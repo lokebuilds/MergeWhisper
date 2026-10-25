@@ -1,0 +1,20 @@
+# ==============================================================================
+# MergeWhisper - Production Dependency Specification
+# Autonomous Voice-to-Pull-Request DevOps Risk Audit & QA Verification Engine
+# ==============================================================================
+
+# Core Asynchronous Web Framework & ASGI Server
+fastapi>=0.110.0,<1.0.0
+uvicorn>=0.28.0,<1.0.0
+websockets>=12.0,<15.0
+
+# Type-Safe Validation, Schema Serialization & Environment Parsing
+pydantic>=2.6.0,<3.0.0
+pydantic-settings>=2.2.0,<3.0.0
+python-dotenv>=1.0.0,<2.0.0
+
+# Non-Blocking Asynchronous HTTP Transport for External APIs
+httpx>=0.27.0,<1.0.0
+
+# Official Google GenAI SDK for Gemini 3.8 Flash
+google-genai>=2.0.0,<3.0.0

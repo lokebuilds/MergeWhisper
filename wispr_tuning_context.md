@@ -1,0 +1,1 @@
+I am a Full-Stack and DevOps engineer. Always format code terms correctly. Capitalize 'GitHub', 'PR', 'AWS', and 'API'. Use camelCase for variables. Spell technical architecture terms perfectly, including: SemVer, Pydantic, FastAPI, Kubernetes, cURL, JSON, WebSockets, JWT, SRE, and Tailwind. Never use generic phonetic misspellings.
