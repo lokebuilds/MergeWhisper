@@ -88,6 +88,39 @@ flowchart LR
 
 ---
 
+## DevSecOps & Zero-Trust Governance
+
+MergeWhisper is engineered with a **Zero-Trust architecture** to ensure sensitive credentials and destructive migrations never reach production pull requests.
+
+```mermaid
+flowchart TD
+    A[Raw Git Diff + Spoken Intent] --> B[Layer 1: Client-Side Regex Scrubber]
+    B -->|Sanitized Payload| C[Layer 2: FastAPI Zero-Memory Gateway]
+    C --> D[Layer 3: Gemini AST & Security Analyzer]
+    D -->|Safe Diff| E[Greenlit: Synthesize PR & Release Artifacts]
+    D -->|Plaintext Key / Destructive DDL| F[🛑 Fatal Halt Triggered]
+    F --> G[Freeze PR Shipment]
+    F --> H[Generate Emergency Rollback Command]
+    F --> I[Dispatch Quarantined Alert to #eng-security]
+```
+
+### 1. Dual-Layer Security Firewall
+- **Client-Side Pre-Scrubber**: Scans diffs in real time for common secret signatures (JWT tokens, private keys, database connection strings) before network dispatch.
+- **Semantic AST Inspection**: Deeply analyzes syntax changes to detect unindexed database scans, unauthorized external network calls, and privileged escalation patterns.
+
+### 2. Fatal Halt Circuit Breaker
+When plaintext cloud credentials (e.g., AWS IAM access keys `AKIA...`, GCP service account keys, GitHub PATs) or destructive operations are detected:
+- **Pipeline Lockdown**: The synthesis engine locks downstream shipment, preventing pull request creation and webhook execution.
+- **Automated Rollback Runbook**: Instantly outputs the exact command line necessary to invalidate the credential (e.g., `aws iam delete-access-key --access-key-id AKIAIOSFODNN7EXAMPLE`).
+- **Telemetry Quarantine**: Classifies the risk level as `CRITICAL` and drafts an emergency security incident payload.
+
+### 3. Ephemeral Memory Policy (Zero Data Retention)
+- Spoken audio transcripts and raw git diffs exist strictly in volatile RAM for `<3,000ms` during inference and are immediately released upon completion.
+- **No Persistent Vector Databases**: Operates without vector storage or embedding caches, eliminating lingering codebase footprints.
+- **Zero Training Ingestion**: Model inference calls are executed under enterprise zero-data-retention terms; developer diffs are never retained or used for model training.
+
+---
+
 ## Local Setup & Installation
 
 ### Prerequisites
