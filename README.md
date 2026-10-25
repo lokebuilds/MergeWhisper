@@ -137,16 +137,6 @@ uvicorn main:app --reload --port 8000
 ```
 Open your browser at `http://localhost:8000` to launch the MergeWhisper Developer Console.
 
----
-
-## Hackathon Judging Rubric Alignment
-
-| Rubric Criterion | Weight | How MergeWhisper Achieves It |
-| :--- | :---: | :--- |
-| **Real Problem** | **30%** | Solves context fragmentation and developer friction. Engineers spend 30-45 minutes per PR writing descriptions, testing checklists, and rollback steps. MergeWhisper automates the entire specification in <3 seconds while preventing security breaches. |
-| **Wispr Flow Usage** | **30%** | Leverages voice dictation where speaking is 3x faster than typing. Introduces a **Universal Developer Profile** that primes Wispr's dictionary with exact developer acronyms for zero-error transcription of technical jargon. |
-| **Live Link / Works** | **25%** | Deployed and operational on Vercel with real-time Gemini 3.8 Flash orchestration, Pydantic v2 validation, and dual WebSocket/HTTP transport resilience. Tested against live git diffs and enterprise scenarios. |
-| **Demo Clarity** | **15%** | Provides pre-loaded enterprise scenarios (Auth Loop Fix, Postgres Migration, WebSocket Leak, Redis Limiter) and an interactive 5-stage dashboard designed with clean spatial physics for effortless evaluation. |
 
 ---
 
