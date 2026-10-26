@@ -43,7 +43,7 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 
 # Model definition
-GEMINI_MODEL = "gemini-3.8-flash"
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 
 # Centralized orchestrator instance
 orchestrator = MergeWhisperOrchestrator()

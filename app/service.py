@@ -1,3 +1,4 @@
+
 """Asynchronous Orchestration Service for MergeWhisper.
 
 Coordinates live Gemini 3.8 Flash AI orchestration using the official google-genai SDK,
@@ -33,8 +34,8 @@ from app.schemas import (
 
 logger = logging.getLogger("mergewhisper.orchestrator")
 
-# Uncorrelated model cluster list for zero-downtime cascading failover
-MODEL_TIERS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"]
+# Fast-failover model tier list
+MODEL_TIERS = ["gemini-3.1-flash-lite", "gemini-flash-latest"]
 GEMINI_MODEL = MODEL_TIERS[0]
 
 
@@ -61,6 +62,7 @@ class MergeWhisperOrchestrator:
 
     def __init__(self, settings: Optional[Settings] = None) -> None:
         self.settings: Settings = settings or get_settings()
+        self._quota_exhausted: bool = False
 
     def get_api_key(self) -> str:
         """Resolve active Gemini API key from settings or environment."""
@@ -126,6 +128,17 @@ class MergeWhisperOrchestrator:
         # Step 1: Ingesting developer intent & git context
         yield {"event": "step_complete", "step": 1}
 
+        # Fast-Path: If external Gemini quota is exhausted for the day, serve instant deterministic synthesis without delay
+        if self._quota_exhausted:
+            logger.info("[AI Gateway] Daily quota limit active. Serving instant deterministic release pipeline.")
+            from app.mock_store import synthesize_release_manifest
+            fallback_res = synthesize_release_manifest(payload)
+            for step_num in range(2, 6):
+                await asyncio.sleep(0.06)
+                yield {"event": "step_complete", "step": step_num}
+            yield {"event": "synthesis_complete", "data": fallback_res.model_dump()}
+            return
+
         config = types.GenerateContentConfig(
             system_instruction=self.build_system_prompt(),
             response_mime_type="application/json",
@@ -154,7 +167,7 @@ class MergeWhisperOrchestrator:
                             contents=user_content,
                             config=config,
                         ),
-                        timeout=8.0,
+                        timeout=3.0,
                     )
 
                     raw_text = response.text
@@ -170,6 +183,11 @@ class MergeWhisperOrchestrator:
                     break
                 except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
                     last_error = exc
+                    exc_str = str(exc)
+                    if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
+                        self._quota_exhausted = True
+                        logger.warning("[AI Gateway] Gemini Free Tier quota exhausted (429). Instantly activating resilient deterministic synthesis.")
+                        break
                     print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
                     logger.warning(
                         "[AI Gateway] Model %s exhausted or timed out (%s). Cascading to next tier...",
@@ -396,7 +414,7 @@ class MergeWhisperOrchestrator:
                         contents=patch_prompt,
                         config=config,
                     ),
-                    timeout=8.0,
+                    timeout=4.0,
                 )
 
                 raw_text = response.text
@@ -411,6 +429,10 @@ class MergeWhisperOrchestrator:
                 break
             except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
                 last_error = exc
+                exc_str = str(exc)
+                if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
+                    logger.warning("[AI Gateway] Gemini Free Tier quota exhausted (429). Applying local refinement mutation instantly.")
+                    break
                 print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
                 logger.warning(
                     "[AI Gateway] Model %s failed for refinement (%s). Cascading to next tier...",
