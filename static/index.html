@@ -2726,6 +2726,7 @@
                 const issueCurl = stage05Data.issue_tracker_curl ||
                     (manifest.ship && manifest.ship.issue_tracker_curl) ||
                     (manifest.stage_05 && manifest.stage_05.issue_tracker_curl) ||
+                    `curl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer $LINEAR_API_KEY" \\\n  -d '{"query":"mutation { issueUpdate(id: \\"ENG-402\\", input: { stateId: \\"completed\\", description: \\"PR: ${compareUrl} marked Done\\" }) { success } }"}'`;
                 curlCodeEl.textContent = issueCurl;
             }
 
