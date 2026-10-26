@@ -15,7 +15,7 @@ import uuid
 from typing import Any, AsyncGenerator, Dict, Optional
 
 from google import genai
-from google.genai import types
+from google.genai import errors, types
 
 from app.config import Settings, get_settings
 from app.schemas import (
@@ -33,7 +33,9 @@ from app.schemas import (
 
 logger = logging.getLogger("mergewhisper.orchestrator")
 
-GEMINI_MODEL = "gemini-3.8-flash"
+# Uncorrelated model cluster list for zero-downtime cascading failover
+MODEL_TIERS = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"]
+GEMINI_MODEL = MODEL_TIERS[0]
 
 
 def generate_github_url(
@@ -134,32 +136,45 @@ class MergeWhisperOrchestrator:
             automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
         )
 
-        try:
-            response = await asyncio.wait_for(
-                client.aio.models.generate_content(
-                    model=GEMINI_MODEL,
-                    contents=user_content,
-                    config=config,
-                ),
-                timeout=8.0,
+        manifest: Optional[PipelineStagesManifest] = None
+        last_error: Optional[Exception] = None
+
+        for model_name in MODEL_TIERS:
+            try:
+                response = await asyncio.wait_for(
+                    client.aio.models.generate_content(
+                        model=model_name,
+                        contents=user_content,
+                        config=config,
+                    ),
+                    timeout=8.0,
+                )
+
+                raw_text = response.text
+                if not raw_text:
+                    raise ValueError(f"{model_name} returned empty response.")
+
+                cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
+                cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+
+                parsed_data = json.loads(cleaned_json)
+                manifest = PipelineStagesManifest.model_validate(parsed_data)
+                logger.info("[AI Gateway] Model %s successfully synthesized release manifest.", model_name)
+                break
+            except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
+                last_error = exc
+                print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
+                logger.warning(
+                    "[AI Gateway] Model %s exhausted or timed out (%s). Cascading to next tier...",
+                    model_name,
+                    exc,
+                )
+                continue
+
+        if manifest is None:
+            raise RuntimeError(
+                f"All AI model tiers ({', '.join(MODEL_TIERS)}) exhausted or failed. Last error: {last_error}"
             )
-
-            raw_text = response.text
-            if not raw_text:
-                raise ValueError(f"{GEMINI_MODEL} returned empty response.")
-
-            cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
-            cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
-
-            parsed_data = json.loads(cleaned_json)
-            manifest = PipelineStagesManifest.model_validate(parsed_data)
-        except Exception as exc:
-            logger.warning(
-                "Live Gemini model '%s' unavailable (%s). Activating deterministic zero-failure failover engine.",
-                GEMINI_MODEL,
-                exc,
-            )
-            manifest = self._build_fallback_manifest(payload)
 
         # DevSecOps Security Directive Enforcement: If raw unredacted credentials exist in git diff, enforce CRITICAL
         if payload.diff and re.search(
@@ -315,24 +330,42 @@ class MergeWhisperOrchestrator:
             automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
         )
 
-        try:
-            response = await client.aio.models.generate_content(
-                model=GEMINI_MODEL,
-                contents=patch_prompt,
-                config=config,
-            )
+        manifest: Optional[PipelineStagesManifest] = None
+        last_error: Optional[Exception] = None
 
-            raw_text = response.text
-            if not raw_text:
-                raise ValueError(f"{GEMINI_MODEL} returned empty response for refinement patch.")
+        for model_name in MODEL_TIERS:
+            try:
+                response = await asyncio.wait_for(
+                    client.aio.models.generate_content(
+                        model=model_name,
+                        contents=patch_prompt,
+                        config=config,
+                    ),
+                    timeout=8.0,
+                )
 
-            cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
-            cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+                raw_text = response.text
+                if not raw_text:
+                    raise ValueError(f"{model_name} returned empty response for refinement patch.")
 
-            parsed_data = json.loads(cleaned_json)
-            manifest = PipelineStagesManifest.model_validate(parsed_data)
-        except Exception as exc:
-            logger.warning("Gemini refinement failed (%s). Applying mutation locally.", exc)
+                cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
+                cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+
+                parsed_data = json.loads(cleaned_json)
+                manifest = PipelineStagesManifest.model_validate(parsed_data)
+                break
+            except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
+                last_error = exc
+                print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
+                logger.warning(
+                    "[AI Gateway] Model %s failed for refinement (%s). Cascading to next tier...",
+                    model_name,
+                    exc,
+                )
+                continue
+
+        if manifest is None:
+            logger.warning("All Gemini model tiers failed for refinement (%s). Applying mutation locally.", last_error)
             manifest = PipelineStagesManifest(
                 audit=patch_req.current_response.audit,
                 verify=patch_req.current_response.verify,
@@ -416,57 +449,6 @@ class MergeWhisperOrchestrator:
             ship=ship_stage,
         )
 
-
-    def _build_fallback_manifest(self, payload: IngestData) -> PipelineStagesManifest:
-        """Construct a high-fidelity deterministic fallback manifest if external AI APIs spike."""
-        from app.mock_store import PRESETS_DATA
-
-        intent_lower = payload.intent.lower()
-        diff_lower = (payload.diff or "").lower()
-
-        matched_key = "auth-loop"
-        if "postgres" in intent_lower or "migration" in intent_lower or "partition" in diff_lower or "table" in diff_lower:
-            matched_key = "postgres-migration"
-        elif "websocket" in intent_lower or "leak" in intent_lower or "ws" in diff_lower or "socket" in diff_lower:
-            matched_key = "websocket-leak"
-        elif "redis" in intent_lower or "limiter" in intent_lower or "rate" in intent_lower or "lua" in diff_lower:
-            matched_key = "redis-limiter"
-
-        preset = PRESETS_DATA.get(matched_key, PRESETS_DATA["auth-loop"])
-
-        # Check for unredacted credentials in diff to enforce CRITICAL if present
-        risk_level = "CRITICAL" if payload.diff and re.search(
-            r"\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b|\b(sk_live_[a-zA-Z0-9]+|ghp_[a-zA-Z0-9]+)\b|(?:\bpassword\s*=\s*['\"][^'\"]+['\"])",
-            payload.diff,
-        ) else preset["risk_level"]
-
-        return PipelineStagesManifest(
-            audit=AuditData(
-                risk_level=risk_level,
-                blast_radius=preset["blast_radius"],
-                is_breaking_change=preset["is_breaking_change"],
-                rollback_plan=preset["rollback_plan"],
-            ),
-            verify=VerifyData(
-                objective=preset["qa_objective"],
-                verification_steps=preset["qa_steps"],
-                edge_cases=preset["qa_edge_cases"],
-            ),
-            changelog=ChangelogData(
-                semver_bump=preset["semver_bump"],
-                current_version=preset["current_version"],
-                next_version=preset["next_version"],
-                keep_a_changelog_markdown=f"### Changed\n- {preset['summary']}\n- Resolved in {payload.head_branch}",
-            ),
-            ship=GeminiShipData(
-                title=preset["title"],
-                summary=preset["summary"],
-                markdown_body=f"## Architectural Overview\n\n{preset['summary']}\n\n### Blast Radius\n{preset['blast_radius']}\n\n### Rollback Runbook\n```bash\n{preset['rollback_plan']}\n```",
-                channel_name="eng-releases",
-                broadcast_summary=f"🚀 {preset['title']} ({preset['next_version']}) merged to {payload.base_branch}",
-                issue_tracker_curl=f"curl -X POST https://api.linear.app/graphql -H 'Content-Type: application/json' -d '{{\"query\":\"mutation {{ issueUpdate(id: \\\"ENG-402\\\", input: {{ stateId: \\\"completed\\\" }}) }}\"}}'",
-            ),
-        )
 
     def get_system_health(self) -> SystemHealthResponse:
         """Produce system diagnostic telemetry."""

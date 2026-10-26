@@ -1409,59 +1409,6 @@
             if (progressBar) progressBar.style.width = '100%';
         }
 
-        // Hardcoded, successful JSON pull request payload for zero-latency demo failover
-        function getHardcodedFixtureManifest(payload) {
-            const targetRepo = (payload && payload.target_repo) || document.getElementById('target-repo')?.value.trim() || 'facebook/react';
-            const baseBranch = (payload && payload.base_branch) || document.getElementById('base-branch')?.value.trim() || 'main';
-            const headBranch = (payload && payload.head_branch) || document.getElementById('head-branch')?.value.trim() || 'fix/auth-loop';
-            const title = "fix(auth): terminate redirect loop and purge session token cookie";
-            const encodedTitle = encodeURIComponent(title);
-            const githubUrl = `https://github.com/${targetRepo}/compare/${baseBranch}...${headBranch}?quick_pull=1&title=${encodedTitle}`;
-
-            return {
-                session_id: "sess-cached-fixture-" + Date.now().toString(36),
-                latency_ms: 38,
-                spoken_word_count: payload && payload.intent ? payload.intent.split(/\s+/).filter(Boolean).length : 14,
-                dev_time_saved_minutes: 45,
-                audit: {
-                    risk_level: "LOW",
-                    is_breaking_change: false,
-                    blast_radius: "Session Authentication Middleware Guard (Isolated OIDC / OAuth2 token clearance boundary). Zero database schema changes.",
-                    rollback_plan: "git revert -m 1 HEAD && kubectl rollout restart deployment/auth-gateway --namespace=production"
-                },
-                verify: {
-                    objective: "Verify session termination, cookie clearance, and redirect loop resolution across authenticated routes.",
-                    verification_steps: [
-                        "1. Assert HTTP 200 on /auth/logout with Set-Cookie deletion header",
-                        "2. Verify access_token cookie is stripped with Max-Age=0",
-                        "3. Confirm unauthenticated redirection to /login without 302 cyclical recursion",
-                        "4. Dispatch concurrent requests across active tabs to confirm session revocation"
-                    ],
-                    edge_cases: [
-                        "Expired JWT token refresh race during simultaneous logout",
-                        "Stale browser cookies presenting invalid signature"
-                    ]
-                },
-                changelog: {
-                    semver_bump: "PATCH",
-                    current_version: "v18.2.0",
-                    next_version: "v18.2.1",
-                    keep_a_changelog_markdown: "### Fixed\\n- Resolved circular authentication redirect loop during user logout.\\n- Explicitly purged `access_token` session cookies with immediate zero-retention invalidation.\\n- Hardened token refresh handler against concurrent expired requests."
-                },
-                ship: {
-                    title: title,
-                    summary: "Patches circular authentication redirect loop by terminating invalid session cookies and safely routing unauthenticated callers to /login.",
-                    markdown_body: "## Architectural Summary\\nResolves an edge-case redirect recursion in the session authentication middleware. When user tokens expire or are revoked, callers are cleanly redirected to `/login?reason=session_expired` and session cookies are zeroed out.\\n\\n### Core Engineering Highlights\\n- **Sub-3s voice-to-execution latency** (Evaluated in 38ms via Cached Fixture)\\n- **Zero-retention ephemeral memory** (Ghost Mode compliant)\\n- **Autonomous AST-grounded pull request**\\n\\n### Verification Matrix\\n- [x] Multi-agent code synthesis complete\\n- [x] Patch verified in zero-trust sandbox\\n- [x] Autonomous pull request generated",
-                    github_dispatch_url: githubUrl,
-                    channel_name: "eng-releases",
-                    broadcast_summary: "🚀 Release v18.2.1 ready for deployment: Auth redirect loop fix merged.",
-                    formatted_slack_payload: JSON.stringify({
-                        text: "🚀 Release v18.2.1 ready for deployment: Auth redirect loop fix merged."
-                    }, null, 2),
-                    issue_tracker_curl: `curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{"query":"mutation { issueUpdate(id: \\"REACT-842\\", input: { stateId: \\"completed\\", description: \\"PR: ${githubUrl} marked Done\\" }) { success } }"}'`
-                }
-            };
-        }
 
         // Hardened In-Memory Fallback Registry for 100% Guaranteed Uptime
         const OFFLINE_FALLBACK_STORE = {
@@ -2277,22 +2224,9 @@
                             refreshIcons();
                         }, 500);
                     } catch (httpErr) {
-                        console.warn("HTTP fallback encountered provider error. Activating zero-latency local fallback fixture:", httpErr);
-                        currentActiveManifest = getHardcodedFixtureManifest(payload);
-                        fastForwardModalSequencer();
-
-                        const actualElapsed = 42;
-                        document.getElementById('exec-latency-ticker').textContent = `${actualElapsed} ms`;
-
-                        renderAllStages(currentActiveManifest);
-                        markAllStagesCompleted();
-
-                        setTimeout(() => {
-                            modal.classList.add('hidden');
-                            showToast('⚡ Failover Active: Release pipeline synthesized via Zero-Latency Local Engine', 'info');
-                            navigateToStage('stage-02');
-                            refreshIcons();
-                        }, 500);
+                        console.error("HTTP synthesis request failed:", httpErr);
+                        modal.classList.add('hidden');
+                        showToast(`Synthesis failed: ${httpErr.message || 'Server error'}`, 'error');
                     }
                 };
 
@@ -2336,24 +2270,10 @@
                                 refreshIcons();
                             }, 500);
                         } else if (data.event === 'error') {
-                            console.warn("WebSocket streaming error from server. Activating zero-latency failover:", data.message);
-                            currentActiveManifest = getHardcodedFixtureManifest(payload);
-                            fastForwardModalSequencer();
-
-                            const actualElapsed = 42;
-                            document.getElementById('exec-latency-ticker').textContent = `${actualElapsed} ms`;
-
-                            renderAllStages(currentActiveManifest);
-                            markAllStagesCompleted();
-
+                            console.error("WebSocket streaming error from server:", data.message);
                             try { socket.close(); } catch (_) {}
-
-                            setTimeout(() => {
-                                modal.classList.add('hidden');
-                                showToast('⚡ Failover Active: Release pipeline synthesized via Zero-Latency Local Engine', 'info');
-                                navigateToStage('stage-02');
-                                refreshIcons();
-                            }, 500);
+                            modal.classList.add('hidden');
+                            showToast(`Synthesis failed: ${data.message || 'Server error'}`, 'error');
                             return;
                         }
                     } catch (err) {
@@ -2368,22 +2288,9 @@
                 };
 
             } catch (err) {
-                console.warn("Synthesis initiation failed. Activating zero-latency local engine:", err);
-                currentActiveManifest = getHardcodedFixtureManifest(payload);
-                fastForwardModalSequencer();
-
-                const actualElapsed = 42;
-                document.getElementById('exec-latency-ticker').textContent = `${actualElapsed} ms`;
-
-                renderAllStages(currentActiveManifest);
-                markAllStagesCompleted();
-
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    showToast('⚡ Failover Active: Release pipeline synthesized via Zero-Latency Local Engine', 'info');
-                    navigateToStage('stage-02');
-                    refreshIcons();
-                }, 500);
+                console.error("Synthesis initiation failed:", err);
+                modal.classList.add('hidden');
+                showToast(`Synthesis initiation failed: ${err.message || 'Error'}`, 'error');
             } finally {
                 refreshIcons();
             }
