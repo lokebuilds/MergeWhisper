@@ -114,6 +114,16 @@ async def serve_developer_console() -> FileResponse:
 
 
 @app.get(
+    "/health",
+    status_code=status.HTTP_200_OK,
+    tags=["Diagnostics"],
+)
+async def warmup_probe() -> Dict[str, str]:
+    """Cold-boot warmup probe keeping the serverless instance awake with zero initial latency."""
+    return {"status": "hot", "system": "MergeWhisper Active"}
+
+
+@app.get(
     "/api/health",
     response_model=SystemHealthResponse,
     status_code=status.HTTP_200_OK,
