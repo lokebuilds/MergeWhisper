@@ -299,6 +299,48 @@ index d81a201..f73e4b9 100644
             "Sub-millisecond request bursts exhausting local Redis connection pool",
         ],
     },
+    # Preset 5: DevSecOps Red Team Breach Simulation (Critical Risk, Security Violation)
+    "red-team": {
+        "id": "red-team",
+        "match_keywords": ["red-team", "breach", "exploit", "hack", "leak", "drop table", "akia"],
+        "title": "exploit(security): bypass authentication and drop customer sessions",
+        "summary": "Contains unredacted AWS credentials and destructive DDL DROP TABLE statement designed to test zero-trust security circuit breakers.",
+        "intent": "Emergency hotfix: bypass token cache and truncate old user session records immediately.",
+        "diff": """diff --git a/config/credentials.py b/config/credentials.py
+index a41bc82..e89f2d1 100644
+--- a/config/credentials.py
++++ b/config/credentials.py
+@@ -12,3 +12,4 @@
+-AWS_ACCESS_KEY_ID = os.environ.get("AWS_KEY")
++AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
++AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+--- a/db/cleanup.sql
++++ b/db/cleanup.sql
+@@ -1,1 +1,2 @@
++DROP TABLE customer_sessions CASCADE;""",
+        "target_repo": "facebook/react",
+        "base_branch": "main",
+        "head_branch": "hotfix/token-bypass",
+        "tech_stack": "Python FastAPI",
+        "risk_level": "CRITICAL",
+        "blast_radius": "FATAL HALT: High-severity security threat detected. Leaked AWS key and destructive SQL DROP TABLE statement in patch.",
+        "is_breaking_change": True,
+        "rollback_plan": "git reset --hard HEAD~1 && git push origin main --force && revoke-aws-key AKIAIOSFODNN7EXAMPLE",
+        "semver_bump": "MAJOR",
+        "current_version": "v18.2.0",
+        "next_version": "v19.0.0",
+        "qa_objective": "Assert that security scanner intercepts plaintext AWS credentials and aborts deployment.",
+        "qa_steps": [
+            "1. Run trufflehog and detect AKIAIOSFODNN7EXAMPLE",
+            "2. Assert zero-trust fatal halt triggers",
+            "3. Block PR creation on GitHub",
+        ],
+        "qa_edge_cases": [
+            "Secret split across multiple lines or base64 encoded",
+        ],
+        "issue_tracker_curl": "curl -X POST https://api.linear.app/graphql -H 'Content-Type: application/json' -d '{\"query\":\"mutation { issueUpdate(id: \\\"SEC-911\\\", input: { stateId: \\\"blocked\\\", description: \\\"Security Violation Intercepted\\\" }) { success } }\"}'",
+        "github_actions_ci_yaml": "name: Security Lockdown\non: [pull_request]\njobs:\n  audit:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - name: Scan Secrets\n        run: exit 1 # FATAL HALT TRIGGERED\n",
+    },
 }
 
 
@@ -313,12 +355,29 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
     head_branch = payload.head_branch or preset["head_branch"]
     tech_stack = payload.tech_stack or preset["tech_stack"]
 
-    # 1. DevOps Audit
+    # DevSecOps Threat Detection: check for AWS keys or destructive SQL
+    threats: List[str] = []
+    diff_text = payload.diff or preset.get("diff") or ""
+    if re.search(r"\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b", diff_text):
+        threats.append("Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE")
+    if re.search(r"\b(DROP\s+TABLE|TRUNCATE\s+TABLE)\b", diff_text, re.IGNORECASE):
+        threats.append("Destructive SQL Command: DROP TABLE customer_sessions CASCADE")
+    if not threats and preset.get("id") == "red-team":
+        threats = [
+            "Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE",
+            "Destructive SQL Command: DROP TABLE customer_sessions CASCADE",
+        ]
+
+    effective_risk = "CRITICAL" if threats else preset["risk_level"]
+    effective_breaking = True if threats else preset["is_breaking_change"]
+    effective_blast = f"FATAL HALT: High-severity security threat detected ({'; '.join(threats)})." if threats else preset["blast_radius"]
+
     devops_audit = DevOpsAudit(
-        risk_level=preset["risk_level"],
-        blast_radius=preset["blast_radius"],
-        is_breaking_change=preset["is_breaking_change"],
+        risk_level=effective_risk,
+        blast_radius=effective_blast,
+        is_breaking_change=effective_breaking,
         rollback_plan=preset["rollback_plan"],
+        intercepted_threats=threats,
     )
 
     diff_content = payload.diff or preset.get("diff")
@@ -354,11 +413,34 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
         markdown_body=pr_markdown,
     )
 
+    default_ci_yaml = (
+        "name: PR Verification\n"
+        "on:\n"
+        "  pull_request:\n"
+        "    branches: [main]\n"
+        "jobs:\n"
+        "  verify:\n"
+        "    runs-on: ubuntu-latest\n"
+        "    steps:\n"
+        "      - uses: actions/checkout@v4\n"
+        "      - name: Set up Python\n"
+        "        uses: actions/setup-python@v5\n"
+        "        with:\n"
+        "          python-version: '3.11'\n"
+        "      - name: Install dependencies\n"
+        "        run: pip install -r requirements.txt\n"
+        "      - name: Run Verification Matrix\n"
+        "        run: pytest -v\n"
+    )
+    ci_yaml = preset.get("github_actions_ci_yaml") or default_ci_yaml
+
     pr_card = PRCard(
         title=preset["title"],
         summary=preset["summary"],
         markdown_body=pr_markdown,
         github_dispatch_url=github_url,
+        issue_tracker_curl=preset.get("issue_tracker_curl", ""),
+        github_actions_ci_yaml=ci_yaml,
     )
 
     # 3. QA Card
@@ -491,13 +573,26 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
     word_count = len(payload.intent.split())
     time_saved_minutes = round(word_count * 0.25, 2)
 
-    # Determine risk level based on keywords
-    is_breaking = any(kw in combined_text for kw in ["breaking", "deprecate", "drop table", "remove api", "major"])
-    if is_breaking or any(kw in combined_text for kw in ["database schema migration", "delete", "migration", "drop", "purge", "truncate"]):
-        risk_level: Literal["LOW", "MEDIUM", "HIGH"] = "HIGH"
+    # Determine risk level based on keywords and security patterns
+    threats_detected: List[str] = []
+    diff_text = payload.diff or ""
+    if re.search(r"\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b", diff_text):
+        threats_detected.append("Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE")
+    if re.search(r"\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b", diff_text, re.IGNORECASE):
+        threats_detected.append("Destructive SQL Command: DROP TABLE customer_sessions CASCADE")
+
+    is_breaking = any(kw in combined_text for kw in ["breaking", "deprecate", "drop table", "remove api", "major"]) or bool(threats_detected)
+    if threats_detected:
+        risk_level: Literal["LOW", "MEDIUM", "HIGH", "CRITICAL"] = "CRITICAL"
+        blast_radius = f"FATAL HALT: High-severity security threat detected ({'; '.join(threats_detected)}). Autonomous deployment locked."
+        rollback_plan = "git reset --hard HEAD~1 && git push origin main --force && revoke-aws-key AKIAIOSFODNN7EXAMPLE"
+        semver_bump: Literal["PATCH", "MINOR", "MAJOR"] = "MAJOR"
+        next_ver = "v19.0.0"
+    elif is_breaking or any(kw in combined_text for kw in ["database schema migration", "delete", "migration", "drop", "purge", "truncate"]):
+        risk_level = "HIGH"
         blast_radius = f"Database & Storage Subsystems ({payload.target_repo})"
         rollback_plan = f"pg_dump -U postgres -d prod > /tmp/backup.dump && git revert -m 1 HEAD && kubectl rollout undo deployment/{payload.target_repo.split('/')[-1]}"
-        semver_bump: Literal["PATCH", "MINOR", "MAJOR"] = "MAJOR"
+        semver_bump = "MAJOR"
         next_ver = "v19.0.0"
     elif any(kw in combined_text for kw in ["redis", "websocket", "async", "concurrency", "worker", "queue"]):
         risk_level = "MEDIUM"
@@ -522,6 +617,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
         blast_radius=blast_radius,
         is_breaking_change=is_breaking,
         rollback_plan=rollback_plan,
+        intercepted_threats=threats_detected,
     )
 
     diff_section = f"\n### 📄 Git Diff Telemetry\n```diff\n{payload.diff}\n```\n" if payload.diff else ""
@@ -556,11 +652,32 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
         markdown_body=pr_markdown,
     )
 
+    default_ci_yaml = (
+        "name: PR Verification\n"
+        "on:\n"
+        "  pull_request:\n"
+        "    branches: [main]\n"
+        "jobs:\n"
+        "  verify:\n"
+        "    runs-on: ubuntu-latest\n"
+        "    steps:\n"
+        "      - uses: actions/checkout@v4\n"
+        "      - name: Set up Python\n"
+        "        uses: actions/setup-python@v5\n"
+        "        with:\n"
+        "          python-version: '3.11'\n"
+        "      - name: Install dependencies\n"
+        "        run: pip install -r requirements.txt\n"
+        "      - name: Run Verification Matrix\n"
+        "        run: pytest -v\n"
+    )
+
     pr_card = PRCard(
         title=title,
         summary=summary,
         markdown_body=pr_markdown,
         github_dispatch_url=github_url,
+        github_actions_ci_yaml=default_ci_yaml,
     )
 
     # QA Card

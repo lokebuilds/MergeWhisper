@@ -103,6 +103,10 @@ class AuditData(BaseSchema):
         min_length=1,
         description="Exact automated rollback or git revert command for rapid incident mitigation.",
     )
+    intercepted_threats: List[str] = Field(
+        default_factory=list,
+        description="List of detected secret patterns, unredacted tokens, or destructive SQL DDL.",
+    )
 
     @field_validator("rollback_plan")
     @classmethod
@@ -205,6 +209,10 @@ class GeminiShipData(BaseSchema):
         default="",
         description="A valid cURL command to POST a status update to a Linear or Jira API, including the PR link and marking the ticket as 'Done'.",
     )
+    github_actions_ci_yaml: str = Field(
+        default="",
+        description="Executable GitHub Actions YAML workflow script (.github/workflows/verify-pr.yml) configured to execute the Stage 03 verification steps.",
+    )
 
 
 class ShipData(GeminiShipData):
@@ -234,6 +242,10 @@ class PRCard(BaseSchema):
     issue_tracker_curl: str = Field(
         default="",
         description="A valid cURL command to POST a status update to a Linear or Jira API, including the PR link and marking the ticket as 'Done'.",
+    )
+    github_actions_ci_yaml: str = Field(
+        default="",
+        description="Executable GitHub Actions YAML workflow script (.github/workflows/verify-pr.yml).",
     )
 
 
@@ -332,6 +344,8 @@ class SynthesisResponse(BaseSchema):
                         "summary": ship_dict.get("summary", ""),
                         "markdown_body": ship_dict.get("markdown_body", ""),
                         "github_dispatch_url": ship_dict.get("github_dispatch_url"),
+                        "issue_tracker_curl": ship_dict.get("issue_tracker_curl", ""),
+                        "github_actions_ci_yaml": ship_dict.get("github_actions_ci_yaml", ""),
                     }
                 if "slack_card" not in data:
                     data["slack_card"] = {
@@ -353,6 +367,8 @@ class SynthesisResponse(BaseSchema):
                         "channel_name": slack_dict.get("channel_name", "eng-releases"),
                         "broadcast_summary": slack_dict.get("broadcast_summary", ""),
                         "formatted_slack_payload": slack_dict.get("formatted_slack_payload", {}),
+                        "issue_tracker_curl": pr_dict.get("issue_tracker_curl", ""),
+                        "github_actions_ci_yaml": pr_dict.get("github_actions_ci_yaml", ""),
                     }
         return data
 
