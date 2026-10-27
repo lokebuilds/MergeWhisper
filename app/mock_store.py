@@ -367,15 +367,15 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
         threats.append("Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE")
     if re.search(r"\b(DROP\s+TABLE|TRUNCATE\s+TABLE)\b", diff_text, re.IGNORECASE):
         threats.append("Destructive SQL Command: DROP TABLE customer_sessions CASCADE")
-    if not threats and preset.get("id") == "red-team":
+    if not threats and preset.get("id") == "red-team" and "[REDACTED]" not in diff_text:
         threats = [
             "Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE",
             "Destructive SQL Command: DROP TABLE customer_sessions CASCADE",
         ]
 
-    effective_risk = "CRITICAL" if threats else preset["risk_level"]
-    effective_breaking = True if threats else preset["is_breaking_change"]
-    effective_blast = f"FATAL HALT: High-severity security threat detected ({'; '.join(threats)})." if threats else preset["blast_radius"]
+    effective_risk = "CRITICAL" if threats else ("LOW" if "[REDACTED]" in diff_text else preset["risk_level"])
+    effective_breaking = True if threats else (False if "[REDACTED]" in diff_text else preset["is_breaking_change"])
+    effective_blast = f"FATAL HALT: High-severity security threat detected ({'; '.join(threats)})." if threats else ("Remediated: Threat neutralized via zero-trust inline remediation." if "[REDACTED]" in diff_text else preset["blast_radius"])
 
     devops_audit = DevOpsAudit(
         risk_level=effective_risk,
