@@ -42,7 +42,7 @@ class IngestData(BaseSchema):
         description="Optional raw git diff, staged changes, or patch context.",
     )
     target_repo: str = Field(
-        default="facebook/react",
+        default="lokebuilds/MergeWhisper",
         description="Target GitHub/GitLab repository identifier in owner/repo format.",
     )
     base_branch: str = Field(
@@ -50,7 +50,7 @@ class IngestData(BaseSchema):
         description="Target upstream branch to merge changes into.",
     )
     head_branch: str = Field(
-        default="fix/auth-loop",
+        default="feat/live-demo",
         description="Working feature or bugfix branch containing changes.",
     )
     tech_stack: str = Field(

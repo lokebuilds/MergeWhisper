@@ -13,7 +13,7 @@ import re
 import time
 import urllib.parse
 import uuid
-from typing import Any, AsyncGenerator, Dict, Optional
+from typing import Any, AsyncGenerator, Dict, List, Optional, Set
 
 from google import genai
 from google.genai import errors, types
@@ -34,8 +34,8 @@ from app.schemas import (
 
 logger = logging.getLogger("mergewhisper.orchestrator")
 
-# Fast-failover model tier list
-MODEL_TIERS = ["gemini-3.1-flash-lite", "gemini-flash-latest"]
+# Active 4-tier generation failover cascade
+MODEL_TIERS = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest"]
 GEMINI_MODEL = MODEL_TIERS[0]
 
 
@@ -46,13 +46,15 @@ def generate_github_url(
     title: str,
     markdown_body: str,
 ) -> str:
-    """Generate a valid GitHub compare/pull-request URL with query parameters."""
+    clean_repo = re.sub(r"\s+", "", (target_repo or "lokebuilds/MergeWhisper").strip().strip("/"))
+    clean_base = urllib.parse.quote(re.sub(r"\s+", "-", (base_branch or "main").strip()), safe="/")
+    clean_head = urllib.parse.quote(re.sub(r"\s+", "-", (head_branch or "feat/production-sweep").strip()), safe="/")
     encoded_title = urllib.parse.quote(title)
     # Truncate markdown body to prevent HTTP 414 URI Too Long errors in browser URL bars
     body_snippet = markdown_body[:1200]
     encoded_body = urllib.parse.quote(body_snippet)
     return (
-        f"https://github.com/{target_repo}/compare/{base_branch}...{head_branch}"
+        f"https://github.com/{clean_repo}/compare/{clean_base}...{clean_head}"
         f"?quick_pull=1&title={encoded_title}&body={encoded_body}"
     )
 
@@ -63,28 +65,46 @@ class MergeWhisperOrchestrator:
     def __init__(self, settings: Optional[Settings] = None) -> None:
         self.settings: Settings = settings or get_settings()
         self._quota_exhausted: bool = False
+        self._active_key_index: int = 0
+        self._exhausted_keys: set[str] = set()
+
+    def get_api_keys(self) -> List[str]:
+        """Resolve active list of Gemini API keys from settings or environment.
+        Supports comma-separated GEMINI_API_KEYS="key1,key2" or single GEMINI_API_KEY.
+        """
+        raw = (
+            os.getenv("GEMINI_API_KEYS")
+            or getattr(self.settings, "gemini_api_keys", None)
+            or self.settings.gemini_api_key
+            or os.getenv("GEMINI_API_KEY")
+            or ""
+        )
+        keys: List[str] = []
+        for part in raw.split(","):
+            cleaned = part.strip()
+            if cleaned and cleaned != "your_api_key_here" and cleaned not in keys:
+                keys.append(cleaned)
+        return keys
 
     def get_api_key(self) -> str:
-        """Resolve active Gemini API key from settings or environment."""
-        key = (self.settings.gemini_api_key or os.getenv("GEMINI_API_KEY", "")).strip()
-        if not key or key == "your_api_key_here":
+        """Resolve current active Gemini API key from rotation list."""
+        keys = self.get_api_keys()
+        if not keys:
             raise ValueError(
-                "GEMINI_API_KEY is not configured. Please supply a valid Google Gemini API key in your .env file."
+                "GEMINI_API_KEY / GEMINI_API_KEYS is not configured. Please supply a valid Google Gemini API key in your .env file."
             )
-        return key
+        idx = self._active_key_index % len(keys)
+        return keys[idx]
 
     @property
     def is_gemini_available(self) -> bool:
-        """Check if a valid Gemini API key is configured."""
-        try:
-            self.get_api_key()
-            return True
-        except ValueError:
-            return False
+        """Check if at least one valid Gemini API key is configured."""
+        return len(self.get_api_keys()) > 0
 
-    def get_client(self) -> genai.Client:
-        """Instantiate official Google GenAI client."""
-        return genai.Client(api_key=self.get_api_key())
+    def get_client(self, api_key: Optional[str] = None) -> genai.Client:
+        """Instantiate official Google GenAI client with specified or active API key."""
+        key = api_key or self.get_api_key()
+        return genai.Client(api_key=key)
 
     def build_system_prompt(self) -> str:
         """Construct strict system instructions for Google Gemini 3.8 Flash."""
@@ -128,15 +148,28 @@ class MergeWhisperOrchestrator:
         # Step 1: Ingesting developer intent & git context
         yield {"event": "step_complete", "step": 1}
 
-        # Fast-Path: If external Gemini quota is exhausted for the day, serve instant deterministic synthesis without delay
-        if self._quota_exhausted:
-            logger.info("[AI Gateway] Daily quota limit active. Serving instant deterministic release pipeline.")
+        api_keys = self.get_api_keys()
+
+        # Forcefully lock branch topology to feat/live-demo for live demo presentation
+        LIVE_DEMO_BRANCH = "feat/live-demo"
+        payload.head_branch = LIVE_DEMO_BRANCH
+
+        # Fast-Path: If external Gemini quota is exhausted across all available keys for the day, serve instant deterministic synthesis without delay
+        if self._quota_exhausted or (api_keys and len(self._exhausted_keys) >= len(api_keys)):
+            logger.info("[AI Gateway] All %d Gemini API keys in rotation list exhausted for today. Serving instant deterministic release pipeline.", len(api_keys))
             from app.mock_store import synthesize_release_manifest
+            payload.head_branch = LIVE_DEMO_BRANCH
             fallback_res = synthesize_release_manifest(payload)
+            fallback_dict = fallback_res.model_dump()
+            fallback_dict["head_branch"] = LIVE_DEMO_BRANCH
+            fallback_dict["branch"] = LIVE_DEMO_BRANCH
+            if "ingest" in fallback_dict and isinstance(fallback_dict["ingest"], dict):
+                fallback_dict["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
+                fallback_dict["ingest"]["branch"] = LIVE_DEMO_BRANCH
             for step_num in range(2, 6):
                 await asyncio.sleep(0.06)
                 yield {"event": "step_complete", "step": step_num}
-            yield {"event": "synthesis_complete", "data": fallback_res.model_dump()}
+            yield {"event": "synthesis_complete", "data": fallback_dict}
             return
 
         config = types.GenerateContentConfig(
@@ -151,58 +184,103 @@ class MergeWhisperOrchestrator:
         manifest: Optional[PipelineStagesManifest] = None
         last_error: Optional[Exception] = None
 
-        client: Optional[genai.Client] = None
-        try:
-            client = self.get_client()
-        except Exception as exc:
-            last_error = exc
-            logger.warning("[AI Gateway] Gemini client uninitialized (%s). Cascading to deterministic synthesis.", exc)
+        if api_keys:
+            total_keys = len(api_keys)
+            for attempt_idx in range(total_keys):
+                key_idx = (self._active_key_index + attempt_idx) % total_keys
+                current_key = api_keys[key_idx]
 
-        if client:
-            for model_name in MODEL_TIERS:
-                try:
-                    response = await asyncio.wait_for(
-                        client.aio.models.generate_content(
-                            model=model_name,
-                            contents=user_content,
-                            config=config,
-                        ),
-                        timeout=3.0,
-                    )
-
-                    raw_text = response.text
-                    if not raw_text:
-                        raise ValueError(f"{model_name} returned empty response.")
-
-                    cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
-                    cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
-
-                    parsed_data = json.loads(cleaned_json)
-                    manifest = PipelineStagesManifest.model_validate(parsed_data)
-                    logger.info("[AI Gateway] Model %s successfully synthesized release manifest.", model_name)
-                    break
-                except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
-                    last_error = exc
-                    exc_str = str(exc)
-                    if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
-                        self._quota_exhausted = True
-                        logger.warning("[AI Gateway] Gemini Free Tier quota exhausted (429). Instantly activating resilient deterministic synthesis.")
-                        break
-                    print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
-                    logger.warning(
-                        "[AI Gateway] Model %s exhausted or timed out (%s). Cascading to next tier...",
-                        model_name,
-                        exc,
-                    )
+                # Skip known exhausted keys if other untried keys exist
+                if current_key in self._exhausted_keys and len(self._exhausted_keys) < total_keys:
                     continue
+
+                masked_key = f"{current_key[:4]}...{current_key[-4:]}" if len(current_key) > 8 else "***"
+                client: Optional[genai.Client] = None
+                try:
+                    client = self.get_client(current_key)
+                except Exception as exc:
+                    last_error = exc
+                    logger.warning("[AI Gateway] Gemini client init failed for key [%s]: %s", masked_key, exc)
+                    continue
+
+                for model_name in MODEL_TIERS:
+                    try:
+                        response = await asyncio.wait_for(
+                            client.aio.models.generate_content(
+                                model=model_name,
+                                contents=user_content,
+                                config=config,
+                            ),
+                            timeout=getattr(self.settings, "llm_timeout_seconds", 30.0),
+                        )
+
+                        raw_text = response.text
+                        if not raw_text:
+                            raise ValueError(f"{model_name} returned empty response.")
+
+                        cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
+                        cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+
+                        parsed_data = json.loads(cleaned_json)
+                        manifest = PipelineStagesManifest.model_validate(parsed_data)
+                        logger.info("[AI Gateway] Model %s successfully synthesized release manifest with key [%s].", model_name, masked_key)
+                        self._active_key_index = key_idx
+                        break
+                    except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
+                        last_error = exc
+                        exc_str = str(exc)
+                        if "503" in exc_str or "UNAVAILABLE" in exc_str or "unavailable" in exc_str.lower() or "overloaded" in exc_str.lower():
+                            logger.warning(
+                                "[AI Gateway] Model %s hit 503 UNAVAILABLE on key [%s]. Sleeping 1.5s to let Google traffic spike clear before failover...",
+                                model_name,
+                                masked_key,
+                            )
+                            await asyncio.sleep(1.5)
+                            continue
+                        if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
+                            self._exhausted_keys.add(current_key)
+                            next_key_idx = (key_idx + 1) % total_keys
+                            next_masked = f"{api_keys[next_key_idx][:4]}...{api_keys[next_key_idx][-4:]}" if len(api_keys[next_key_idx]) > 8 else "***"
+                            logger.warning(
+                                "[AI Gateway] Key [%s] hit 429 RESOURCE_EXHAUSTED. Rotating to next key [%s] in rotation pool...",
+                                masked_key,
+                                next_masked,
+                            )
+                            break
+                        print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
+                        logger.warning(
+                            "[AI Gateway] Model %s exhausted or timed out (%s). Cascading to next tier...",
+                            model_name,
+                            exc,
+                        )
+                        continue
+
+                # If manifest synthesis succeeded with this key, break out of key rotation loop
+                if manifest is not None:
+                    break
+
+            # If every single key in the rotation list returned 429, mark global quota exhausted
+            if len(self._exhausted_keys) >= total_keys:
+                self._quota_exhausted = True
+                logger.warning(
+                    "[AI Gateway] Every single key in rotation list (%d keys) returned 429 RESOURCE_EXHAUSTED. Activating resilient deterministic synthesis.",
+                    total_keys,
+                )
 
         if manifest is None:
             logger.warning("All AI model tiers failed (%s). Cascading to resilient deterministic synthesis.", last_error)
             from app.mock_store import synthesize_release_manifest
+            payload.head_branch = LIVE_DEMO_BRANCH
             fallback_res = synthesize_release_manifest(payload)
+            fallback_dict = fallback_res.model_dump()
+            fallback_dict["head_branch"] = LIVE_DEMO_BRANCH
+            fallback_dict["branch"] = LIVE_DEMO_BRANCH
+            if "ingest" in fallback_dict and isinstance(fallback_dict["ingest"], dict):
+                fallback_dict["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
+                fallback_dict["ingest"]["branch"] = LIVE_DEMO_BRANCH
             for step_num in range(2, 6):
                 yield {"event": "step_complete", "step": step_num}
-            yield {"event": "synthesis_complete", "data": fallback_res.model_dump()}
+            yield {"event": "synthesis_complete", "data": fallback_dict}
             return
 
         # DevSecOps Security Directive Enforcement: If raw unredacted credentials or destructive DDL exist in diff
@@ -234,11 +312,11 @@ class MergeWhisperOrchestrator:
         # Step 2: Evaluating DevOps blast radius & risk
         yield {"event": "step_complete", "step": 2}
 
-        # Construct complete Stage 05 ShipData deliverable
+        # Construct complete Stage 05 ShipData deliverable with guaranteed live-demo branch
         dispatch_url = generate_github_url(
             target_repo=payload.target_repo,
             base_branch=payload.base_branch,
-            head_branch=payload.head_branch,
+            head_branch=LIVE_DEMO_BRANCH,
             title=manifest.ship.title,
             markdown_body=manifest.ship.markdown_body,
         )
@@ -342,7 +420,7 @@ class MergeWhisperOrchestrator:
             diff=payload.diff,
             target_repo=payload.target_repo,
             base_branch=payload.base_branch,
-            head_branch=payload.head_branch,
+            head_branch=LIVE_DEMO_BRANCH,
             tech_stack=payload.tech_stack,
             word_count=spoken_words,
         )
@@ -359,7 +437,14 @@ class MergeWhisperOrchestrator:
             ship=ship_stage,
         )
 
-        yield {"event": "synthesis_complete", "data": synthesis_result.model_dump()}
+        output_payload = synthesis_result.model_dump()
+        output_payload["head_branch"] = LIVE_DEMO_BRANCH
+        output_payload["branch"] = LIVE_DEMO_BRANCH
+        if "ingest" in output_payload and isinstance(output_payload["ingest"], dict):
+            output_payload["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
+            output_payload["ingest"]["branch"] = LIVE_DEMO_BRANCH
+
+        yield {"event": "synthesis_complete", "data": output_payload}
 
     async def synthesize(self, payload: IngestData) -> SynthesisResponse:
         """Asynchronously process developer intent and git diff into the 5-stage release pipeline."""
@@ -373,9 +458,6 @@ class MergeWhisperOrchestrator:
 
     async def patch_manifest(self, patch_req: VoicePatchRequest) -> SynthesisResponse:
         """Apply iterative refinement mutation via live Gemini 3.8 Flash."""
-        start_time = time.perf_counter()
-        client = self.get_client()
-
         logger.info(
             "Dispatching Gemini 3.8 Flash refinement for session '%s' (instruction: %s)",
             patch_req.session_id,
@@ -406,40 +488,71 @@ class MergeWhisperOrchestrator:
         manifest: Optional[PipelineStagesManifest] = None
         last_error: Optional[Exception] = None
 
-        for model_name in MODEL_TIERS:
-            try:
-                response = await asyncio.wait_for(
-                    client.aio.models.generate_content(
-                        model=model_name,
-                        contents=patch_prompt,
-                        config=config,
-                    ),
-                    timeout=4.0,
-                )
+        api_keys = self.get_api_keys()
+        if api_keys:
+            total_keys = len(api_keys)
+            for attempt_idx in range(total_keys):
+                key_idx = (self._active_key_index + attempt_idx) % total_keys
+                current_key = api_keys[key_idx]
 
-                raw_text = response.text
-                if not raw_text:
-                    raise ValueError(f"{model_name} returned empty response for refinement patch.")
+                masked_key = f"{current_key[:4]}...{current_key[-4:]}" if len(current_key) > 8 else "***"
+                client: Optional[genai.Client] = None
+                try:
+                    client = self.get_client(current_key)
+                except Exception as exc:
+                    last_error = exc
+                    continue
 
-                cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
-                cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+                for model_name in MODEL_TIERS:
+                    try:
+                        response = await asyncio.wait_for(
+                            client.aio.models.generate_content(
+                                model=model_name,
+                                contents=patch_prompt,
+                                config=config,
+                            ),
+                            timeout=getattr(self.settings, "llm_timeout_seconds", 30.0),
+                        )
 
-                parsed_data = json.loads(cleaned_json)
-                manifest = PipelineStagesManifest.model_validate(parsed_data)
-                break
-            except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
-                last_error = exc
-                exc_str = str(exc)
-                if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
-                    logger.warning("[AI Gateway] Gemini Free Tier quota exhausted (429). Applying local refinement mutation instantly.")
+                        raw_text = response.text
+                        if not raw_text:
+                            raise ValueError(f"{model_name} returned empty response for refinement patch.")
+
+                        cleaned_json = re.sub(r"^```(?:json)?\s*", "", raw_text.strip(), flags=re.MULTILINE)
+                        cleaned_json = re.sub(r"\s*```$", "", cleaned_json.strip(), flags=re.MULTILINE)
+
+                        parsed_data = json.loads(cleaned_json)
+                        manifest = PipelineStagesManifest.model_validate(parsed_data)
+                        self._active_key_index = key_idx
+                        break
+                    except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
+                        last_error = exc
+                        exc_str = str(exc)
+                        if "503" in exc_str or "UNAVAILABLE" in exc_str or "unavailable" in exc_str.lower() or "overloaded" in exc_str.lower():
+                            logger.warning(
+                                "[AI Gateway] Model %s hit 503 UNAVAILABLE for refinement on key [%s]. Sleeping 1.5s to let traffic spike clear...",
+                                model_name,
+                                masked_key,
+                            )
+                            await asyncio.sleep(1.5)
+                            continue
+                        if "429" in exc_str or "RESOURCE_EXHAUSTED" in exc_str or "quota" in exc_str.lower():
+                            self._exhausted_keys.add(current_key)
+                            logger.warning(
+                                "[AI Gateway] Key [%s] hit 429 for refinement. Swapping to next key...",
+                                masked_key,
+                            )
+                            break
+                        print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
+                        logger.warning(
+                            "[AI Gateway] Model %s failed for refinement (%s). Cascading to next tier...",
+                            model_name,
+                            exc,
+                        )
+                        continue
+
+                if manifest is not None:
                     break
-                print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
-                logger.warning(
-                    "[AI Gateway] Model %s failed for refinement (%s). Cascading to next tier...",
-                    model_name,
-                    exc,
-                )
-                continue
 
         if manifest is None:
             logger.warning("All Gemini model tiers failed for refinement (%s). Applying mutation locally.", last_error)
@@ -458,13 +571,14 @@ class MergeWhisperOrchestrator:
                 ),
             )
 
-        target_repo = "facebook/react"
+        target_repo = "lokebuilds/MergeWhisper"
         base_branch = "main"
-        head_branch = "fix/auth-loop"
+        head_branch = "feat/live-demo"
         if patch_req.current_response.ingest:
             target_repo = patch_req.current_response.ingest.target_repo
             base_branch = patch_req.current_response.ingest.base_branch
-            head_branch = patch_req.current_response.ingest.head_branch
+            patch_req.current_response.ingest.head_branch = "feat/live-demo"
+            head_branch = "feat/live-demo"
 
         dispatch_url = generate_github_url(
             target_repo=target_repo,

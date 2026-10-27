@@ -20,11 +20,28 @@ class Settings(BaseSettings):
     Guarantees safe instantiation even when external API credentials are omitted.
     """
 
-    # Optional external AI service credentials
+    # Optional external AI service credentials (single key or comma-separated rotation list)
     gemini_api_key: Optional[str] = Field(
         default=None,
         validation_alias=AliasChoices("gemini_api_key", "GEMINI_API_KEY"),
         description="Optional API key for Google Gemini model orchestration. If omitted, deterministic offline fallback is utilized.",
+    )
+    gemini_api_keys: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices("gemini_api_keys", "GEMINI_API_KEYS"),
+        description="Optional comma-separated list of Google Gemini API keys for active round-robin rotation (e.g., 'key1,key2').",
+    )
+
+    # External LLM generation network timeout (30s threshold per tier)
+    llm_timeout_seconds: float = Field(
+        default=30.0,
+        validation_alias=AliasChoices(
+            "llm_timeout_seconds",
+            "LLM_TIMEOUT_SECONDS",
+            "llm_timeout",
+            "LLM_TIMEOUT",
+        ),
+        description="Network read/execution timeout for external LLM generation in seconds.",
     )
 
     # Server binding interface ('hash' per specification with 'host' alias support)
@@ -92,10 +109,20 @@ class Settings(BaseSettings):
         """Convenience property aligning 'hash' binding parameter to standard network terminology."""
         return self.hash
 
+    def get_api_keys(self) -> list[str]:
+        """Parse and return valid API keys from GEMINI_API_KEYS or GEMINI_API_KEY."""
+        raw = self.gemini_api_keys or self.gemini_api_key or ""
+        keys: list[str] = []
+        for part in raw.split(","):
+            cleaned = part.strip()
+            if cleaned and cleaned != "your_api_key_here" and cleaned not in keys:
+                keys.append(cleaned)
+        return keys
+
     @property
     def is_gemini_available(self) -> bool:
         """Determines if live Gemini orchestration can be initiated."""
-        return bool(self.gemini_api_key and self.gemini_api_key.strip())
+        return len(self.get_api_keys()) > 0
 
     @property
     def is_production(self) -> bool:

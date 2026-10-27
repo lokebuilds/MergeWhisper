@@ -37,9 +37,9 @@ def generate_github_url(
     Safely truncates the body query parameter if the encoded query string exceeds
     1800 characters to prevent HTTP 414 URI Too Long errors in web browsers.
     """
-    clean_repo = target_repo.strip().strip("/")
-    clean_base = base_branch.strip()
-    clean_head = head_branch.strip()
+    clean_repo = re.sub(r"\s+", "", (target_repo or "lokebuilds/MergeWhisper").strip().strip("/"))
+    clean_base = urllib.parse.quote(re.sub(r"\s+", "-", (base_branch or "main").strip()), safe="/")
+    clean_head = urllib.parse.quote(re.sub(r"\s+", "-", (head_branch or "feat/live-demo").strip()), safe="/")
 
     params = {
         "quick_pull": "1",
@@ -133,9 +133,9 @@ index a41bc82..e89f2d1 100644
 +            response.delete_cookie("session_token", path="/")
 +            return response
          return await call_next(request)""",
-        "target_repo": "facebook/react",
+        "target_repo": "lokebuilds/MergeWhisper",
         "base_branch": "main",
-        "head_branch": "fix/auth-loop",
+        "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI",
         "risk_level": "LOW",
         "blast_radius": "Session Middleware & Ingress Route Guard (Isolated to Auth Handlers)",
@@ -185,9 +185,9 @@ index 0000000..f82a17b
 +
 +CREATE TABLE audit_logs_2026_10 PARTITION OF audit_logs
 +    FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');""",
-        "target_repo": "facebook/react",
+        "target_repo": "lokebuilds/MergeWhisper",
         "base_branch": "main",
-        "head_branch": "db/partition-audit",
+        "head_branch": "feat/live-demo",
         "tech_stack": "PostgreSQL & Alembic",
         "risk_level": "HIGH",
         "blast_radius": "Database Tier (All read/write operations targeting audit_logs across all microservices)",
@@ -233,9 +233,9 @@ index f92c10a..cb491e0 100644
 +                    del self.active_connections[client_id]
 +            self.pending_event_queues.pop(client_id, None)
 +            await websocket.close(code=1000)""",
-        "target_repo": "facebook/react",
+        "target_repo": "lokebuilds/MergeWhisper",
         "base_branch": "main",
-        "head_branch": "fix/ws-memory-leak",
+        "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI & WebSockets",
         "risk_level": "MEDIUM",
         "blast_radius": "Real-time Ingress Gateway & WebSocket Worker Fleet (12 cluster nodes)",
@@ -277,9 +277,9 @@ index d81a201..f73e4b9 100644
 +            pipe.evalsha(RATE_LIMIT_LUA_SHA, 1, key, capacity, fill_rate, time.time())
 +            results = await pipe.execute()
 +            return bool(results[0])""",
-        "target_repo": "facebook/react",
+        "target_repo": "lokebuilds/MergeWhisper",
         "base_branch": "main",
-        "head_branch": "perf/redis-limiter",
+        "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI & Redis",
         "risk_level": "LOW",
         "blast_radius": "API Gateway Rate Limiter Middleware (Fails open to protect traffic)",
@@ -318,9 +318,9 @@ index a41bc82..e89f2d1 100644
 +++ b/db/cleanup.sql
 @@ -1,1 +1,2 @@
 +DROP TABLE customer_sessions CASCADE;""",
-        "target_repo": "facebook/react",
+        "target_repo": "lokebuilds/MergeWhisper",
         "base_branch": "main",
-        "head_branch": "hotfix/token-bypass",
+        "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI",
         "risk_level": "CRITICAL",
         "blast_radius": "FATAL HALT: High-severity security threat detected. Leaked AWS key and destructive SQL DROP TABLE statement in patch.",
@@ -349,10 +349,12 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
     start_time = time.perf_counter()
     session_id = f"sess_{uuid.uuid4()}"
 
+    LIVE_DEMO_BRANCH = "feat/live-demo"
+
     # Use payload fields if user customized them, otherwise preset defaults
     target_repo = payload.target_repo or preset["target_repo"]
     base_branch = payload.base_branch or preset["base_branch"]
-    head_branch = payload.head_branch or preset["head_branch"]
+    head_branch = LIVE_DEMO_BRANCH
     tech_stack = payload.tech_stack or preset["tech_stack"]
 
     # DevSecOps Threat Detection: check for AWS keys or destructive SQL
@@ -532,11 +534,22 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
     time_saved = round(word_count * 0.25, 2)
     elapsed_ms = round((time.perf_counter() - start_time) * 1000 + 45.0, 2)
 
+    ingest_data = IngestionPayload(
+        intent=payload.intent,
+        diff=diff_content,
+        target_repo=target_repo,
+        base_branch=base_branch,
+        head_branch=LIVE_DEMO_BRANCH,
+        tech_stack=tech_stack,
+        word_count=word_count,
+    )
+
     return SynthesisResponse(
         session_id=session_id,
         latency_ms=elapsed_ms,
         dev_time_saved_minutes=time_saved,
         spoken_word_count=word_count,
+        ingest=ingest_data,
         devops_audit=devops_audit,
         pr_card=pr_card,
         qa_card=qa_card,
@@ -558,6 +571,8 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
     and constructs all deliverables with an embedded GitHub compare dispatch link.
     """
     start_time = time.perf_counter()
+    LIVE_DEMO_BRANCH = "feat/live-demo"
+    payload.head_branch = LIVE_DEMO_BRANCH
     combined_text = f"{payload.intent} {payload.diff or ''}".lower()
 
     # Match against pre-baked presets
@@ -620,6 +635,10 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
         intercepted_threats=threats_detected,
     )
 
+    LIVE_DEMO_BRANCH = "feat/live-demo"
+    head_branch = LIVE_DEMO_BRANCH
+    payload.head_branch = LIVE_DEMO_BRANCH
+
     diff_section = f"\n### 📄 Git Diff Telemetry\n```diff\n{payload.diff}\n```\n" if payload.diff else ""
     pr_markdown = f"""## 🎙️ MergeWhisper Autonomous Pull Request Manifest
 
@@ -627,7 +646,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
 {summary}
 
 - **Target Repository:** `{payload.target_repo}`
-- **Branch Topology:** `{payload.head_branch}` ➡️ `{payload.base_branch}`
+- **Branch Topology:** `{LIVE_DEMO_BRANCH}` ➡️ `{payload.base_branch}`
 - **Declared Tech Stack:** `{payload.tech_stack}`
 - **Risk Level:** `{risk_level}` | **Breaking Change:** `{'YES' if is_breaking else 'NO'}`
 
@@ -647,7 +666,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
     github_url = generate_github_url(
         target_repo=payload.target_repo,
         base_branch=payload.base_branch,
-        head_branch=payload.head_branch,
+        head_branch=LIVE_DEMO_BRANCH,
         title=title,
         markdown_body=pr_markdown,
     )
@@ -759,11 +778,22 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
 
     elapsed_ms = round((time.perf_counter() - start_time) * 1000 + 35.0, 2)
 
+    ingest_data = IngestionPayload(
+        intent=payload.intent,
+        diff=payload.diff,
+        target_repo=payload.target_repo,
+        base_branch=payload.base_branch,
+        head_branch=LIVE_DEMO_BRANCH,
+        tech_stack=payload.tech_stack,
+        word_count=word_count,
+    )
+
     return SynthesisResponse(
         session_id=f"sess_{uuid.uuid4()}",
         latency_ms=elapsed_ms,
         dev_time_saved_minutes=time_saved_minutes,
         spoken_word_count=word_count,
+        ingest=ingest_data,
         devops_audit=devops_audit,
         pr_card=pr_card,
         qa_card=qa_card,
@@ -854,7 +884,7 @@ def apply_voice_patch(patch_req: VoicePatchRequest) -> SynthesisResponse:
     manifest.slack_card.broadcast_summary += f"\n• *Voice Patch Applied:* `{instruction}`"
 
     # Extract target_repo, base_branch, head_branch from existing dispatch url
-    target_repo = "facebook/react"
+    target_repo = "lokebuilds/MergeWhisper"
     base_branch = "main"
     head_branch = "fix/auth-loop"
     if manifest.pr_card.github_dispatch_url:

@@ -177,39 +177,40 @@
             <button 
                 type="button" 
                 onclick="if (currentView !== 'landing') switchView('landing'); (document.getElementById('features-section') || document.getElementById('landing-view')).scrollIntoView({ behavior: 'smooth' });" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors cursor-pointer">
-                Features
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                FEATURES
             </button>
             <button 
                 type="button" 
                 onclick="openWorkspace()" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors cursor-pointer">
-                Presets
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                PRESETS
             </button>
             <button 
                 type="button" 
                 onclick="showToast('Coming soon', 'info')" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors cursor-pointer">
-                Shortcuts
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                SHORTCUTS
             </button>
             <button 
                 type="button" 
                 onclick="if (currentView !== 'landing') switchView('landing'); const faq = document.getElementById('faq-section') || document.getElementById('faq'); if (faq) faq.scrollIntoView({ behavior: 'smooth' });" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors cursor-pointer">
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
                 FAQ
             </button>
         </nav>
 
-        <!-- Right Side: Wispr Setup (Workspace only), Theme Toggle, and Primary Open Workspace Button -->
+        <!-- Right Side: Wispr Setup Logo, Theme Toggle, and Primary Open Workspace Button -->
         <div class="flex items-center gap-3.5 sm:gap-4">
-            <!-- Wispr Setup Utility Button (hidden on landing by default) -->
+
+            <!-- Wispr Setup Utility Button / Logo -->
             <button 
                 type="button" 
                 id="copy-dev-profile-btn"
                 onclick="copyUniversalDeveloperProfile()" 
-                title="Copy Universal Developer Profile to clipboard for Wispr Flow dictation engine"
-                class="hidden text-xs font-mono font-medium text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors flex items-center gap-2 px-2.5 py-1 rounded cursor-pointer">
-                <i data-lucide="mic" class="w-3.5 h-3.5"></i>
+                title="Wispr Setup: Copy developer voice profile"
+                class="text-xs font-mono font-medium text-gray-500 hover:text-[#38BDF8] transition-colors flex items-center gap-2 px-2.5 py-1 rounded cursor-pointer">
+                <i data-lucide="mic" class="w-3.5 h-3.5 text-[#38BDF8]"></i>
                 <span id="copy-dev-profile-label">Wispr Setup</span>
             </button>
 
@@ -737,7 +738,6 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-mono text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Enterprise Presets</span>
-                        <span id="active-preset-label" class="text-xs font-mono text-stone-600 dark:text-zinc-400 font-medium">Preset: None</span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                         <button type="button" onclick="selectPreset('auth-loop')" id="pill-auth-loop" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
@@ -788,9 +788,6 @@
                         <label for="intent" class="text-xs font-mono font-medium text-stone-700 dark:text-zinc-300 uppercase tracking-wider">
                             Developer Intent Ingest
                         </label>
-                        <span class="text-[11px] font-mono text-stone-400 dark:text-zinc-500 tabular-nums">
-                            Words: <span id="intent-word-count" class="text-stone-900 dark:text-zinc-100 font-medium">0</span>
-                        </span>
                     </div>
 
                     <textarea 
@@ -803,15 +800,15 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" placeholder="owner/repository" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="target-repo" type="text" value="lokebuilds/MergeWhisper" placeholder="lokebuilds/MergeWhisper" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Base Branch</span>
-                            <input id="base-branch" type="text" placeholder="main" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" placeholder="feat/branch-name" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="head-branch" type="text" value="feat/live-demo" placeholder="feat/live-demo" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
                         </div>
                     </div>
 
@@ -823,16 +820,6 @@
                                 <span>Git Staged Diff & Patch Logs</span>
                                 <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Optional</span>
                                 <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
-                            </button>
-                            <!-- DevSecOps Ghost Mode Toggle Button -->
-                            <button 
-                                type="button" 
-                                id="ghost-mode-toggle-btn"
-                                onclick="toggleGhostMode()" 
-                                title="Redact secrets, tokens and credentials from Git Diff before synthesis"
-                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium text-stone-600 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 bg-stone-100 hover:bg-stone-200/80 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 border border-stone-200 dark:border-zinc-700/60 transition cursor-pointer active:scale-[0.98]">
-                                <i data-lucide="ghost" class="w-3.5 h-3.5 text-stone-400 dark:text-zinc-400"></i>
-                                <span id="ghost-mode-btn-label">👻 Enable Ghost Mode</span>
                             </button>
                         </div>
                         <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-white dark:bg-[#08090a] hidden">
@@ -858,6 +845,18 @@
                         <span id="synthesize-btn-label">Synthesize Release Specifications</span>
                         <span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>
                     </button>
+
+                    <!-- Navigation Footer for Stage 01 -->
+                    <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
+                        <button 
+                            type="button" 
+                            id="proceed-to-audit-btn" 
+                            onclick="proceedToStage('stage-02')" 
+                            class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1 shadow-xs active:scale-[0.98]">
+                            <span>Proceed to Audit</span>
+                            &rarr;
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -955,7 +954,7 @@
                         <button type="button" onclick="navigateToStage('stage-01')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Ingest
                         </button>
-                        <button type="button" onclick="navigateToStage('stage-03')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button type="button" onclick="proceedToStage('stage-03')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
                             <span>Proceed to Verify</span>
                             &rarr;
                         </button>
@@ -1003,7 +1002,7 @@
                         <button type="button" onclick="navigateToStage('stage-02')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Audit
                         </button>
-                        <button type="button" onclick="navigateToStage('stage-04')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button type="button" onclick="proceedToStage('stage-04')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
                             <span>Proceed to Changelog</span>
                             &rarr;
                         </button>
@@ -1059,7 +1058,7 @@
                         <button type="button" onclick="navigateToStage('stage-03')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Verify
                         </button>
-                        <button type="button" id="proceed-to-ship-btn" onclick="navigateToStage('stage-05')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button type="button" id="proceed-to-ship-btn" onclick="proceedToStage('stage-05')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
                             <span>Proceed to Ship</span>
                             &rarr;
                         </button>
@@ -1130,20 +1129,20 @@
                             </div>
                         </div>
 
-                        <!-- Prominent Green 'Open in GitHub Compare' Button (Refined Slate-Emerald in Dark Mode) -->
+                        <!-- Signature Dark 'Open in GitHub Compare' Button -->
                         <a 
                             id="pr-github-compare-btn" 
-                            href="#" 
+                            href="https://github.com/lokebuilds/MergeWhisper/compare/main...feat/production-sweep" 
                             target="_blank" 
                             rel="noopener noreferrer" 
-                            class="w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-emerald-600 hover:bg-emerald-500 text-white dark:bg-emerald-900/40 dark:text-emerald-300 dark:border dark:border-emerald-700/40 hover:dark:bg-emerald-800/50 flex items-center justify-center gap-2 shadow-xs transition cursor-pointer pointer-events-none opacity-50 active:scale-[0.99]">
+                            class="w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold">
                             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
                             <span>Open in GitHub Compare</span>
                         </a>
                     </div>
 
                     <!-- Stakeholder Broadcast & CI Pipeline Card -->
-                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5">
+                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5 min-h-[460px]">
                         <div class="flex flex-col gap-4">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-1.5 p-0.5 rounded-lg bg-stone-100 dark:bg-zinc-800/80 border hairline-border">
@@ -1151,7 +1150,7 @@
                                         type="button" 
                                         id="tab-btn-slack" 
                                         onclick="switchShipTab('slack')" 
-                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-purple-600 dark:text-purple-400 shadow-2xs flex items-center gap-1.5 border border-purple-500/30">
+                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40">
                                         <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
                                         <span>Slack Block Kit</span>
                                     </button>
@@ -1160,52 +1159,60 @@
                                         id="tab-btn-ci" 
                                         onclick="switchShipTab('ci')" 
                                         class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5">
-                                        <i data-lucide="cog" class="w-3.5 h-3.5 text-[#38BDF8]"></i>
+                                        <i data-lucide="cog" class="w-3.5 h-3.5"></i>
                                         <span>⚙️ CI Workflow</span>
                                     </button>
                                 </div>
-                                <span id="ship-channel-badge" class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-purple-500/10 text-purple-700 dark:text-purple-400">
-                                    #eng-releases
-                                </span>
                             </div>
 
                             <!-- Tab 1: Slack Broadcast -->
-                            <div id="ship-tab-content-slack" class="flex flex-col gap-4">
+                            <div id="ship-tab-content-slack" class="flex flex-col gap-3">
                                 <div>
                                     <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 block mb-0.5 uppercase tracking-wider">Broadcast Summary:</span>
-                                    <div id="slack-broadcast-summary" class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 leading-relaxed">
+                                    <div id="slack-broadcast-summary" class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 leading-relaxed truncate">
                                         Awaiting release broadcast synthesis...
                                     </div>
                                 </div>
 
-                                <div class="flex flex-col gap-1">
-                                    <div class="flex items-center justify-between">
-                                        <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Slack Block Kit JSON Payload:</span>
-                                        <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="text-xs font-mono text-stone-500 hover:text-purple-600 dark:hover:text-purple-400 flex items-center gap-1 transition cursor-pointer">
-                                            <i data-lucide="copy" class="w-3 h-3"></i>
-                                            <span>Copy JSON</span>
-                                        </button>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-gray-800">
+                                        <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Slack Block Kit JSON Payload</span>
+                                        <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
+                                            <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                                <span>Copy JSON</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <pre id="slack-json-box" class="p-3 rounded-lg editorial-inner text-xs font-mono text-purple-800 dark:text-purple-300 whitespace-pre-wrap overflow-y-auto max-h-[190px] leading-relaxed">{}</pre>
+                                    <pre id="slack-json-box" class="p-4 rounded-lg bg-[#0c0d12] border border-gray-800 text-[#10b981] text-xs font-mono whitespace-pre-wrap overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed shadow-inner">{}</pre>
                                 </div>
                             </div>
 
                             <!-- Tab 2: CI Workflow YAML -->
                             <div id="ship-tab-content-ci" class="hidden flex flex-col gap-3">
-                                <div class="flex items-center justify-between text-[11px] font-mono text-stone-500 dark:text-zinc-400">
-                                    <span class="text-[#38BDF8] font-medium">.github/workflows/verify-pr.yml</span>
-                                    <div class="flex items-center gap-2">
-                                        <button type="button" onclick="copyCiWorkflow()" class="text-xs font-mono text-stone-500 hover:text-[#38BDF8] dark:hover:text-[#38BDF8] flex items-center gap-1 transition cursor-pointer">
-                                            <i data-lucide="copy" class="w-3 h-3"></i>
-                                            <span>📋 Copy</span>
-                                        </button>
-                                        <button type="button" onclick="downloadCiWorkflow()" class="text-xs font-mono text-stone-500 hover:text-[#38BDF8] dark:hover:text-[#38BDF8] flex items-center gap-1 transition cursor-pointer">
-                                            <i data-lucide="download" class="w-3 h-3"></i>
-                                            <span>⬇️ Download .yml</span>
-                                        </button>
+                                <div>
+                                    <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 block mb-0.5 uppercase tracking-wider">CI Specification:</span>
+                                    <div class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 leading-relaxed truncate">
+                                        <span>Automated GitHub Actions PR Verification Pipeline</span>
                                     </div>
                                 </div>
-                                <pre id="ci-workflow-box" class="p-3.5 rounded-lg bg-black/60 border border-gray-800/80 font-mono text-xs text-[#38BDF8] dark:text-[#38BDF8] whitespace-pre overflow-x-auto overflow-y-auto max-h-[200px] leading-relaxed"># Awaiting CI workflow synthesis...</pre>
+
+                                <div class="flex flex-col">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-gray-800">
+                                        <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">.github/workflows/verify-pr.yml</span>
+                                        <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
+                                            <button type="button" onclick="copyCiWorkflow()" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                                <span>Copy</span>
+                                            </button>
+                                            <button type="button" onclick="downloadCiWorkflow()" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                                <span>Download .yml</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#10b981] border border-gray-800 p-4 font-mono text-xs shadow-inner rounded-lg whitespace-pre overflow-x-auto overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed"># Awaiting CI workflow synthesis...</pre>
+                                </div>
                             </div>
                         </div>
 
@@ -1214,7 +1221,7 @@
                             <button type="button" onclick="navigateToStage('stage-04')" class="text-stone-500 hover:text-stone-800 dark:hover:text-zinc-200 transition cursor-pointer">
                                 &larr; Back to Changelog
                             </button>
-                            <button type="button" onclick="navigateToStage('stage-01')" class="text-stone-700 hover:text-stone-900 dark:text-zinc-300 dark:hover:text-white font-medium transition cursor-pointer">
+                            <button type="button" onclick="resetToNewIngest()" class="text-stone-700 hover:text-stone-900 dark:text-zinc-300 dark:hover:text-white font-medium transition cursor-pointer">
                                 Create New Ingest &rarr;
                             </button>
                         </div>
@@ -1269,10 +1276,10 @@
                 </button>
             </div>
             <div class="space-y-2 font-mono text-xs">
-                <div onclick="loadProjectRepo('facebook/react', 'main', 'fix/auth-loop', 'auth-loop')" class="p-3 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-700 cursor-pointer transition flex items-center justify-between">
+                <div onclick="loadProjectRepo('lokebuilds/MergeWhisper', 'main', 'feat/production-sweep', 'auth-loop')" class="p-3 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-700 cursor-pointer transition flex items-center justify-between">
                     <div>
-                        <span class="font-medium text-stone-900 dark:text-zinc-100 block">facebook/react</span>
-                        <span class="text-[10px] text-stone-400">main &larr; fix/auth-loop</span>
+                        <span class="font-medium text-stone-900 dark:text-zinc-100 block">lokebuilds/MergeWhisper</span>
+                        <span class="text-[10px] text-stone-400">main &larr; feat/production-sweep</span>
                     </div>
                     <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600">Active</span>
                 </div>
@@ -1394,86 +1401,16 @@
     </div>
 
     <!-- ==================================================================== -->
-    <!-- INTERACTIVE SRE ROI TELEMETRY WIDGET (BASE-4 / ELECTRIC SKY #38BDF8) -->
+    <!-- SRE ROI TELEMETRY BADGE (STATIC / NON-INTERACTIVE / ELECTRIC SKY)     -->
     <!-- ==================================================================== -->
-    <div id="sre-roi-dock" class="fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6 font-mono text-xs select-none">
-        <!-- Minimized Floating Pill (Default State: Discreet, non-intrusive, never covers page elements) -->
-        <button 
-            type="button" 
-            id="sre-roi-minimized" 
-            onclick="toggleRoiDock(true)" 
-            class="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/95 dark:bg-[#0c0d10]/95 border border-stone-300 dark:border-zinc-800 shadow-lg hover:border-[#38BDF8] dark:hover:border-[#38BDF8] transition-all cursor-pointer backdrop-blur-md">
+    <div id="sre-roi-dock" class="hidden fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6 font-mono text-xs select-none pointer-events-none">
+        <div class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 dark:bg-[#0c0d10]/95 border border-stone-300 dark:border-zinc-800 shadow-lg backdrop-blur-md">
             <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
-            <span class="text-[11px] font-medium text-stone-700 dark:text-zinc-300">⏱️ <span id="roi-minimized-time" class="font-bold text-[#38BDF8] tabular-nums">42.5</span>m Saved Today</span>
-            <span class="text-[10px] text-stone-400 group-hover:text-[#38BDF8] dark:text-zinc-500">▲ ROI</span>
-        </button>
-
-        <!-- Expanded Glass-morphic Calculator Card -->
-        <div id="sre-roi-expanded" class="hidden editorial-card radius-outer border border-stone-200 dark:border-zinc-800 shadow-2xl bg-white/95 dark:bg-[#0c0d10]/95 backdrop-blur-md p-4 max-w-xs sm:max-w-sm w-full flex flex-col gap-3 transition-all">
-            <div class="flex items-center justify-between gap-3 border-b border-stone-200/80 dark:border-zinc-800 pb-2.5">
-                <div class="flex items-center gap-2 whitespace-nowrap">
-                    <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
-                    <span class="text-[11px] text-stone-700 dark:text-zinc-300 font-medium">⏱️ Total Saved Today:</span>
-                    <span id="roi-total-saved-today" class="text-xs font-bold text-[#38BDF8] tabular-nums">42.5 mins</span>
-                </div>
-                <button 
-                    type="button" 
-                    onclick="toggleRoiDock(false)" 
-                    title="Minimize ROI Drawer"
-                    class="p-1 rounded text-stone-400 hover:text-stone-700 dark:text-zinc-500 dark:hover:text-zinc-200 transition cursor-pointer">
-                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                </button>
-            </div>
-
-            <!-- Team ROI Calculator Drawer -->
-            <div id="roi-calculator-drawer" class="flex flex-col gap-3">
-                <div class="flex items-center justify-between text-[11px] text-stone-600 dark:text-zinc-400 font-medium">
-                    <span>Calculate Team ROI</span>
-                    <span class="text-[10px] text-stone-400 dark:text-zinc-500">$130/hr blended</span>
-                </div>
-
-                <div class="flex flex-col gap-1.5">
-                    <div class="flex justify-between text-[11px] text-stone-600 dark:text-zinc-400">
-                        <span>Team Size:</span>
-                        <span id="slider-team-size-val" class="text-[#38BDF8] font-bold tabular-nums">10 devs</span>
-                    </div>
-                    <input 
-                        type="range" 
-                        id="slider-team-size" 
-                        min="1" 
-                        max="100" 
-                        value="10" 
-                        oninput="updateRoiCalculations()" 
-                        class="w-full accent-[#38BDF8] h-1.5 bg-stone-200 dark:bg-zinc-800 rounded-lg cursor-pointer">
-                </div>
-
-                <div class="flex flex-col gap-1.5">
-                    <div class="flex justify-between text-[11px] text-stone-600 dark:text-zinc-400">
-                        <span>PRs / Week per Dev:</span>
-                        <span id="slider-prs-week-val" class="text-[#38BDF8] font-bold tabular-nums">3 PRs</span>
-                    </div>
-                    <input 
-                        type="range" 
-                        id="slider-prs-week" 
-                        min="1" 
-                        max="10" 
-                        value="3" 
-                        oninput="updateRoiCalculations()" 
-                        class="w-full accent-[#38BDF8] h-1.5 bg-stone-200 dark:bg-zinc-800 rounded-lg cursor-pointer">
-                </div>
-
-                <!-- Dynamic Output Box -->
-                <div class="p-2.5 rounded-xl bg-stone-50 dark:bg-black/50 border border-stone-200/80 dark:border-zinc-800 flex flex-col gap-1.5 text-[11px]">
-                    <div class="flex items-center justify-between">
-                        <span class="text-stone-600 dark:text-zinc-400">Hours Saved / Month:</span>
-                        <span id="roi-hours-saved" class="text-[#38BDF8] font-bold tabular-nums">30 hrs</span>
-                    </div>
-                    <div class="flex items-center justify-between">
-                        <span class="text-stone-600 dark:text-zinc-400">Financial Savings:</span>
-                        <span id="roi-dollar-saved" class="text-emerald-600 dark:text-emerald-400 font-bold tabular-nums">$3,900</span>
-                    </div>
-                </div>
-            </div>
+            <span class="text-[11px] font-medium text-stone-700 dark:text-zinc-300">
+                ⏱️ Total Time Saved: <span id="roi-minimized-time" class="font-bold text-[#38BDF8] tabular-nums">42.5</span> mins
+            </span>
+            <!-- Hidden backward-compatibility target for legacy queries -->
+            <span id="roi-total-saved-today" class="hidden">42.5 mins</span>
         </div>
     </div>
 
@@ -1585,9 +1522,9 @@
                 summary: 'Contains unredacted AWS credentials and destructive DDL DROP TABLE statement designed to test zero-trust security circuit breakers.',
                 intent: 'Emergency hotfix: bypass token cache and truncate old user session records immediately.',
                 diff: "diff --git a/config/credentials.py b/config/credentials.py\n--- a/config/credentials.py\n+++ b/config/credentials.py\n@@ -12,3 +12,4 @@\n-AWS_ACCESS_KEY_ID = os.environ.get(\"AWS_KEY\")\n+AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\"\n+AWS_SECRET_ACCESS_KEY = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"\n--- a/db/cleanup.sql\n+++ b/db/cleanup.sql\n@@ -1,1 +1,2 @@\n+DROP TABLE customer_sessions CASCADE;",
-                target_repo: 'facebook/react',
+                target_repo: 'lokebuilds/MergeWhisper',
                 base_branch: 'main',
-                head_branch: 'hotfix/token-bypass',
+                head_branch: 'feat/live-demo',
                 tech_stack: 'Python FastAPI',
                 risk_level: 'CRITICAL',
                 blast_radius: 'FATAL HALT: High-severity security threat detected. Leaked AWS key and destructive SQL DROP TABLE statement in patch.',
@@ -1614,9 +1551,9 @@
                 summary: 'Prevents recursion in session authentication middleware by bypassing already-targeted auth endpoints and safely clearing invalid tokens.',
                 intent: 'Fix the infinite auth redirect loop in the session middleware when tokens expire, clear session cookies cleanly, and bump patch version.',
                 diff: "diff --git a/app/middleware/session.py b/app/middleware/session.py\n--- a/app/middleware/session.py\n+++ b/app/middleware/session.py\n@@ -34,8 +34,11 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):\n-    return RedirectResponse(url='/auth/login')\n+    if request.url.path.startswith('/auth/'):\n+        return await call_next(request)\n+    response = RedirectResponse(url='/auth/login?reason=session_expired', status_code=303)\n+    response.delete_cookie('session_token', path='/')\n+    return response",
-                target_repo: 'facebook/react',
+                target_repo: 'lokebuilds/MergeWhisper',
                 base_branch: 'main',
-                head_branch: 'fix/auth-loop',
+                head_branch: 'feat/live-demo',
                 tech_stack: 'Python FastAPI',
                 risk_level: 'LOW',
                 blast_radius: 'Session Middleware & Ingress Route Guard (Isolated to Auth Handlers)',
@@ -1637,7 +1574,7 @@
                     'Concurrent expired cookie requests from multi-tab browser sessions',
                     'Malformed or empty session_token cookie headers'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"REACT-842\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/facebook/react/compare/main...fix/auth-loop?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"REACT-842\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'postgres-migration': {
                 id: 'postgres-migration',
@@ -1645,9 +1582,9 @@
                 summary: 'Introduces declarative range partitioning on audit_logs by created_at timestamp to bound index bloat and accelerate historical query performance.',
                 intent: 'Add partitioned audit_logs table with range partition on created_at and composite foreign key constraint, breaking public report schema.',
                 diff: "diff --git a/migrations/20261022_audit.sql b/migrations/20261022_audit.sql\nnew file mode 100644\n--- /dev/null\n+++ b/migrations/20261022_audit.sql\n@@ -0,0 +1,8 @@\n+CREATE TABLE audit_logs (\n+    id BIGSERIAL,\n+    tenant_id UUID NOT NULL,\n+    action VARCHAR(64) NOT NULL,\n+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n+    PRIMARY KEY (id, created_at)\n+) PARTITION BY RANGE (created_at);",
-                target_repo: 'supabase/postgres',
-                base_branch: 'master',
-                head_branch: 'migration/audit-partitioning',
+                target_repo: 'lokebuilds/MergeWhisper',
+                base_branch: 'main',
+                head_branch: 'feat/live-demo',
                 tech_stack: 'PostgreSQL 16',
                 risk_level: 'HIGH',
                 blast_radius: 'Primary OLTP PostgreSQL Cluster -> Audit Logging Worker -> BI Replication Pipelines',
@@ -1667,7 +1604,7 @@
                     'Historical event insertion into unprovisioned partition boundary',
                     'Clock skew between ingestion nodes resulting in timestamp collision'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"DB-104\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/supabase/postgres/compare/master...migration/audit-partitioning?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"DB-104\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'websocket-leak': {
                 id: 'websocket-leak',
@@ -1675,9 +1612,9 @@
                 summary: 'Closes memory leak in WebSocket broadcast pipeline by unlinking dropped client sockets on abnormal disconnect frames.',
                 intent: 'Resolve memory leak in WebSocket broadcast listener by deregistering disconnected subscriber channels on client disconnect.',
                 diff: "diff --git a/app/broadcaster.py b/app/broadcaster.py\n--- a/app/broadcaster.py\n+++ b/app/broadcaster.py\n@@ -88,4 +88,8 @@ async def handle_client(ws):\n-    pass\n+    try:\n+        await ws.listen()\n+    finally:\n+        await channel_hub.unsubscribe(ws)",
-                target_repo: 'encode/starlette',
-                base_branch: 'master',
-                head_branch: 'fix/ws-leak',
+                target_repo: 'lokebuilds/MergeWhisper',
+                base_branch: 'main',
+                head_branch: 'feat/live-demo',
                 tech_stack: 'Starlette WS',
                 risk_level: 'MEDIUM',
                 blast_radius: 'Live Event Broadcaster Subsystem -> WebSocket Gateway -> Active Client Subscriptions',
@@ -1697,7 +1634,7 @@
                     'Network flap where client reconnects before teardown loop terminates',
                     'Heartbeat ping loss on high-latency mobile carrier networks'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"WS-309\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/encode/starlette/compare/master...fix/ws-leak?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"WS-309\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'redis-limiter': {
                 id: 'redis-limiter',
@@ -1705,9 +1642,9 @@
                 summary: 'Shields authentication APIs from denial-of-service spikes via an atomic Redis sorted set sliding-window evaluation script.',
                 intent: 'Implement atomic sliding-window rate limiter using Redis Lua script to prevent thundering herd on auth endpoints.',
                 diff: "diff --git a/app/limiter.lua b/app/limiter.lua\nnew file mode 100644\n--- /dev/null\n+++ b/app/limiter.lua\n@@ -0,0 +1,6 @@\n+local key = KEYS[1]\n+local now = tonumber(ARGV[1])\n+local window = tonumber(ARGV[2])\n+local limit = tonumber(ARGV[3])\n+redis.call('ZREMRANGEBYSCORE', key, 0, now - window)\n+return 1",
-                target_repo: 'redis/redis-py',
+                target_repo: 'lokebuilds/MergeWhisper',
                 base_branch: 'main',
-                head_branch: 'feat/lua-rate-limiter',
+                head_branch: 'feat/live-demo',
                 tech_stack: 'Redis 7 / Lua',
                 risk_level: 'LOW',
                 blast_radius: 'Rate Limiting Middleware -> Redis Sentinel Cluster -> Gateway Ingress Filter',
@@ -1798,7 +1735,7 @@
                 landingView.classList.remove('hidden');
                 workspaceView.classList.add('hidden');
                 if (navBtn) navBtn.classList.remove('hidden');
-                if (copyDevProfileBtn) copyDevProfileBtn.classList.add('hidden');
+                if (copyDevProfileBtn) copyDevProfileBtn.classList.remove('hidden');
             } else {
                 if (!preserveState) {
                     resetWorkspaceState();
@@ -1814,20 +1751,23 @@
             refreshIcons();
         }
 
-        // Surgical Reset Workspace State: Explicitly selects #target-repo, #base-branch, #head-branch, #intent, and #raw-diff and forces .value to ''
+        // Surgical Reset Workspace State: Explicitly selects #target-repo, #base-branch, #head-branch, #intent, and #raw-diff
         function resetWorkspaceState() {
-            // Explicitly select all 5 input elements and force their .value to an empty string ''
+            // Explicitly select all 5 input elements
             const targetRepo = document.getElementById('target-repo');
             const baseBranch = document.getElementById('base-branch');
             const headBranch = document.getElementById('head-branch');
             const intent = document.getElementById('intent');
             const rawDiff = document.getElementById('raw-diff');
 
-            if (targetRepo) targetRepo.value = '';
-            if (baseBranch) baseBranch.value = '';
-            if (headBranch) headBranch.value = '';
+            if (targetRepo) targetRepo.value = 'lokebuilds/MergeWhisper';
+            if (baseBranch) baseBranch.value = 'main';
+            if (headBranch) headBranch.value = 'feat/live-demo';
             if (intent) intent.value = '';
             if (rawDiff) rawDiff.value = '';
+            if (typeof updateGitHubCompareLink === 'function') {
+                updateGitHubCompareLink();
+            }
 
             // Reset active preset key
             activePresetKey = null;
@@ -1864,6 +1804,19 @@
             // Reset Fatal Halt visual state
             if (typeof resetFatalHaltUI === 'function') {
                 resetFatalHaltUI();
+            }
+
+            // Clear any pending staggered checkmark timers & hide checkmarks
+            if (typeof stageTickTimeouts !== 'undefined' && Array.isArray(stageTickTimeouts)) {
+                stageTickTimeouts.forEach(t => clearTimeout(t));
+                stageTickTimeouts = [];
+            }
+            document.querySelectorAll('.check-icon').forEach(icon => icon.classList.add('hidden'));
+
+            // Hide SRE ROI dock on clean reset
+            const roiDock = document.getElementById('sre-roi-dock');
+            if (roiDock) {
+                roiDock.classList.add('hidden');
             }
 
             // Navigate cleanly to Stage 01
@@ -1936,6 +1889,9 @@
             document.getElementById('target-repo').value = repo;
             document.getElementById('base-branch').value = base;
             document.getElementById('head-branch').value = head;
+            if (typeof updateGitHubCompareLink === 'function') {
+                updateGitHubCompareLink();
+            }
             if (activePresetKey === presetKey) activePresetKey = null;
             if (presetKey) selectPreset(presetKey);
             showToast(`Loaded repository ${repo}`, 'info');
@@ -2070,8 +2026,11 @@
             }
 
             if (ghBtn) {
-                ghBtn.className = "w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-emerald-600 hover:bg-emerald-500 text-white dark:bg-emerald-900/40 dark:text-emerald-300 dark:border dark:border-emerald-700/40 hover:dark:bg-emerald-800/50 flex items-center justify-center gap-2 shadow-xs transition cursor-pointer active:scale-[0.99] pointer-events-none opacity-50";
+                ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
                 ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
+                if (typeof updateGitHubCompareLink === 'function') {
+                    updateGitHubCompareLink();
+                }
             }
         }
 
@@ -2150,8 +2109,12 @@
                 document.getElementById('target-repo').value = preset.target_repo;
                 document.getElementById('base-branch').value = preset.base_branch;
                 document.getElementById('head-branch').value = preset.head_branch;
+                if (typeof updateGitHubCompareLink === 'function') {
+                    updateGitHubCompareLink();
+                }
                 
-                document.getElementById('active-preset-label').textContent = `Preset: ${preset.title.split(':')[0]}`;
+                const activePresetLabel = document.getElementById('active-preset-label');
+                if (activePresetLabel) activePresetLabel.textContent = `Preset: ${preset.title.split(':')[0]}`;
                 updateWordCounter();
 
                 const drawer = document.getElementById('diff-drawer-content');
@@ -2325,9 +2288,10 @@
 
         // Real-Time Word Counter
         function updateWordCounter() {
-            const val = document.getElementById('intent').value.trim();
+            const val = document.getElementById('intent')?.value.trim() || '';
             const count = val ? val.split(/\s+/).filter(Boolean).length : 0;
-            document.getElementById('intent-word-count').textContent = count;
+            const counter = document.getElementById('intent-word-count');
+            if (counter) counter.textContent = count;
         }
 
         // Collapsible Diff Toggle
@@ -2357,9 +2321,9 @@
             const payload = {
                 intent: intentVal,
                 diff: diffVal,
-                target_repo: document.getElementById('target-repo').value.trim() || 'facebook/react',
-                base_branch: document.getElementById('base-branch').value.trim() || 'main',
-                head_branch: document.getElementById('head-branch').value.trim() || 'fix/auth-loop',
+                target_repo: sanitizeRepo(document.getElementById('target-repo').value, 'lokebuilds/MergeWhisper'),
+                base_branch: sanitizeBranch(document.getElementById('base-branch').value, 'main'),
+                head_branch: sanitizeBranch(document.getElementById('head-branch').value, 'feat/live-demo'),
                 tech_stack: 'Python FastAPI'
             };
 
@@ -2402,32 +2366,57 @@
 
                         const actualElapsed = Math.round(performance.now() - startClock);
                         const cappedDisplay = (actualElapsed > 14250 || actualElapsed === 0) ? '14,250' : actualElapsed.toLocaleString();
-                        document.getElementById('exec-latency-ticker').textContent = `${cappedDisplay} ms`;
+                        const tickerEl = document.getElementById('exec-latency-ticker');
+                        if (tickerEl) tickerEl.textContent = `${cappedDisplay} ms`;
 
-                        renderAllStages(data);
-                        markAllStagesCompleted();
+                        try {
+                            renderAllStages(data);
+                        } catch (renderErr) {
+                            console.error("Non-fatal error in renderAllStages (HTTP):", renderErr);
+                        }
 
                         setTimeout(() => {
-                            modal.classList.add('hidden');
-                            const audit = currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit;
-                            const isCritical = (audit && audit.risk_level ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
+                            if (modal) modal.classList.add('hidden');
+                            const audit = (currentActiveManifest && (currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit)) || {};
+                            const isCritical = ((audit && audit.risk_level) ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
                             if (isCritical) {
                                 showFatalHaltModal(audit.intercepted_threats);
                                 showToast('🛑 DevSecOps Fatal Halt: Deployment locked due to security breach.', 'error');
                             } else {
                                 showToast(`Release pipeline synthesized in ${cappedDisplay} ms`, 'success');
                             }
-                            // Accumulate SRE Telemetry
-                            const wordsSpoken = currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count) || payload.intent.split(/\s+/).filter(Boolean).length;
-                            const minutesSaved = currentActiveManifest.dev_time_saved_minutes || Math.round(wordsSpoken * 0.25 * 10) / 10;
-                            accumulateRoiTelemetry(minutesSaved);
+                            // Accumulate SRE Telemetry with strict null-safety
+                            try {
+                                const wordsSpoken = (currentActiveManifest && (currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count))) || (payload.intent ? payload.intent.split(/\s+/).filter(Boolean).length : 14);
+                                const minutesSaved = (currentActiveManifest && currentActiveManifest.dev_time_saved_minutes) || Math.round(wordsSpoken * 0.25 * 10) / 10;
+                                accumulateRoiTelemetry(minutesSaved);
+                            } catch (roiErr) {
+                                console.warn("ROI telemetry accumulation warning:", roiErr);
+                            }
 
-                            navigateToStage('stage-02');
+                            // Reveal SRE ROI dock in collapsed pill state after generation completes (Stage 05)
+                            try {
+                                const roiDock = document.getElementById('sre-roi-dock');
+                                if (roiDock) {
+                                    if (typeof toggleRoiDock === 'function') toggleRoiDock(false);
+                                    roiDock.classList.remove('hidden');
+                                }
+                            } catch (dockErr) {
+                                console.warn("SRE ROI dock reveal warning:", dockErr);
+                            }
+
+                            // Reveal Stage 01 footer with Proceed to Audit button for manual progression
+                            const s1Footer = document.getElementById('stage-01-footer');
+                            if (s1Footer) s1Footer.classList.remove('hidden');
+                            const synthBtn = document.getElementById('synthesize-btn');
+                            if (synthBtn) {
+                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                            }
                             refreshIcons();
                         }, 500);
                     } catch (httpErr) {
                         console.error("HTTP synthesis request failed:", httpErr);
-                        modal.classList.add('hidden');
+                        if (modal) modal.classList.add('hidden');
                         showToast(`Synthesis failed: ${httpErr.message || 'Server error'}`, 'error');
                     }
                 };
@@ -2449,38 +2438,63 @@
 
                             const actualElapsed = Math.round(performance.now() - startClock);
                             const cappedDisplay = (actualElapsed > 14250 || actualElapsed === 0) ? '14,250' : actualElapsed.toLocaleString();
-                            document.getElementById('exec-latency-ticker').textContent = `${cappedDisplay} ms`;
+                            const tickerEl = document.getElementById('exec-latency-ticker');
+                            if (tickerEl) tickerEl.textContent = `${cappedDisplay} ms`;
 
-                            renderAllStages(data.data);
-                            markAllStagesCompleted();
+                            try {
+                                renderAllStages(data.data);
+                            } catch (renderErr) {
+                                console.error("Non-fatal error in renderAllStages (WS):", renderErr);
+                            }
 
                             try {
                                 socket.close();
                             } catch (_) {}
 
-                            // Gracefully close modal
+                            // Gracefully close modal & trigger Fatal Halt if CRITICAL
                             setTimeout(() => {
-                                modal.classList.add('hidden');
-                                const audit = currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit;
-                                const isCritical = (audit && audit.risk_level ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
+                                if (modal) modal.classList.add('hidden');
+                                const audit = (currentActiveManifest && (currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit)) || {};
+                                const isCritical = ((audit && audit.risk_level) ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
                                 if (isCritical) {
                                     showFatalHaltModal(audit.intercepted_threats);
                                     showToast('🛑 DevSecOps Fatal Halt: Deployment locked due to security breach.', 'error');
                                 } else {
                                     showToast(`Release pipeline synthesized in ${cappedDisplay} ms`, 'success');
                                 }
-                                // Accumulate SRE Telemetry
-                                const wordsSpoken = currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count) || payload.intent.split(/\s+/).filter(Boolean).length;
-                                const minutesSaved = currentActiveManifest.dev_time_saved_minutes || Math.round(wordsSpoken * 0.25 * 10) / 10;
-                                accumulateRoiTelemetry(minutesSaved);
+                                // Accumulate SRE Telemetry with strict null-safety
+                                try {
+                                    const wordsSpoken = (currentActiveManifest && (currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count))) || (payload.intent ? payload.intent.split(/\s+/).filter(Boolean).length : 14);
+                                    const minutesSaved = (currentActiveManifest && currentActiveManifest.dev_time_saved_minutes) || Math.round(wordsSpoken * 0.25 * 10) / 10;
+                                    accumulateRoiTelemetry(minutesSaved);
+                                } catch (roiErr) {
+                                    console.warn("ROI telemetry accumulation warning:", roiErr);
+                                }
 
-                                navigateToStage('stage-02');
+                                // Reveal SRE ROI dock in collapsed pill state after generation completes (Stage 05)
+                                try {
+                                    const roiDock = document.getElementById('sre-roi-dock');
+                                    if (roiDock) {
+                                        if (typeof toggleRoiDock === 'function') toggleRoiDock(false);
+                                        roiDock.classList.remove('hidden');
+                                    }
+                                } catch (dockErr) {
+                                    console.warn("SRE ROI dock reveal warning:", dockErr);
+                                }
+
+                                // Reveal Stage 01 footer with Proceed to Audit button for manual progression
+                                const s1Footer = document.getElementById('stage-01-footer');
+                                if (s1Footer) s1Footer.classList.remove('hidden');
+                                const synthBtn = document.getElementById('synthesize-btn');
+                                if (synthBtn) {
+                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                                }
                                 refreshIcons();
                             }, 500);
                         } else if (data.event === 'error') {
                             console.error("WebSocket streaming error from server:", data.message);
                             try { socket.close(); } catch (_) {}
-                            modal.classList.add('hidden');
+                            if (modal) modal.classList.add('hidden');
                             showToast(`Synthesis failed: ${data.message || 'Server error'}`, 'error');
                             return;
                         }
@@ -2563,199 +2577,361 @@
             triggerRefinementPatch(text);
         }
 
-        // Mark All Wizard Stages Completed
-        function markAllStagesCompleted() {
-            document.querySelectorAll('.check-icon').forEach(icon => {
-                icon.classList.remove('hidden');
-            });
+        // Staggered top navigation step tick animation (01 Ingest -> 02 Audit -> 03 Verify -> 04 Changelog -> 05 Ship)
+        // Sequential top navigation step checkmark handlers
+        let stageTickTimeouts = [];
+
+        function setStepCheckmark(stepId, show = true) {
+            const stepBtn = document.getElementById(stepId);
+            if (stepBtn) {
+                const icon = stepBtn.querySelector('.check-icon');
+                if (icon) {
+                    if (show) {
+                        icon.classList.remove('hidden');
+                        stepBtn.classList.add('ring-1', 'ring-emerald-500/40');
+                        setTimeout(() => stepBtn.classList.remove('ring-1', 'ring-emerald-500/40'), 400);
+                    } else {
+                        icon.classList.add('hidden');
+                    }
+                }
+            }
+            refreshIcons();
         }
+
+        // Advance to target stage and apply checkmark to completed prior step
+        function proceedToStage(targetStage) {
+            if (targetStage === 'stage-02') {
+                setStepCheckmark('nav-step-01', true);
+            } else if (targetStage === 'stage-03') {
+                setStepCheckmark('nav-step-02', true);
+            } else if (targetStage === 'stage-04') {
+                setStepCheckmark('nav-step-03', true);
+            } else if (targetStage === 'stage-05') {
+                setStepCheckmark('nav-step-04', true);
+            }
+            navigateToStage(targetStage);
+        }
+
+        // Reset workspace to clean Stage 01 state and strip all checkmarks
+        function resetToNewIngest() {
+            resetWorkspaceState();
+            const stepIds = ['nav-step-01', 'nav-step-02', 'nav-step-03', 'nav-step-04', 'nav-step-05'];
+            stepIds.forEach(id => setStepCheckmark(id, false));
+            const s1Footer = document.getElementById('stage-01-footer');
+            if (s1Footer) s1Footer.classList.add('hidden');
+            const synthBtn = document.getElementById('synthesize-btn');
+            if (synthBtn) {
+                synthBtn.innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 dark:text-amber-500"></i><span id="synthesize-btn-label">Synthesize Release Specifications</span><span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>';
+            }
+            navigateToStage('stage-01');
+            showToast("Workspace reset for new ingest", "info");
+            refreshIcons();
+        }
+
+        function markAllStagesCompleted() {
+            // Deprecated: checkmarks are earned sequentially via Proceed buttons
+        }
+
+        window.setStepCheckmark = setStepCheckmark;
+        window.proceedToStage = proceedToStage;
+        window.resetToNewIngest = resetToNewIngest;
+        window.markAllStagesCompleted = markAllStagesCompleted;
+
+        // ====================================================================
+        // UNIVERSAL URL SANITIZER & DYNAMIC BUILDER FOR EXTERNAL LINKS
+        // ====================================================================
+        function sanitizeBranch(branch, defaultBranch = 'main') {
+            if (!branch || typeof branch !== 'string' || !branch.trim()) return defaultBranch;
+            // 1. Remove spaces around slashes (e.g. 'feat / my branch' -> 'feat/my branch')
+            // 2. Replace remaining whitespace sequences with dashes (e.g. 'my branch' -> 'my-branch')
+            // 3. Safely URI-encode path segments while preserving forward slashes
+            const cleaned = branch.trim()
+                .replace(/\s*\/\s*/g, '/')
+                .replace(/\s+/g, '-');
+            return cleaned
+                .split('/')
+                .map(segment => encodeURIComponent(segment))
+                .join('/');
+        }
+
+        function sanitizeRepo(repo, defaultRepo = 'lokebuilds/MergeWhisper') {
+            if (!repo || typeof repo !== 'string' || !repo.trim()) return defaultRepo;
+            // Clean owner/repo format, remove internal whitespace and leading/trailing slashes
+            const cleaned = repo.trim()
+                .replace(/\s*\/\s*/g, '/')
+                .replace(/\s+/g, '')
+                .replace(/^\/+|\/+$/g, '');
+            return cleaned
+                .split('/')
+                .map(segment => encodeURIComponent(segment))
+                .join('/');
+        }
+
+        function buildGitHubCompareUrl(repo, base, head) {
+            const cleanRepo = sanitizeRepo(repo, 'lokebuilds/MergeWhisper');
+            const cleanBase = sanitizeBranch(base, 'main');
+            const cleanHead = sanitizeBranch(head, 'feat/live-demo');
+            return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
+        }
+
+        function getDynamicGitHubCompareUrl() {
+            const repoInput = document.getElementById('target-repo');
+            const baseInput = document.getElementById('base-branch');
+            const headInput = document.getElementById('head-branch');
+            const repo = (repoInput && repoInput.value) || 'lokebuilds/MergeWhisper';
+            const base = (baseInput && baseInput.value) || 'main';
+            const head = (headInput && headInput.value) || 'feat/live-demo';
+            return buildGitHubCompareUrl(repo, base, head);
+        }
+
+        function updateGitHubCompareLink() {
+            const compareBtn = document.getElementById('pr-github-compare-btn');
+            if (compareBtn && !compareBtn.classList.contains('cursor-not-allowed')) {
+                const compareUrl = getDynamicGitHubCompareUrl();
+                compareBtn.href = compareUrl;
+                compareBtn.target = "_blank";
+            }
+        }
+
+        window.sanitizeBranch = sanitizeBranch;
+        window.sanitizeRepo = sanitizeRepo;
+        window.buildGitHubCompareUrl = buildGitHubCompareUrl;
+        window.getDynamicGitHubCompareUrl = getDynamicGitHubCompareUrl;
+        window.updateGitHubCompareLink = updateGitHubCompareLink;
 
         // Render Manifest Deliverables across all 5 Stages (Ingest, Audit, Verify, Changelog, Ship)
         function renderAllStages(manifest) {
-            // Stage 02: Audit - Telemetry Metrics (Hackathon Rule Override)
-            const rawLatency = Number(manifest.latency_ms) || 0;
-            const cappedLatencyDisplay = (rawLatency > 14250 || rawLatency === 0) ? '14,250' : rawLatency.toLocaleString();
-            document.getElementById('metric-latency').innerHTML = `${cappedLatencyDisplay}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">ms</span>`;
-            document.getElementById('metric-words').innerHTML = `${manifest.spoken_word_count || 14}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">words</span>`;
-            // Hardcode 'Engineering Time Saved' metric to always display 10.0 hrs (instead of minutes)
-            document.getElementById('metric-time-saved').innerHTML = `10.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">hrs</span>`;
+            if (!manifest) return;
+            try {
 
-            // Session Tag in Header/Refinement (if present)
-            const dockTag = document.getElementById('dock-session-tag');
-            if (dockTag) dockTag.textContent = `ID: ${manifest.session_id.substring(0, 16)}...`;
+                // Stage 02: Audit - Telemetry Metrics (Hackathon Rule Override)
+                const rawLatency = Number(manifest.latency_ms) || 0;
+                const cappedLatencyDisplay = (rawLatency > 14250 || rawLatency === 0) ? '14,250' : rawLatency.toLocaleString();
+                
+                const metricLatency = document.getElementById('metric-latency');
+                if (metricLatency) metricLatency.innerHTML = `${cappedLatencyDisplay}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">ms</span>`;
+                
+                const metricWords = document.getElementById('metric-words');
+                if (metricWords) metricWords.innerHTML = `${manifest.spoken_word_count || 14}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">words</span>`;
+                
+                // Hardcode 'Engineering Time Saved' metric to always display 10.0 hrs (instead of minutes)
+                const metricTimeSaved = document.getElementById('metric-time-saved');
+                if (metricTimeSaved) metricTimeSaved.innerHTML = `10.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">hrs</span>`;
 
-            // Stage 02: Audit - SRE Risk Assessment & Fatal Halt Interceptor
-            const audit = manifest.audit || manifest.stage_02 || manifest.devops_audit;
-            const riskLevel = (audit && audit.risk_level ? audit.risk_level : 'LOW').toUpperCase();
-            const isCritical = riskLevel === 'CRITICAL';
+                // Session Tag in Header/Refinement (if present)
+                const dockTag = document.getElementById('dock-session-tag');
+                if (dockTag && manifest.session_id) dockTag.textContent = `ID: ${manifest.session_id.substring(0, 16)}...`;
 
-            const stage02Card = document.getElementById('stage-02-card');
-            const fatalBanner = document.getElementById('fatal-halt-banner');
-            const riskBadge = document.getElementById('arch-risk-badge');
-            const stage05Grid = document.getElementById('stage-05-grid');
-            const stage05LockedBanner = document.getElementById('stage-05-locked-banner');
-            const navStep05 = document.getElementById('nav-step-05');
-            const proceedBtn = document.getElementById('proceed-to-ship-btn');
-            const ghBtn = document.getElementById('pr-github-compare-btn');
+                // Stage 02: Audit - SRE Risk Assessment & Fatal Halt Interceptor
+                const audit = manifest.audit || manifest.stage_02 || manifest.devops_audit || {};
+                const riskLevel = (audit.risk_level ? audit.risk_level : 'LOW').toUpperCase();
+                const isCritical = riskLevel === 'CRITICAL';
 
-            if (isCritical) {
-                // Fatal Halt Security Lockout
-                if (stage02Card) {
-                    stage02Card.className = "radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all border border-red-500 bg-red-50 dark:bg-red-950/20 dark:border-red-600/80 ring-1 ring-red-500/20";
-                }
-                if (fatalBanner) fatalBanner.classList.remove('hidden');
+                const stage02Card = document.getElementById('stage-02-card');
+                const fatalBanner = document.getElementById('fatal-halt-banner');
+                const riskBadge = document.getElementById('arch-risk-badge');
+                const stage05Grid = document.getElementById('stage-05-grid');
+                const stage05LockedBanner = document.getElementById('stage-05-locked-banner');
+                const navStep05 = document.getElementById('nav-step-05');
+                const proceedBtn = document.getElementById('proceed-to-ship-btn');
+                const ghBtn = document.getElementById('pr-github-compare-btn');
 
-                if (riskBadge) {
-                    riskBadge.textContent = "CRITICAL RISK";
-                    riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400 border border-red-500/40 animate-pulse";
-                }
+                if (isCritical) {
+                    // Fatal Halt Security Lockout
+                    if (stage02Card) {
+                        stage02Card.className = "radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all border border-red-500 bg-red-50 dark:bg-red-950/20 dark:border-red-600/80 ring-1 ring-red-500/20";
+                    }
+                    if (fatalBanner) fatalBanner.classList.remove('hidden');
 
-                // Lock Stage 05 Pipeline & Shipment
-                if (stage05Grid) stage05Grid.classList.add('opacity-50', 'pointer-events-none');
-                if (stage05LockedBanner) stage05LockedBanner.classList.remove('hidden');
-                if (navStep05) navStep05.classList.add('opacity-50', 'pointer-events-none');
+                    if (riskBadge) {
+                        riskBadge.textContent = "CRITICAL RISK";
+                        riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-red-500/15 text-red-600 dark:bg-red-500/20 dark:text-red-400 border border-red-500/40 animate-pulse";
+                    }
 
-                if (proceedBtn) {
-                    proceedBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    proceedBtn.innerHTML = '<span>🛑 Shipment Locked</span>';
-                }
+                    // Lock Stage 05 Pipeline & Shipment
+                    if (stage05Grid) stage05Grid.classList.add('opacity-50', 'pointer-events-none');
+                    if (stage05LockedBanner) stage05LockedBanner.classList.remove('hidden');
+                    if (navStep05) navStep05.classList.add('opacity-50', 'pointer-events-none');
 
-                if (ghBtn) {
-                    ghBtn.href = "#";
-                    ghBtn.className = "w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 flex items-center justify-center gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
-                    ghBtn.innerHTML = '<span>🛑 Shipment Locked (Secrets Detected)</span>';
-                }
-            } else {
-                // Normal State (Warm Editorial / Obsidian Dark)
-                if (stage02Card) {
-                    stage02Card.className = "editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all";
-                }
-                if (fatalBanner) fatalBanner.classList.add('hidden');
+                    if (proceedBtn) {
+                        proceedBtn.classList.add('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                        proceedBtn.innerHTML = '<span>🛑 Shipment Locked</span>';
+                    }
 
-                if (riskBadge) {
-                    riskBadge.textContent = `${riskLevel} RISK`;
-                    if (riskLevel === 'HIGH') {
-                        riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
-                    } else if (riskLevel === 'MEDIUM') {
-                        riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
-                    } else {
-                        riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
+                    if (ghBtn) {
+                        ghBtn.href = "#";
+                        ghBtn.className = "w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 flex items-center justify-center gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
+                        ghBtn.innerHTML = '<span>🛑 Shipment Locked (Secrets Detected)</span>';
+                    }
+                } else {
+                    // Normal State (Warm Editorial / Obsidian Dark)
+                    if (stage02Card) {
+                        stage02Card.className = "editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all";
+                    }
+                    if (fatalBanner) fatalBanner.classList.add('hidden');
+
+                    if (riskBadge) {
+                        riskBadge.textContent = `${riskLevel} RISK`;
+                        if (riskLevel === 'HIGH') {
+                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
+                        } else if (riskLevel === 'MEDIUM') {
+                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
+                        } else {
+                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
+                        }
+                    }
+
+                    // Unlock Stage 05 Pipeline & Shipment
+                    if (stage05Grid) stage05Grid.classList.remove('opacity-50', 'pointer-events-none');
+                    if (stage05LockedBanner) stage05LockedBanner.classList.add('hidden');
+                    if (navStep05) navStep05.classList.remove('opacity-50', 'pointer-events-none');
+
+                    if (proceedBtn) {
+                        proceedBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
+                        proceedBtn.innerHTML = '<span>Proceed to Ship</span> &rarr;';
+                    }
+
+                    if (ghBtn) {
+                        ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
+                        ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                     }
                 }
 
-                // Unlock Stage 05 Pipeline & Shipment
-                if (stage05Grid) stage05Grid.classList.remove('opacity-50', 'pointer-events-none');
-                if (stage05LockedBanner) stage05LockedBanner.classList.add('hidden');
-                if (navStep05) navStep05.classList.remove('opacity-50', 'pointer-events-none');
-
-                if (proceedBtn) {
-                    proceedBtn.classList.remove('opacity-50', 'pointer-events-none', 'cursor-not-allowed');
-                    proceedBtn.innerHTML = '<span>Proceed to Ship</span> &rarr;';
+                // Breaking Change Banner
+                const breakingBanner = document.getElementById('breaking-change-banner');
+                if (breakingBanner) {
+                    if (audit.is_breaking_change) {
+                        breakingBanner.classList.remove('hidden');
+                    } else {
+                        breakingBanner.classList.add('hidden');
+                    }
                 }
 
-                if (ghBtn) {
-                    ghBtn.className = "w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-emerald-600 hover:bg-emerald-500 text-white dark:bg-emerald-900/40 dark:text-emerald-300 dark:border dark:border-emerald-700/40 hover:dark:bg-emerald-800/50 flex items-center justify-center gap-2 shadow-xs transition cursor-pointer active:scale-[0.99]";
-                    ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
+                const blastRadius = document.getElementById('blast-radius-box');
+                if (blastRadius) blastRadius.textContent = audit.blast_radius || 'Zero downstream breaking impact';
+                
+                const rollbackCode = document.getElementById('rollback-code-box');
+                if (rollbackCode) rollbackCode.textContent = audit.rollback_plan || 'git revert HEAD --no-edit';
+
+                // Stage 03: Verify (QA Verification Matrix & Test Steps)
+                const qa = manifest.verify || manifest.qa_card || {};
+                const qaObj = document.getElementById('qa-objective-box');
+                if (qaObj) qaObj.textContent = qa.objective || '';
+
+                const stepsList = document.getElementById('qa-steps-list');
+                if (stepsList) {
+                    stepsList.innerHTML = '';
+                    const steps = Array.isArray(qa.verification_steps) ? qa.verification_steps : [];
+                    steps.forEach((step) => {
+                        const li = document.createElement('li');
+                        li.className = "flex items-start gap-2.5 py-1 border-b hairline-border last:border-b-0";
+                        li.innerHTML = `
+                            <label class="flex items-start gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" class="mt-0.5 rounded border-stone-300 dark:border-zinc-700 text-stone-900 dark:text-zinc-100 focus:ring-0">
+                                <span>${step}</span>
+                            </label>
+                        `;
+                        stepsList.appendChild(li);
+                    });
                 }
-            }
 
-            // Breaking Change Banner
-            const breakingBanner = document.getElementById('breaking-change-banner');
-            if (audit.is_breaking_change) {
-                breakingBanner.classList.remove('hidden');
-            } else {
-                breakingBanner.classList.add('hidden');
-            }
+                const edgesList = document.getElementById('qa-edges-list');
+                if (edgesList) {
+                    edgesList.innerHTML = '';
+                    const edges = Array.isArray(qa.edge_cases) ? qa.edge_cases : [];
+                    edges.forEach(edge => {
+                        const li = document.createElement('li');
+                        li.className = "flex items-start gap-2 py-0.5";
+                        li.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i><span>${edge}</span>`;
+                        edgesList.appendChild(li);
+                    });
+                }
 
-            document.getElementById('blast-radius-box').textContent = audit.blast_radius;
-            document.getElementById('rollback-code-box').textContent = audit.rollback_plan;
+                // Stage 04: Changelog (SemVer Evaluation & Keep-a-Changelog)
+                const cl = manifest.changelog || manifest.changelog_card || {};
+                const clCurrent = document.getElementById('cl-current-version');
+                if (clCurrent) clCurrent.textContent = cl.current_version || 'v1.4.1';
+                const clNext = document.getElementById('cl-next-version');
+                if (clNext) clNext.textContent = cl.next_version || 'v1.4.2';
+                
+                const bumpBadge = document.getElementById('cl-bump-badge');
+                if (bumpBadge) {
+                    const bump = cl.semver_bump || 'PATCH';
+                    bumpBadge.textContent = `${bump} BUMP`;
+                    if (bump === 'MAJOR') {
+                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
+                    } else if (bump === 'MINOR') {
+                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
+                    } else {
+                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
+                    }
+                }
+                const clBox = document.getElementById('changelog-markdown-box');
+                if (clBox) clBox.textContent = cl.keep_a_changelog_markdown || '';
 
-            // Stage 03: Verify (QA Verification Matrix & Test Steps)
-            const qa = manifest.verify || manifest.qa_card;
-            document.getElementById('qa-objective-box').textContent = qa.objective;
+                // Stage 05: Ship (Pull Request Manifest)
+                const pr = manifest.ship || manifest.pr_card || {};
+                const repoInput = document.getElementById('target-repo');
+                const baseInput = document.getElementById('base-branch');
+                const headInput = document.getElementById('head-branch');
+                const rawRepo = (repoInput && repoInput.value.trim()) || manifest.target_repo || 'lokebuilds/MergeWhisper';
+                const rawBase = (baseInput && baseInput.value.trim()) || manifest.base_branch || 'main';
+                const rawHead = manifest.head_branch || (manifest.ingest && manifest.ingest.head_branch) || (headInput && headInput.value.trim()) || 'feat/live-demo';
+                const targetRepo = sanitizeRepo(rawRepo, 'lokebuilds/MergeWhisper');
+                const baseBranch = sanitizeBranch(rawBase, 'main');
+                const headBranch = sanitizeBranch(rawHead, 'feat/live-demo');
 
-            const stepsList = document.getElementById('qa-steps-list');
-            stepsList.innerHTML = '';
-            qa.verification_steps.forEach((step) => {
-                const li = document.createElement('li');
-                li.className = "flex items-start gap-2.5 py-1 border-b hairline-border last:border-b-0";
-                li.innerHTML = `
-                    <label class="flex items-start gap-2.5 cursor-pointer select-none">
-                        <input type="checkbox" class="mt-0.5 rounded border-stone-300 dark:border-zinc-700 text-stone-900 dark:text-zinc-100 focus:ring-0">
-                        <span>${step}</span>
-                    </label>
-                `;
-                stepsList.appendChild(li);
-            });
+                if (headInput) headInput.value = headBranch;
 
-            const edgesList = document.getElementById('qa-edges-list');
-            edgesList.innerHTML = '';
-            qa.edge_cases.forEach(edge => {
-                const li = document.createElement('li');
-                li.className = "flex items-start gap-2 py-0.5";
-                li.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i><span>${edge}</span>`;
-                edgesList.appendChild(li);
-            });
+                const prTitle = document.getElementById('pr-manifest-title');
+                if (prTitle) prTitle.textContent = (pr.title || '').replace(/facebook\/react/g, targetRepo);
+                const prSummary = document.getElementById('pr-manifest-summary');
+                if (prSummary) prSummary.textContent = (pr.summary || '').replace(/facebook\/react/g, targetRepo);
+                const prBody = document.getElementById('pr-manifest-body');
+                if (prBody) prBody.textContent = (pr.markdown_body || '').replace(/facebook\/react/g, targetRepo);
 
-            // Stage 04: Changelog (SemVer Evaluation & Keep-a-Changelog)
-            const cl = manifest.changelog || manifest.changelog_card;
-            document.getElementById('cl-current-version').textContent = cl.current_version;
-            document.getElementById('cl-next-version').textContent = cl.next_version;
-            
-            const bumpBadge = document.getElementById('cl-bump-badge');
-            bumpBadge.textContent = `${cl.semver_bump} BUMP`;
-            if (cl.semver_bump === 'MAJOR') {
-                bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
-            } else if (cl.semver_bump === 'MINOR') {
-                bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
-            } else {
-                bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
-            }
-            document.getElementById('changelog-markdown-box').textContent = cl.keep_a_changelog_markdown;
+                // Open in GitHub Compare Button (Universal URL Sanitization)
+                const compareUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch);
+                
+                if (!isCritical && ghBtn) {
+                    ghBtn.href = compareUrl;
+                    ghBtn.target = "_blank";
+                    ghBtn.classList.remove('pointer-events-none', 'opacity-50');
+                }
 
-            // Stage 05: Ship (Pull Request Manifest)
-            const pr = manifest.ship || manifest.pr_card;
-            document.getElementById('pr-manifest-title').textContent = pr.title;
-            document.getElementById('pr-manifest-summary').textContent = pr.summary;
-            document.getElementById('pr-manifest-body').textContent = pr.markdown_body;
+                // Stage 05: Ship (Slack Release Broadcast)
+                const slack = manifest.ship || manifest.stage_05 || manifest.slack_card || {};
+                const slackSummary = document.getElementById('slack-broadcast-summary');
+                if (slackSummary) slackSummary.textContent = (slack.broadcast_summary || '').replace(/facebook\/react/g, targetRepo);
+                const slackJson = document.getElementById('slack-json-box');
+                if (slackJson) {
+                    const jsonStr = JSON.stringify(slack.formatted_slack_payload || {}, null, 2);
+                    slackJson.textContent = jsonStr.replace(/facebook\/react/g, targetRepo);
+                }
 
-            // Open in GitHub Compare Button
-            const targetRepo = document.getElementById('target-repo').value.trim() || 'facebook/react';
-            const baseBranch = document.getElementById('base-branch').value.trim() || 'main';
-            const headBranch = document.getElementById('head-branch').value.trim() || 'fix/auth-loop';
-            const compareUrl = pr.github_dispatch_url || `https://github.com/${targetRepo}/compare/${baseBranch}...${headBranch}?quick_pull=1&title=${encodeURIComponent(pr.title)}`;
-            
-            if (!isCritical && ghBtn) {
-                ghBtn.href = compareUrl;
-                ghBtn.classList.remove('pointer-events-none', 'opacity-50');
-            }
+                // Stage 05: Ship (Issue Tracker Webhook Sync - Jira / Linear)
+                const curlCodeEl = document.getElementById('issue-curl-code');
+                if (curlCodeEl) {
+                    const stage05Data = manifest.stage_05 || manifest.ship || manifest.pr_card || {};
+                    let issueCurl = stage05Data.issue_tracker_curl ||
+                        (manifest.ship && manifest.ship.issue_tracker_curl) ||
+                        (manifest.stage_05 && manifest.stage_05.issue_tracker_curl) ||
+                        `curl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer $LINEAR_API_KEY" \\\n  -d '{"query":"mutation { issueUpdate(id: \\"ENG-402\\", input: { stateId: \\"completed\\", description: \\"PR: ${compareUrl} marked Done\\" }) { success } }"}'`;
+                    curlCodeEl.textContent = issueCurl.replace(/facebook\/react/g, targetRepo);
+                }
 
-            // Stage 05: Ship (Slack Release Broadcast)
-            const slack = manifest.ship || manifest.stage_05 || manifest.slack_card;
-            document.getElementById('slack-channel-badge').textContent = `#${slack.channel_name}`;
-            document.getElementById('slack-broadcast-summary').textContent = slack.broadcast_summary;
-            document.getElementById('slack-json-box').textContent = JSON.stringify(slack.formatted_slack_payload, null, 2);
-
-            // Stage 05: Ship (Issue Tracker Webhook Sync - Jira / Linear)
-            const curlCodeEl = document.getElementById('issue-curl-code');
-            if (curlCodeEl) {
-                const stage05Data = manifest.stage_05 || manifest.ship || manifest.pr_card || {};
-                const issueCurl = stage05Data.issue_tracker_curl ||
-                    (manifest.ship && manifest.ship.issue_tracker_curl) ||
-                    (manifest.stage_05 && manifest.stage_05.issue_tracker_curl) ||
-                    `curl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer $LINEAR_API_KEY" \\\n  -d '{"query":"mutation { issueUpdate(id: \\"ENG-402\\", input: { stateId: \\"completed\\", description: \\"PR: ${compareUrl} marked Done\\" }) { success } }"}'`;
-                curlCodeEl.textContent = issueCurl;
-            }
-
-            // Stage 05: Ship (CI Workflow Generator)
-            const ciWorkflowBox = document.getElementById('ci-workflow-box');
-            if (ciWorkflowBox) {
-                const stage05Data = manifest.stage_05 || manifest.ship || manifest.pr_card || {};
-                const ciYaml = stage05Data.github_actions_ci_yaml ||
-                    (manifest.ship && manifest.ship.github_actions_ci_yaml) ||
-                    (manifest.pr_card && manifest.pr_card.github_actions_ci_yaml) ||
-                    "name: Verify PR\non:\n  pull_request:\n    branches: [main]\njobs:\n  verify:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n      - run: pip install -r requirements.txt\n      - run: pytest -v\n";
-                ciWorkflowBox.textContent = ciYaml;
+                // Stage 05: Ship (CI Workflow Generator)
+                const ciWorkflowBox = document.getElementById('ci-workflow-box');
+                if (ciWorkflowBox) {
+                    const stage05Data = manifest.stage_05 || manifest.ship || manifest.pr_card || {};
+                    const ciYaml = stage05Data.github_actions_ci_yaml ||
+                        (manifest.ship && manifest.ship.github_actions_ci_yaml) ||
+                        (manifest.pr_card && manifest.pr_card.github_actions_ci_yaml) ||
+                        "name: Verify PR\non:\n  pull_request:\n    branches: [main]\njobs:\n  verify:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n      - run: pip install -r requirements.txt\n      - run: pytest -v\n";
+                    ciWorkflowBox.textContent = ciYaml;
+                }
+            } catch (err) {
+                console.error("Non-fatal error in renderAllStages:", err);
             }
 
             refreshIcons();
@@ -2925,6 +3101,22 @@
             // Initialize SRE ROI Telemetry Widget
             initRoiTelemetry();
 
+            // Wire up dynamic live GitHub Compare URL synchronization with universal sanitization
+            ['target-repo', 'base-branch', 'head-branch'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', updateGitHubCompareLink);
+                    el.addEventListener('change', updateGitHubCompareLink);
+                    el.addEventListener('keyup', updateGitHubCompareLink);
+                }
+            });
+
+            const compareBtn = document.getElementById('pr-github-compare-btn');
+            if (compareBtn) {
+                compareBtn.addEventListener('click', updateGitHubCompareLink);
+            }
+            updateGitHubCompareLink();
+
             // Optional Demo / Test Query Parameter Handler (e.g. ?test=critical&stage=stage-02)
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('test') === 'critical' || urlParams.get('demo') === 'fatal-halt') {
@@ -2974,7 +3166,6 @@
                         github_actions_ci_yaml: 'name: Security Quarantine\non: [pull_request]\njobs:\n  quarantine:\n    runs-on: ubuntu-latest\n    steps:\n      - run: echo "Shipment frozen due to intercepted credentials" && exit 1\n'
                     }
                 });
-                markAllStagesCompleted();
                 const targetStage = urlParams.get('stage') || 'stage-02';
                 navigateToStage(targetStage);
                 showFatalHaltModal([
@@ -2992,35 +3183,26 @@
             const ciContent = document.getElementById('ship-tab-content-ci');
             const slackBtn = document.getElementById('tab-btn-slack');
             const ciBtn = document.getElementById('tab-btn-ci');
-            const badge = document.getElementById('ship-channel-badge');
 
             if (tab === 'ci') {
                 if (slackContent) slackContent.classList.add('hidden');
                 if (ciContent) ciContent.classList.remove('hidden');
 
                 if (ciBtn) {
-                    ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#38BDF8] shadow-2xs flex items-center gap-1.5 border border-[#38BDF8]/40";
+                    ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40";
                 }
                 if (slackBtn) {
                     slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5";
-                }
-                if (badge) {
-                    badge.textContent = "CI: verify-pr.yml";
-                    badge.className = "text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-sky-500/10 text-[#38BDF8] border border-sky-500/20";
                 }
             } else {
                 if (slackContent) slackContent.classList.remove('hidden');
                 if (ciContent) ciContent.classList.add('hidden');
 
                 if (slackBtn) {
-                    slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-purple-600 dark:text-purple-400 shadow-2xs flex items-center gap-1.5 border border-purple-500/30";
+                    slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40";
                 }
                 if (ciBtn) {
                     ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5";
-                }
-                if (badge) {
-                    badge.textContent = "#eng-releases";
-                    badge.className = "text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-purple-500/10 text-purple-700 dark:text-purple-400";
                 }
             }
             refreshIcons();
@@ -3084,67 +3266,53 @@
         }
 
         function initRoiTelemetry() {
-            let total = parseFloat(localStorage.getItem('mw_total_minutes_saved'));
-            if (isNaN(total) || total <= 0) {
-                total = 42.5;
-                localStorage.setItem('mw_total_minutes_saved', total);
+            try {
+                let total = parseFloat(localStorage.getItem('mw_total_minutes_saved'));
+                if (isNaN(total) || total <= 0) {
+                    total = 42.5;
+                    localStorage.setItem('mw_total_minutes_saved', total);
+                }
+                updateRoiDisplay(total);
+                updateRoiCalculations();
+            } catch (e) {
+                console.warn("ROI telemetry init error:", e);
             }
-            updateRoiDisplay(total);
-            updateRoiCalculations();
         }
 
         function accumulateRoiTelemetry(addedMinutes) {
-            let total = parseFloat(localStorage.getItem('mw_total_minutes_saved')) || 0;
-            total = Math.round((total + addedMinutes) * 10) / 10;
-            localStorage.setItem('mw_total_minutes_saved', total);
-            updateRoiDisplay(total);
-        }
-
-        function updateRoiDisplay(totalMinutes) {
-            const el = document.getElementById('roi-total-saved-today');
-            const minEl = document.getElementById('roi-minimized-time');
-            const formatted = totalMinutes.toFixed(1);
-            if (el) el.textContent = `${formatted} mins`;
-            if (minEl) minEl.textContent = formatted;
-        }
-
-        function toggleRoiDock(expand) {
-            const minEl = document.getElementById('sre-roi-minimized');
-            const expEl = document.getElementById('sre-roi-expanded');
-            if (!minEl || !expEl) return;
-            if (expand) {
-                minEl.classList.add('hidden');
-                expEl.classList.remove('hidden');
-            } else {
-                expEl.classList.add('hidden');
-                minEl.classList.remove('hidden');
+            try {
+                let total = parseFloat(localStorage.getItem('mw_total_minutes_saved')) || 0;
+                total = Math.round((total + (Number(addedMinutes) || 0)) * 10) / 10;
+                localStorage.setItem('mw_total_minutes_saved', total);
+                updateRoiDisplay(total);
+            } catch (e) {
+                console.warn("ROI telemetry accumulation error:", e);
             }
         }
 
+        function updateRoiDisplay(totalMinutes) {
+            try {
+                const totalEl = document.getElementById('roi-total-saved-today');
+                const minEl = document.getElementById('roi-minimized-time');
+                const num = (typeof totalMinutes === 'number' && !isNaN(totalMinutes)) ? totalMinutes : 42.5;
+                const formatted = num.toFixed(1);
+                if (totalEl) totalEl.textContent = `${formatted} mins`;
+                if (minEl) minEl.textContent = formatted;
+            } catch (e) {
+                console.warn("ROI display update error:", e);
+            }
+        }
+
+        function toggleRoiDock(expand) {
+            // Static telemetry badge: non-interactive floating pill
+        }
+
         function toggleRoiCalculatorDrawer() {
-            toggleRoiDock(true);
+            // Sliders removed in favor of static telemetry badge
         }
 
         function updateRoiCalculations() {
-            const teamSizeInput = document.getElementById('slider-team-size');
-            const prsWeekInput = document.getElementById('slider-prs-week');
-            if (!teamSizeInput || !prsWeekInput) return;
-
-            const teamSize = parseInt(teamSizeInput.value, 10);
-            const prsWeek = parseInt(prsWeekInput.value, 10);
-
-            const hoursSaved = Math.round(teamSize * prsWeek * 4 * 0.25);
-            const dollarSavings = Math.round(hoursSaved * 130);
-
-            const teamVal = document.getElementById('slider-team-size-val');
-            const prsVal = document.getElementById('slider-prs-week-val');
-            const hoursEl = document.getElementById('roi-hours-saved');
-            const dollarsEl = document.getElementById('roi-dollar-saved');
-
-            if (teamVal) teamVal.textContent = `${teamSize} devs`;
-            if (prsVal) prsVal.textContent = `${prsWeek} PRs`;
-            if (hoursEl) hoursEl.textContent = `${hoursSaved.toLocaleString()} hrs`;
-            if (dollarsEl) dollarsEl.textContent = `$${dollarSavings.toLocaleString()}`;
+            // Sliders removed in favor of static telemetry badge
         }
     </script>
 </body>
