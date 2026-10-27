@@ -13,7 +13,8 @@ import re
 import time
 import urllib.parse
 import uuid
-from typing import Any, AsyncGenerator, Dict, List, Optional, Set
+from pathlib import Path
+from typing import Any, AsyncGenerator, Dict, List, Optional, Set, Tuple
 
 from google import genai
 from google.genai import errors, types
@@ -25,6 +26,8 @@ from app.schemas import (
     GeminiShipData,
     IngestData,
     PipelineStagesManifest,
+    PublishPRRequest,
+    PublishPRResponse,
     ShipData,
     SynthesisResponse,
     SystemHealthResponse,
@@ -37,6 +40,24 @@ logger = logging.getLogger("mergewhisper.orchestrator")
 # Active 4-tier generation failover cascade
 MODEL_TIERS = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest"]
 GEMINI_MODEL = MODEL_TIERS[0]
+
+
+def derive_dynamic_branch(intent: str, fallback: str = "feat/patch") -> str:
+    """Generate a semantic, kebab-case dynamic git branch name from developer intent."""
+    if not intent or not intent.strip():
+        return fallback
+    words = re.findall(r"[a-zA-Z0-9]+", intent.lower())
+    if not words:
+        return fallback
+    is_fix = any(w in words for w in ["fix", "bug", "patch", "error", "leak", "resolve", "recursion", "issue"])
+    prefix = "fix" if is_fix else "feat"
+    stopwords = {"fix", "feat", "a", "an", "the", "in", "to", "and", "of", "for", "on", "with", "at", "by", "from", "when", "is"}
+    content_words = [w for w in words if w not in stopwords][:3]
+    if not content_words:
+        content_words = words[:2]
+    slug = "-".join(content_words)
+    return f"{prefix}/{slug}"
+
 
 
 def generate_github_url(
@@ -123,7 +144,7 @@ class MergeWhisperOrchestrator:
             "Set is_breaking_change (boolean). Define blast_radius and an exact executable automated rollback_plan command.\n"
             "2. Verify (Stage 03): State the primary verification objective, ordered step-by-step verification_steps, and critical regression edge_cases.\n"
             "3. Changelog (Stage 04): Compute semver_bump ('PATCH', 'MINOR', or 'MAJOR'), current_version ('v18.2.0'), next_version, and keep_a_changelog_markdown.\n"
-            "4. Ship (Stage 05): Provide conventional commit title, architectural summary, comprehensive markdown_body for the PR, channel_name ('eng-releases'), broadcast_summary, and formatted_slack_payload. For Stage 05, generate a realistic cURL command in the 'issue_tracker_curl' field that updates a Linear or Jira ticket with the new release details. Also, generate a complete, valid, executable GitHub Actions CI workflow YAML in 'github_actions_ci_yaml' (.github/workflows/verify-pr.yml) that configures the tech stack runtime, installs dependencies, and executes the QA verification steps from Stage 03.\n"
+            "4. Ship (Stage 05): Provide conventional commit title, architectural summary, comprehensive markdown_body for the PR, channel_name ('eng-releases'), broadcast_summary, and formatted_slack_payload. In 'branch_name', output a dynamic, contextual kebab-case git branch name reflecting the intent (e.g. 'fix/session-auth-recursion', 'feat/partition-audit-schema'). For Stage 05, generate a realistic cURL command in the 'issue_tracker_curl' field that updates a Linear or Jira ticket with the new release details. Also, generate a complete, valid, executable GitHub Actions CI workflow YAML in 'github_actions_ci_yaml' (.github/workflows/verify-pr.yml) that configures the tech stack runtime, installs dependencies, and executes the QA verification steps from Stage 03.\n"
             "5. You MUST return strictly valid JSON matching the PipelineStagesManifest schema."
         )
 
@@ -150,22 +171,26 @@ class MergeWhisperOrchestrator:
 
         api_keys = self.get_api_keys()
 
-        # Forcefully lock branch topology to feat/live-demo for live demo presentation
-        LIVE_DEMO_BRANCH = "feat/live-demo"
-        payload.head_branch = LIVE_DEMO_BRANCH
+        # Dynamically determine semantic head branch from payload or intent (Zero hardcoding)
+        dynamic_branch = (
+            (payload.head_branch.strip() if payload.head_branch and payload.head_branch.strip() != "feat/live-demo" else None)
+            or derive_dynamic_branch(payload.intent)
+        )
+        payload.head_branch = dynamic_branch
 
         # Fast-Path: If external Gemini quota is exhausted across all available keys for the day, serve instant deterministic synthesis without delay
         if self._quota_exhausted or (api_keys and len(self._exhausted_keys) >= len(api_keys)):
             logger.info("[AI Gateway] All %d Gemini API keys in rotation list exhausted for today. Serving instant deterministic release pipeline.", len(api_keys))
             from app.mock_store import synthesize_release_manifest
-            payload.head_branch = LIVE_DEMO_BRANCH
             fallback_res = synthesize_release_manifest(payload)
             fallback_dict = fallback_res.model_dump()
-            fallback_dict["head_branch"] = LIVE_DEMO_BRANCH
-            fallback_dict["branch"] = LIVE_DEMO_BRANCH
+            fallback_dict["head_branch"] = dynamic_branch
+            fallback_dict["branch"] = dynamic_branch
             if "ingest" in fallback_dict and isinstance(fallback_dict["ingest"], dict):
-                fallback_dict["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
-                fallback_dict["ingest"]["branch"] = LIVE_DEMO_BRANCH
+                fallback_dict["ingest"]["head_branch"] = dynamic_branch
+                fallback_dict["ingest"]["branch"] = dynamic_branch
+            if "ship" in fallback_dict and isinstance(fallback_dict["ship"], dict):
+                fallback_dict["ship"]["branch_name"] = dynamic_branch
             for step_num in range(2, 6):
                 await asyncio.sleep(0.06)
                 yield {"event": "step_complete", "step": step_num}
@@ -270,18 +295,25 @@ class MergeWhisperOrchestrator:
         if manifest is None:
             logger.warning("All AI model tiers failed (%s). Cascading to resilient deterministic synthesis.", last_error)
             from app.mock_store import synthesize_release_manifest
-            payload.head_branch = LIVE_DEMO_BRANCH
+            payload.head_branch = dynamic_branch
             fallback_res = synthesize_release_manifest(payload)
             fallback_dict = fallback_res.model_dump()
-            fallback_dict["head_branch"] = LIVE_DEMO_BRANCH
-            fallback_dict["branch"] = LIVE_DEMO_BRANCH
+            fallback_dict["head_branch"] = dynamic_branch
+            fallback_dict["branch"] = dynamic_branch
             if "ingest" in fallback_dict and isinstance(fallback_dict["ingest"], dict):
-                fallback_dict["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
-                fallback_dict["ingest"]["branch"] = LIVE_DEMO_BRANCH
+                fallback_dict["ingest"]["head_branch"] = dynamic_branch
+                fallback_dict["ingest"]["branch"] = dynamic_branch
+            if "ship" in fallback_dict and isinstance(fallback_dict["ship"], dict):
+                fallback_dict["ship"]["branch_name"] = dynamic_branch
             for step_num in range(2, 6):
                 yield {"event": "step_complete", "step": step_num}
             yield {"event": "synthesis_complete", "data": fallback_dict}
             return
+
+        # Check if AI synthesized a contextual branch_name
+        if getattr(manifest.ship, "branch_name", None) and manifest.ship.branch_name.strip():
+            dynamic_branch = derive_dynamic_branch(manifest.ship.branch_name, fallback=dynamic_branch)
+            payload.head_branch = dynamic_branch
 
         # DevSecOps Security Directive Enforcement: If raw unredacted credentials or destructive DDL exist in diff
         threats_detected: List[str] = []
@@ -312,11 +344,11 @@ class MergeWhisperOrchestrator:
         # Step 2: Evaluating DevOps blast radius & risk
         yield {"event": "step_complete", "step": 2}
 
-        # Construct complete Stage 05 ShipData deliverable with guaranteed live-demo branch
+        # Construct complete Stage 05 ShipData deliverable with dynamic branch
         dispatch_url = generate_github_url(
             target_repo=payload.target_repo,
             base_branch=payload.base_branch,
-            head_branch=LIVE_DEMO_BRANCH,
+            head_branch=dynamic_branch,
             title=manifest.ship.title,
             markdown_body=manifest.ship.markdown_body,
         )
@@ -398,6 +430,7 @@ class MergeWhisperOrchestrator:
             title=manifest.ship.title,
             summary=manifest.ship.summary,
             markdown_body=manifest.ship.markdown_body,
+            branch_name=dynamic_branch,
             channel_name=manifest.ship.channel_name,
             broadcast_summary=manifest.ship.broadcast_summary,
             issue_tracker_curl=issue_curl,
@@ -420,7 +453,7 @@ class MergeWhisperOrchestrator:
             diff=payload.diff,
             target_repo=payload.target_repo,
             base_branch=payload.base_branch,
-            head_branch=LIVE_DEMO_BRANCH,
+            head_branch=dynamic_branch,
             tech_stack=payload.tech_stack,
             word_count=spoken_words,
         )
@@ -438,11 +471,13 @@ class MergeWhisperOrchestrator:
         )
 
         output_payload = synthesis_result.model_dump()
-        output_payload["head_branch"] = LIVE_DEMO_BRANCH
-        output_payload["branch"] = LIVE_DEMO_BRANCH
+        output_payload["head_branch"] = dynamic_branch
+        output_payload["branch"] = dynamic_branch
         if "ingest" in output_payload and isinstance(output_payload["ingest"], dict):
-            output_payload["ingest"]["head_branch"] = LIVE_DEMO_BRANCH
-            output_payload["ingest"]["branch"] = LIVE_DEMO_BRANCH
+            output_payload["ingest"]["head_branch"] = dynamic_branch
+            output_payload["ingest"]["branch"] = dynamic_branch
+        if "ship" in output_payload and isinstance(output_payload["ship"], dict):
+            output_payload["ship"]["branch_name"] = dynamic_branch
 
         yield {"event": "synthesis_complete", "data": output_payload}
 
@@ -573,12 +608,18 @@ class MergeWhisperOrchestrator:
 
         target_repo = "lokebuilds/MergeWhisper"
         base_branch = "main"
-        head_branch = "feat/live-demo"
+        head_branch = None
         if patch_req.current_response.ingest:
-            target_repo = patch_req.current_response.ingest.target_repo
-            base_branch = patch_req.current_response.ingest.base_branch
-            patch_req.current_response.ingest.head_branch = "feat/live-demo"
-            head_branch = "feat/live-demo"
+            target_repo = patch_req.current_response.ingest.target_repo or target_repo
+            base_branch = patch_req.current_response.ingest.base_branch or base_branch
+            head_branch = patch_req.current_response.ingest.head_branch
+        if not head_branch and getattr(patch_req.current_response.ship, "branch_name", None):
+            head_branch = patch_req.current_response.ship.branch_name
+        if not head_branch:
+            head_branch = derive_dynamic_branch(patch_req.patch_instruction)
+
+        if patch_req.current_response.ingest:
+            patch_req.current_response.ingest.head_branch = head_branch
 
         dispatch_url = generate_github_url(
             target_repo=target_repo,
@@ -618,6 +659,7 @@ class MergeWhisperOrchestrator:
             title=manifest.ship.title,
             summary=manifest.ship.summary,
             markdown_body=manifest.ship.markdown_body,
+            branch_name=head_branch,
             channel_name=manifest.ship.channel_name,
             broadcast_summary=manifest.ship.broadcast_summary,
             issue_tracker_curl=issue_curl,
@@ -642,6 +684,129 @@ class MergeWhisperOrchestrator:
             ship=ship_stage,
         )
 
+
+    async def execute_git_publish(self, req: PublishPRRequest) -> PublishPRResponse:
+        """Execute real Git operations (checkout branch, commit, push) with human-validated PR text.
+
+        Enforces strict DevSecOps safety controls:
+        - Path & branch sanitization to prevent argument injection
+        - Asynchronous subprocess execution with timeouts
+        - Detailed execution logs captured for transparency and audit compliance
+        """
+        repo_root = Path(__file__).resolve().parent.parent
+        logs: List[str] = []
+
+        # 1. Sanitize the branch name to prevent flag injection or shell corruption
+        raw_branch = req.head_branch.strip()
+        clean_branch = re.sub(r"[^a-zA-Z0-9_\-\./]", "-", raw_branch).strip(".-/")
+        if not clean_branch:
+            clean_branch = derive_dynamic_branch(req.title)
+
+        logs.append(f"[DevSecOps Gate] Validated target head branch: {clean_branch}")
+        logs.append(f"[DevSecOps Gate] Base target branch: {req.base_branch}")
+        logs.append(f"[DevSecOps Gate] Human-Approved PR Title: {req.title}")
+
+        async def run_git_step(args: List[str], desc: str) -> Tuple[int, str, str]:
+            cmd_str = "git " + " ".join(args)
+            logs.append(f"$ {cmd_str}")
+            try:
+                proc = await asyncio.create_subprocess_exec(
+                    "git",
+                    *args,
+                    cwd=str(repo_root),
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                )
+                stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=35.0)
+                stdout_str = stdout_bytes.decode("utf-8", errors="replace").strip()
+                stderr_str = stderr_bytes.decode("utf-8", errors="replace").strip()
+                if stdout_str:
+                    for line in stdout_str.splitlines():
+                        logs.append(f"  [stdout] {line}")
+                if stderr_str:
+                    for line in stderr_str.splitlines():
+                        logs.append(f"  [stderr] {line}")
+                return proc.returncode or 0, stdout_str, stderr_str
+            except asyncio.TimeoutError:
+                err_msg = f"Timeout executing {desc} (35s exceeded)"
+                logs.append(f"  [error] {err_msg}")
+                return -1, "", err_msg
+            except Exception as e:
+                err_msg = f"Failed to execute {desc}: {str(e)}"
+                logs.append(f"  [error] {err_msg}")
+                return -1, "", err_msg
+
+        # Step A: Checkout target branch (create or switch to it)
+        code, out, err = await run_git_step(["checkout", "-B", clean_branch], "git checkout -B")
+        if code != 0:
+            return PublishPRResponse(
+                success=False,
+                head_branch=clean_branch,
+                execution_logs=logs,
+                error=f"Git checkout failed: {err}",
+            )
+
+        # Step B: Stage any pending changes
+        code, out, err = await run_git_step(["add", "-A"], "git add -A")
+        if code != 0:
+            return PublishPRResponse(
+                success=False,
+                head_branch=clean_branch,
+                execution_logs=logs,
+                error=f"Git add failed: {err}",
+            )
+
+        # Step C: Commit with human-approved conventional title and description
+        commit_message = f"{req.title.strip()}\n\n{req.markdown_body.strip()}"
+        commit_args = ["commit", "--allow-empty", "-m", commit_message]
+        if req.author_name and req.author_email:
+            commit_args.extend(["--author", f"{req.author_name} <{req.author_email}>"])
+
+        code, out, err = await run_git_step(commit_args, "git commit")
+        if code != 0:
+            return PublishPRResponse(
+                success=False,
+                head_branch=clean_branch,
+                execution_logs=logs,
+                error=f"Git commit failed: {err}",
+            )
+
+        # Step D: Retrieve Commit SHA
+        code, sha_out, _ = await run_git_step(["rev-parse", "HEAD"], "git rev-parse HEAD")
+        commit_sha = sha_out.strip() if code == 0 else None
+        if commit_sha:
+            logs.append(f"[DevSecOps Gate] Commit verified at SHA: {commit_sha}")
+
+        # Step E: Push to remote origin
+        code, out, err = await run_git_step(["push", "-u", "origin", clean_branch, "--force"], "git push origin")
+        if code != 0:
+            logs.append(f"[DevSecOps Gate] Warning: git push failed: {err}")
+            return PublishPRResponse(
+                success=False,
+                head_branch=clean_branch,
+                commit_sha=commit_sha,
+                execution_logs=logs,
+                error=f"Git push failed: {err}",
+            )
+
+        # Step F: Generate PR comparison link
+        pr_url = generate_github_url(
+            target_repo=req.target_repo,
+            base_branch=req.base_branch,
+            head_branch=clean_branch,
+            title=req.title,
+            markdown_body=req.markdown_body,
+        )
+        logs.append(f"[DevSecOps Gate] Verification complete. Branch live at origin/{clean_branch}")
+        logs.append(f"[DevSecOps Gate] PR compare ready: {pr_url}")
+
+        return PublishPRResponse(
+            success=True,
+            head_branch=clean_branch,
+            commit_sha=commit_sha,
+            pr_url=pr_url,
+            execution_logs=logs,
+        )
 
     def get_system_health(self) -> SystemHealthResponse:
         """Produce system diagnostic telemetry."""

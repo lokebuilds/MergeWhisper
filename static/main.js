@@ -58,7 +58,7 @@ function sanitizeRepo(repo, defaultRepo = 'lokebuilds/MergeWhisper') {
 function buildGitHubCompareUrl(repo, base, head) {
     const cleanRepo = sanitizeRepo(repo, 'lokebuilds/MergeWhisper');
     const cleanBase = sanitizeBranch(base, 'main');
-    const cleanHead = sanitizeBranch(head, 'feat/live-demo');
+    const cleanHead = sanitizeBranch(head, 'feat/patch');
     return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
 }
 

@@ -197,6 +197,10 @@ class GeminiShipData(BaseSchema):
         ...,
         description="Complete GitHub/GitLab-compliant Markdown description including test plan and checklists.",
     )
+    branch_name: Optional[str] = Field(
+        default=None,
+        description="Dynamic contextual git branch name synthesized from intent (e.g. fix/session-cookie-recursion).",
+    )
     channel_name: str = Field(
         default="eng-releases",
         description="Designated Slack communication channel for release broadcasts.",
@@ -421,6 +425,81 @@ class SystemHealthResponse(BaseSchema):
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Server response timestamp.")
 
 
+# ==============================================================================
+# Real Git Execution Request & Response Contracts (Human-in-the-Loop)
+# ==============================================================================
+
+class PublishPRRequest(BaseSchema):
+    """Payload for human-validated real Git commit & push execution."""
+
+    target_repo: str = Field(
+        default="lokebuilds/MergeWhisper",
+        description="Target GitHub repository in owner/repo format.",
+    )
+    base_branch: str = Field(
+        default="main",
+        description="Target base branch to merge into.",
+    )
+    head_branch: str = Field(
+        ...,
+        description="Human-approved dynamic head branch to create, commit, and push.",
+    )
+    title: str = Field(
+        ...,
+        description="Human-reviewed and approved conventional commit PR title.",
+    )
+    markdown_body: str = Field(
+        ...,
+        description="Human-reviewed and approved PR markdown description.",
+    )
+    author_name: Optional[str] = Field(
+        default=None,
+        description="Optional author name for the Git commit.",
+    )
+    author_email: Optional[str] = Field(
+        default=None,
+        description="Optional author email for the Git commit.",
+    )
+
+    @field_validator("head_branch")
+    @classmethod
+    def validate_head_branch(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not cleaned:
+            raise ValueError("Head branch cannot be empty.")
+        return cleaned
+
+
+class PublishPRResponse(BaseSchema):
+    """Execution telemetry and status from real Git subprocess execution."""
+
+    success: bool = Field(
+        ...,
+        description="Whether the git operations completed successfully.",
+    )
+    head_branch: str = Field(
+        ...,
+        description="The branch that was checked out and pushed.",
+    )
+    commit_sha: Optional[str] = Field(
+        default=None,
+        description="SHA of the newly created commit.",
+    )
+    pr_url: Optional[str] = Field(
+        default=None,
+        description="Dynamic GitHub PR compare/create URL or live PR URL.",
+    )
+    execution_logs: List[str] = Field(
+        default_factory=list,
+        description="Ordered real git terminal execution logs.",
+    )
+    error: Optional[str] = Field(
+        default=None,
+        description="Error message if any git step failed.",
+    )
+
+
 # Legacy compatibility aliases
 VoiceCommandInput = IngestData
 PullRequestOrchestrationResult = SynthesisResponse
+

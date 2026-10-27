@@ -349,12 +349,15 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
     start_time = time.perf_counter()
     session_id = f"sess_{uuid.uuid4()}"
 
-    LIVE_DEMO_BRANCH = "feat/live-demo"
-
     # Use payload fields if user customized them, otherwise preset defaults
     target_repo = payload.target_repo or preset["target_repo"]
     base_branch = payload.base_branch or preset["base_branch"]
-    head_branch = LIVE_DEMO_BRANCH
+    head_branch = (
+        (payload.head_branch.strip() if payload.head_branch and payload.head_branch.strip() != "feat/live-demo" else None)
+        or preset.get("head_branch")
+        or "feat/patch"
+    )
+    payload.head_branch = head_branch
     tech_stack = payload.tech_stack or preset["tech_stack"]
 
     # DevSecOps Threat Detection: check for AWS keys or destructive SQL
@@ -571,8 +574,11 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
     and constructs all deliverables with an embedded GitHub compare dispatch link.
     """
     start_time = time.perf_counter()
-    LIVE_DEMO_BRANCH = "feat/live-demo"
-    payload.head_branch = LIVE_DEMO_BRANCH
+    dynamic_head = (
+        (payload.head_branch.strip() if payload.head_branch and payload.head_branch.strip() != "feat/live-demo" else None)
+        or "feat/patch"
+    )
+    payload.head_branch = dynamic_head
     combined_text = f"{payload.intent} {payload.diff or ''}".lower()
 
     # Match against pre-baked presets
@@ -635,9 +641,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
         intercepted_threats=threats_detected,
     )
 
-    LIVE_DEMO_BRANCH = "feat/live-demo"
-    head_branch = LIVE_DEMO_BRANCH
-    payload.head_branch = LIVE_DEMO_BRANCH
+    head_branch = payload.head_branch or dynamic_head
 
     diff_section = f"\n### 📄 Git Diff Telemetry\n```diff\n{payload.diff}\n```\n" if payload.diff else ""
     pr_markdown = f"""## 🎙️ MergeWhisper Autonomous Pull Request Manifest
@@ -646,7 +650,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
 {summary}
 
 - **Target Repository:** `{payload.target_repo}`
-- **Branch Topology:** `{LIVE_DEMO_BRANCH}` ➡️ `{payload.base_branch}`
+- **Branch Topology:** `{head_branch}` ➡️ `{payload.base_branch}`
 - **Declared Tech Stack:** `{payload.tech_stack}`
 - **Risk Level:** `{risk_level}` | **Breaking Change:** `{'YES' if is_breaking else 'NO'}`
 
@@ -783,7 +787,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
         diff=payload.diff,
         target_repo=payload.target_repo,
         base_branch=payload.base_branch,
-        head_branch=LIVE_DEMO_BRANCH,
+        head_branch=head_branch,
         tech_stack=payload.tech_stack,
         word_count=word_count,
     )

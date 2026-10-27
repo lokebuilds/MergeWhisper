@@ -36,16 +36,16 @@
                             card: '#ffffff',
                         },
                         obsidian: {
-                            base: '#08090a',
+                            base: '#0c0d12',
                             subtle: '#0f1115',
                             card: '#13161c',
                             border: '#22242a',
                             borderMuted: '#2b2e38',
                         },
-                        terracotta: {
-                            DEFAULT: '#ea580c',
-                            hover: '#d94b05',
-                            subtle: 'rgba(234, 88, 12, 0.08)',
+                        accent: {
+                            DEFAULT: '#f58e0a',
+                            hover: '#d97706',
+                            subtle: 'rgba(245, 142, 10, 0.1)',
                         }
                     }
                 }
@@ -97,8 +97,8 @@
         html:not(.dark) ::-webkit-scrollbar-thumb { background: #e6e5e0; border-radius: 9999px; }
         html:not(.dark) ::-webkit-scrollbar-thumb:hover { background: #d8d6cf; }
 
-        .dark ::-webkit-scrollbar-track { background: #08090a; }
-        .dark ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 9999px; }
+        .dark ::-webkit-scrollbar-track { background: #0c0d12; }
+        .dark ::-webkit-scrollbar-thumb { background: #1f2129; border-radius: 9999px; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
         /* Smooth Theme & View Transitions */
@@ -112,7 +112,7 @@
             color: #262524;
         }
         .dark body, html.dark body {
-            background-color: #08090a;
+            background-color: #0c0d12;
             color: #f4f4f5;
         }
 
@@ -122,8 +122,8 @@
             border: 1px solid #e6e5e0;
         }
         .dark .editorial-card {
-            background-color: #18181b;
-            border: 1px solid #27272a;
+            background-color: #121318;
+            border: 1px solid #1f2129;
         }
 
         /* Subtle Inner Input/Pre Blocks */
@@ -133,8 +133,8 @@
             color: #262524;
         }
         .dark .editorial-inner {
-            background-color: #121316;
-            border: 1px solid #27272a;
+            background-color: #0c0d12;
+            border: 1px solid #1f2129;
             color: #e4e4e7;
         }
 
@@ -143,7 +143,7 @@
             border-color: #e6e5e0;
         }
         .dark .hairline-border {
-            border-color: #27272a;
+            border-color: #1f2129;
         }
 
         /* Concentric Radius Laws: Outer (24px) = Inner (12px) + Padding (12px-16px) */
@@ -160,12 +160,12 @@
         }
     </style>
 </head>
-<body class="min-h-[100dvh] flex flex-col justify-between selection:bg-amber-500/15 selection:text-amber-800 dark:selection:bg-amber-400/20 dark:selection:text-amber-300 antialiased relative">
+<body class="min-h-[100dvh] flex flex-col justify-between selection:bg-[#f58e0a]/20 selection:text-[#f58e0a] dark:selection:bg-[#f58e0a]/20 dark:selection:text-[#f58e0a] antialiased relative">
 
     <!-- ==================================================================== -->
     <!-- TOP NAVIGATION BAR                                                   -->
     <!-- ==================================================================== -->
-    <header class="sticky top-0 z-40 bg-[#fcfbf7]/90 dark:bg-[#08090a]/90 backdrop-blur-md border-b hairline-border px-4 sm:px-8 py-3 flex items-center justify-between transition-colors">
+    <header class="sticky top-0 z-40 bg-[#fcfbf7]/90 dark:bg-[#0c0d12]/90 backdrop-blur-md border-b hairline-border px-4 sm:px-8 py-3 flex items-center justify-between transition-colors">
         <!-- Left Side: Minimal Brand Mark Only (routes cleanly back to landing view) -->
         <button id="brand-logo-btn" type="button" onclick="switchView('landing')" class="flex items-center gap-2 cursor-pointer select-none group text-left">
             <span class="text-sm font-semibold tracking-tight text-stone-900 dark:text-zinc-100 group-hover:text-stone-700 dark:group-hover:text-zinc-300 transition">MergeWhisper</span>
@@ -177,25 +177,25 @@
             <button 
                 type="button" 
                 onclick="if (currentView !== 'landing') switchView('landing'); (document.getElementById('features-section') || document.getElementById('landing-view')).scrollIntoView({ behavior: 'smooth' });" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 FEATURES
             </button>
             <button 
                 type="button" 
                 onclick="openWorkspace()" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 PRESETS
             </button>
             <button 
                 type="button" 
                 onclick="showToast('Coming soon', 'info')" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 SHORTCUTS
             </button>
             <button 
                 type="button" 
                 onclick="if (currentView !== 'landing') switchView('landing'); const faq = document.getElementById('faq-section') || document.getElementById('faq'); if (faq) faq.scrollIntoView({ behavior: 'smooth' });" 
-                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#38BDF8] transition-colors cursor-pointer">
+                class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 FAQ
             </button>
         </nav>
@@ -209,8 +209,8 @@
                 id="copy-dev-profile-btn"
                 onclick="copyUniversalDeveloperProfile()" 
                 title="Wispr Setup: Copy developer voice profile"
-                class="text-xs font-mono font-medium text-gray-500 hover:text-[#38BDF8] transition-colors flex items-center gap-2 px-2.5 py-1 rounded cursor-pointer">
-                <i data-lucide="mic" class="w-3.5 h-3.5 text-[#38BDF8]"></i>
+                class="text-xs font-mono font-medium text-gray-500 hover:text-[#f58e0a] transition-colors flex items-center gap-2 px-2.5 py-1 rounded cursor-pointer">
+                <i data-lucide="mic" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                 <span id="copy-dev-profile-label">Wispr Setup</span>
             </button>
 
@@ -255,7 +255,7 @@
                     <!-- H1 Title -->
                     <h1 class="text-5xl lg:text-7xl font-black tracking-tighter leading-[1.1] text-stone-900 dark:text-white">
                         Say the idea.<br/>
-                        Make the work <span class="text-amber-600 dark:text-amber-500">clear.</span>
+                        Make the work <span class="text-[#f58e0a]">clear.</span>
                     </h1>
 
                     <!-- Subcopy -->
@@ -279,7 +279,7 @@
                             type="button" 
                             onclick="launchReviewerDemo()" 
                             class="py-3 px-6 rounded-xl border hairline-border hover:border-stone-400 dark:hover:border-zinc-600 bg-transparent text-stone-800 dark:text-zinc-200 hover:bg-stone-100 dark:hover:bg-zinc-900 font-medium text-xs tracking-wider transition flex items-center gap-2 cursor-pointer shadow-2xs active:scale-95">
-                            <i data-lucide="play" class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"></i>
+                            <i data-lucide="play" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                             <span>Run Live Demo</span>
                         </button>
                     </div>
@@ -291,7 +291,7 @@
                     <!-- Top Eyebrow: ● SYSTEM WORKFLOW with tiny waveform icon floating on top right -->
                     <div class="flex items-center justify-between pb-1 sm:pb-2">
                         <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            <span class="w-2 h-2 rounded-full bg-[#f58e0a]"></span>
                             <span class="font-mono text-xs font-semibold tracking-wider uppercase text-stone-600 dark:text-zinc-400">SYSTEM WORKFLOW</span>
                         </div>
                         <!-- Tiny waveform icon floating on top right -->
@@ -307,7 +307,7 @@
                     <!-- Top Box (The Spoken Intent) -->
                     <div class="w-full bg-white dark:bg-[#1c1e21] border hairline-border rounded-2xl p-6 shadow-sm z-10 flex flex-col gap-4">
                         <div class="flex items-center gap-2">
-                            <span class="w-6 h-6 rounded-lg bg-amber-500/10 dark:bg-amber-400/10 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0">
+                            <span class="w-6 h-6 rounded-lg bg-[#f58e0a]/10 flex items-center justify-center text-[#f58e0a] shrink-0">
                                 <i data-lucide="mic" class="w-3.5 h-3.5"></i>
                             </span>
                             <span class="font-mono text-[11px] font-semibold tracking-wider uppercase text-stone-500 dark:text-zinc-400">SPOKEN INTENT</span>
@@ -322,22 +322,22 @@
                         <span class="font-mono text-[10px] tracking-widest uppercase text-stone-400 dark:text-zinc-500 font-medium">ONE DECISION. A CLEAR NEXT STEP.</span>
                         
                         <h3 class="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-                            <i data-lucide="git-pull-request" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                            <i data-lucide="git-pull-request" class="w-5 h-5 text-[#f58e0a] shrink-0"></i>
                             <span>Pull Request #418</span>
                         </h3>
 
                         <!-- 3 checklist items stacked vertically (live execution log) -->
                         <div class="flex flex-col gap-2.5 font-mono text-xs pt-1">
                             <div class="flex items-center gap-2 text-stone-300 dark:text-zinc-400">
-                                <span class="text-emerald-400 font-bold text-xs select-none">✓</span>
+                                <span class="text-[#f58e0a] font-bold text-xs select-none">✓</span>
                                 <span>Multi-agent code synthesis complete</span>
                             </div>
                             <div class="flex items-center gap-2 text-stone-300 dark:text-zinc-400">
-                                <span class="text-emerald-400 font-bold text-xs select-none">✓</span>
+                                <span class="text-[#f58e0a] font-bold text-xs select-none">✓</span>
                                 <span>Patch verified in zero-trust sandbox</span>
                             </div>
                             <div class="flex items-center gap-2 text-stone-300 dark:text-zinc-400">
-                                <span class="text-emerald-400 font-bold text-xs select-none">✓</span>
+                                <span class="text-[#f58e0a] font-bold text-xs select-none">✓</span>
                                 <span>Autonomous pull request generated</span>
                             </div>
                         </div>
@@ -367,10 +367,10 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Feature 1: WebSocket Orchestration -->
                 <div class="flex flex-col items-start text-left p-3 rounded-2xl group transition-all duration-200">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
+                    <div class="w-10 h-10 rounded-xl bg-[#f58e0a]/10 text-[#f58e0a] flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
                         <i data-lucide="radio" class="w-5 h-5"></i>
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 mb-2">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] mb-2">
                         STREAMING
                     </span>
                     <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 tracking-tight mb-1.5">
@@ -399,10 +399,10 @@
 
                 <!-- Feature 3: Semantic PR Synthesis -->
                 <div class="flex flex-col items-start text-left p-3 rounded-2xl group transition-all duration-200">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
+                    <div class="w-10 h-10 rounded-xl bg-[#f58e0a]/10 text-[#f58e0a] flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
                         <i data-lucide="git-pull-request" class="w-5 h-5"></i>
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-500/10 text-amber-700 dark:text-amber-400 mb-2">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] mb-2">
                         REASONING CORE
                     </span>
                     <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 tracking-tight mb-1.5">
@@ -415,10 +415,10 @@
 
                 <!-- Feature 4: Immutable Artifacts -->
                 <div class="flex flex-col items-start text-left p-3 rounded-2xl group transition-all duration-200">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
+                    <div class="w-10 h-10 rounded-xl bg-[#f58e0a]/10 text-[#f58e0a] flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
                         <i data-lucide="file-check" class="w-5 h-5"></i>
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 mb-2">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] mb-2">
                         RELEASE ASSETS
                     </span>
                     <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 tracking-tight mb-1.5">
@@ -446,7 +446,7 @@
                 <div class="p-4 rounded-xl editorial-inner flex flex-col justify-between gap-3">
                     <div class="flex items-center justify-between text-stone-400 dark:text-zinc-500 text-[11px]">
                         <span>01</span>
-                        <i data-lucide="file-text" class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"></i>
+                        <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                     </div>
                     <div>
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">Ingest</span>
@@ -457,7 +457,7 @@
                 <div class="p-4 rounded-xl editorial-inner flex flex-col justify-between gap-3">
                     <div class="flex items-center justify-between text-stone-400 dark:text-zinc-500 text-[11px]">
                         <span>02</span>
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-500"></i>
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                     </div>
                     <div>
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">Audit</span>
@@ -468,7 +468,7 @@
                 <div class="p-4 rounded-xl editorial-inner flex flex-col justify-between gap-3">
                     <div class="flex items-center justify-between text-stone-400 dark:text-zinc-500 text-[11px]">
                         <span>03</span>
-                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-emerald-500"></i>
+                        <i data-lucide="check-square" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                     </div>
                     <div>
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">Verify</span>
@@ -479,7 +479,7 @@
                 <div class="p-4 rounded-xl editorial-inner flex flex-col justify-between gap-3">
                     <div class="flex items-center justify-between text-stone-400 dark:text-zinc-500 text-[11px]">
                         <span>04</span>
-                        <i data-lucide="git-branch" class="w-3.5 h-3.5 text-indigo-500"></i>
+                        <i data-lucide="git-branch" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                     </div>
                     <div>
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">Changelog</span>
@@ -490,7 +490,7 @@
                 <div class="p-4 rounded-xl editorial-inner flex flex-col justify-between gap-3">
                     <div class="flex items-center justify-between text-stone-400 dark:text-zinc-500 text-[11px]">
                         <span>05</span>
-                        <i data-lucide="send" class="w-3.5 h-3.5 text-emerald-600"></i>
+                        <i data-lucide="send" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                     </div>
                     <div>
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">Ship</span>
@@ -508,8 +508,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                 <button type="button" onclick="runGuestDemo('auth-loop')" class="p-3.5 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer flex flex-col justify-between gap-2 shadow-xs group">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition">Auth Loop Fix</span>
-                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">LOW</span>
+                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-[#f58e0a] transition">Auth Loop Fix</span>
+                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-[#f58e0a]/10 text-[#f58e0a]">LOW</span>
                     </div>
                     <p class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 font-normal">Cookie recursion repair</p>
                 </button>
@@ -524,16 +524,16 @@
 
                 <button type="button" onclick="runGuestDemo('websocket-leak')" class="p-3.5 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer flex flex-col justify-between gap-2 shadow-xs group">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition">WebSocket Leak</span>
-                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">MED</span>
+                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-[#f58e0a] transition">WebSocket Leak</span>
+                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-[#f58e0a]/10 text-[#f58e0a]">MED</span>
                     </div>
                     <p class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 font-normal">Async channel cleanup</p>
                 </button>
 
                 <button type="button" onclick="runGuestDemo('redis-limiter')" class="p-3.5 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer flex flex-col justify-between gap-2 shadow-xs group">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-amber-700 dark:group-hover:text-amber-400 transition">Redis Limiter</span>
-                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">LOW</span>
+                        <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100 group-hover:text-[#f58e0a] transition">Redis Limiter</span>
+                        <span class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-[#f58e0a]/10 text-[#f58e0a]">LOW</span>
                     </div>
                     <p class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 font-normal">Sliding window Lua rate script</p>
                 </button>
@@ -552,7 +552,7 @@
                 <div class="flex flex-col">
                     <!-- Left Q1 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>How do you prevent credential leaks?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -567,7 +567,7 @@
 
                     <!-- Left Q2 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>Are developer voice transcripts retained?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -582,7 +582,7 @@
 
                     <!-- Left Q3 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>How does the AI understand repo context?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -597,7 +597,7 @@
 
                     <!-- Left Q4 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>Why use Pydantic v2 schemas?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -615,7 +615,7 @@
                 <div class="flex flex-col">
                     <!-- Right Q1 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>What drives the sub-3-second latency?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -630,7 +630,7 @@
 
                     <!-- Right Q2 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>How do the webhooks synchronize?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -645,7 +645,7 @@
 
                     <!-- Right Q3 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>What is the Universal Developer Profile?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -660,7 +660,7 @@
 
                     <!-- Right Q4 -->
                     <div class="faq-item">
-                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-gray-800/20 dark:border-gray-800 text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-amber-700 dark:hover:text-amber-400 transition-colors">
+                        <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
                             <span>Is this an automated CI/CD deployment?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -689,38 +689,38 @@
         <div class="mb-8 border-b hairline-border pb-4 flex items-center justify-center">
             <nav class="flex items-center justify-center gap-1.5 sm:gap-2.5 overflow-x-auto text-xs font-mono" aria-label="Stages">
                 <!-- Step 01: Ingest -->
-                <button type="button" onclick="navigateToStage('stage-01')" id="nav-step-01" class="stage-nav-pill px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
+                <button type="button" onclick="navigateToStage('stage-01')" id="nav-step-01" class="stage-nav-pill px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border border-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
                     <span class="tabular-nums">01</span>
                     <span>Ingest</span>
-                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-emerald-400 dark:text-emerald-500"></i>
+                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-[#f58e0a]"></i>
                 </button>
 
                 <!-- Step 02: Audit -->
-                <button type="button" onclick="navigateToStage('stage-02')" id="nav-step-02" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
+                <button type="button" onclick="navigateToStage('stage-02')" id="nav-step-02" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#f58e0a] dark:text-zinc-400 dark:hover:text-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
                     <span class="tabular-nums">02</span>
                     <span>Audit</span>
-                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-emerald-400 dark:text-emerald-500"></i>
+                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-[#f58e0a]"></i>
                 </button>
 
                 <!-- Step 03: Verify -->
-                <button type="button" onclick="navigateToStage('stage-03')" id="nav-step-03" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
+                <button type="button" onclick="navigateToStage('stage-03')" id="nav-step-03" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#f58e0a] dark:text-zinc-400 dark:hover:text-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
                     <span class="tabular-nums">03</span>
                     <span>Verify</span>
-                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-emerald-400 dark:text-emerald-500"></i>
+                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-[#f58e0a]"></i>
                 </button>
 
                 <!-- Step 04: Changelog -->
-                <button type="button" onclick="navigateToStage('stage-04')" id="nav-step-04" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
+                <button type="button" onclick="navigateToStage('stage-04')" id="nav-step-04" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#f58e0a] dark:text-zinc-400 dark:hover:text-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
                     <span class="tabular-nums">04</span>
                     <span>Changelog</span>
-                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-emerald-400 dark:text-emerald-500"></i>
+                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-[#f58e0a]"></i>
                 </button>
 
                 <!-- Step 05: Ship -->
-                <button type="button" onclick="navigateToStage('stage-05')" id="nav-step-05" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
+                <button type="button" onclick="navigateToStage('stage-05')" id="nav-step-05" class="stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#f58e0a] dark:text-zinc-400 dark:hover:text-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0">
                     <span class="tabular-nums">05</span>
                     <span>Ship</span>
-                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-emerald-400 dark:text-emerald-500"></i>
+                    <i data-lucide="check" class="w-3 h-3 hidden check-icon text-[#f58e0a]"></i>
                 </button>
             </nav>
         </div>
@@ -743,7 +743,7 @@
                         <button type="button" onclick="selectPreset('auth-loop')" id="pill-auth-loop" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100">Auth Loop Fix</span>
-                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">LOW</span>
+                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-[#f58e0a]/10 text-[#f58e0a]">LOW</span>
                             </div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 block mt-0.5 font-normal">Session cookie recursion</span>
                         </button>
@@ -759,7 +759,7 @@
                         <button type="button" onclick="selectPreset('websocket-leak')" id="pill-websocket-leak" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100">WebSocket Leak</span>
-                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400">MED</span>
+                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-[#f58e0a]/10 text-[#f58e0a]">MED</span>
                             </div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 block mt-0.5 font-normal">Listener garbage collect</span>
                         </button>
@@ -767,7 +767,7 @@
                         <button type="button" onclick="selectPreset('redis-limiter')" id="pill-redis-limiter" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100">Redis Limiter</span>
-                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">LOW</span>
+                                <span class="text-[9px] font-mono tabular-nums px-1 rounded bg-[#f58e0a]/10 text-[#f58e0a]">LOW</span>
                             </div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 line-clamp-1 block mt-0.5 font-normal">Sliding window rate limit</span>
                         </button>
@@ -794,7 +794,7 @@
                         id="intent" 
                         rows="4" 
                         placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#fcfbf7] dark:bg-[#08090a] border border-[#e6e5e0] dark:border-[#23252a] rounded-lg focus:border-stone-400 dark:focus:border-zinc-600 outline-none transition-colors resize-none placeholder-stone-400 dark:placeholder-zinc-600"></textarea>
+                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#fcfbf7] dark:bg-[#0c0d12] border border-[#e6e5e0] dark:border-[#23252a] rounded-lg focus:border-stone-400 dark:focus:border-zinc-600 outline-none transition-colors resize-none placeholder-stone-400 dark:placeholder-zinc-600"></textarea>
 
                     <!-- Compact Repository Metadata -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
@@ -808,7 +808,7 @@
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" value="feat/live-demo" placeholder="feat/live-demo" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
                         </div>
                     </div>
 
@@ -822,12 +822,12 @@
                                 <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
                             </button>
                         </div>
-                        <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-white dark:bg-[#08090a] hidden">
+                        <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-white dark:bg-[#0c0d12] hidden">
                             <div class="flex items-center justify-between pb-2 mb-1.5 border-b hairline-border">
                                 <span class="text-[10px] font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">
                                     Raw Unified Diff Telemetry
                                 </span>
-                                <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
                                     Ghost Shield Active
                                 </span>
                             </div>
@@ -841,7 +841,7 @@
                         id="synthesize-btn" 
                         onclick="triggerSynthesis()" 
                         class="w-full py-3.5 px-6 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-stone-900 hover:bg-stone-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-950 transition flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-[0.99]">
-                        <i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 dark:text-amber-500"></i>
+                        <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                         <span id="synthesize-btn-label">Synthesize Release Specifications</span>
                         <span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>
                     </button>
@@ -884,7 +884,7 @@
                             <span class="text-xs font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">SRE Risk Assessment & Rollback Runbook</span>
                             <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">Subsystem Blast Radius & Hazard Boundary</h3>
                         </div>
-                        <div id="arch-risk-badge" class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <div id="arch-risk-badge" class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
                             STANDBY
                         </div>
                     </div>
@@ -944,7 +944,7 @@
                                 <span>Copy</span>
                             </button>
                         </div>
-                        <div class="rounded-xl overflow-hidden border hairline-border bg-stone-900 text-amber-300 p-3 font-mono text-xs">
+                        <div class="rounded-xl overflow-hidden border hairline-border bg-stone-900 dark:bg-black text-[#f58e0a] p-3 font-mono text-xs border border-stone-800">
                             <pre id="rollback-code-box" class="whitespace-pre-wrap leading-relaxed"># Automated command will appear here...</pre>
                         </div>
                     </div>
@@ -975,7 +975,7 @@
                     <!-- Objective Box -->
                     <div>
                         <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider block mb-1">Primary Objective</span>
-                        <div id="qa-objective-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono text-emerald-700 dark:text-emerald-400 leading-relaxed">
+                        <div id="qa-objective-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono text-[#f58e0a] leading-relaxed">
                             Awaiting synthesis...
                         </div>
                     </div>
@@ -991,7 +991,7 @@
 
                         <div class="flex flex-col gap-2">
                             <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Boundary Regression & Edge Cases</span>
-                            <ul id="qa-edges-list" class="space-y-2 p-3.5 rounded-xl editorial-inner min-h-[140px] text-xs font-mono text-amber-700 dark:text-amber-400">
+                            <ul id="qa-edges-list" class="space-y-2 p-3.5 rounded-xl editorial-inner min-h-[140px] text-xs font-mono text-[#f58e0a]">
                                 <li class="text-stone-400 italic">No boundary conditions analyzed yet.</li>
                             </ul>
                         </div>
@@ -1033,11 +1033,11 @@
                         </div>
                         <div class="flex items-center gap-1.5 text-stone-400 dark:text-zinc-500">
                             <span class="text-[10px]">Increment</span>
-                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-amber-600 dark:text-amber-400"></i>
+                            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                         </div>
                         <div>
                             <span class="text-stone-400 dark:text-zinc-500 text-[10px] block">PROJECTED VERSION</span>
-                            <span id="cl-next-version" class="font-medium text-amber-700 dark:text-amber-400 tabular-nums">--</span>
+                            <span id="cl-next-version" class="font-medium text-[#f58e0a] tabular-nums">--</span>
                         </div>
                     </div>
 
@@ -1080,65 +1080,116 @@
                 </div>
 
                 <div id="stage-05-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-5 transition-opacity">
-                    <!-- PR Manifest Card -->
-                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5">
+                    <!-- PR Manifest Card (Human-in-the-Loop Review Gate) -->
+                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5 bg-[#0c0d12] border border-[#1f2129]">
                         <div class="flex flex-col gap-4">
-                            <div class="border-b hairline-border pb-3 flex items-center justify-between">
+                            <div class="border-b border-[#1f2129] pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
-                                    <i data-lucide="git-pull-request" class="w-4 h-4 text-stone-700 dark:text-zinc-300"></i>
-                                    <span class="text-xs font-semibold text-stone-900 dark:text-zinc-100">Pull Request Manifest</span>
+                                    <i data-lucide="shield-check" class="w-4 h-4 text-[#38BDF8]"></i>
+                                    <span class="text-xs font-semibold text-zinc-100 uppercase tracking-wider">Human-in-the-Loop Review Gate</span>
                                 </div>
-                                <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Conventional Commit</span>
+                                <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/20">Awaiting Senior Validation</span>
                             </div>
 
-                            <div class="flex flex-col gap-1">
+                            <!-- Target Head Branch Textarea -->
+                            <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Commit Title:</span>
-                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-zinc-100 flex items-center gap-1 transition cursor-pointer">
+                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Target Head Branch:</label>
+                                    <span class="text-[10px] font-mono text-zinc-500">Editable Git Branch</span>
+                                </div>
+                                <textarea 
+                                    id="pr-edit-branch" 
+                                    rows="1" 
+                                    placeholder="e.g. fix/session-cookie-recursion" 
+                                    class="w-full p-2.5 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-zinc-100 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                            </div>
+
+                            <!-- PR Conventional Commit Title Textarea -->
+                            <div class="flex flex-col gap-1.5">
+                                <div class="flex items-center justify-between">
+                                    <label for="pr-edit-title" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">PR Title (Conventional Commit):</label>
+                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-zinc-400 hover:text-[#38BDF8] flex items-center gap-1 transition cursor-pointer">
                                         <i data-lucide="copy" class="w-3 h-3"></i>
                                         <span>Copy</span>
                                     </button>
                                 </div>
-                                <div id="pr-manifest-title" class="p-2.5 rounded-lg editorial-inner text-xs font-mono font-medium text-stone-900 dark:text-zinc-100">
-                                    Awaiting synthesis...
-                                </div>
+                                <textarea 
+                                    id="pr-edit-title" 
+                                    rows="2" 
+                                    placeholder="Conventional Commit PR Title..." 
+                                    class="w-full p-2.5 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono font-medium text-zinc-100 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                <!-- Backward compatibility hidden container -->
+                                <div id="pr-manifest-title" class="hidden"></div>
+                                <div id="pr-manifest-summary" class="hidden"></div>
                             </div>
 
-                            <div>
-                                <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 block mb-0.5 uppercase tracking-wider">Architectural Summary:</span>
-                                <div id="pr-manifest-summary" class="p-2.5 rounded-lg editorial-inner text-xs text-stone-700 dark:text-zinc-300 leading-relaxed font-normal">
-                                    --
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col gap-1">
+                            <!-- PR Description / Markdown Body Textarea -->
+                            <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Markdown Body Preview:</span>
+                                    <label for="pr-edit-body" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">PR Description &amp; Verification Matrix (Markdown):</label>
                                     <div class="flex items-center gap-3">
-                                        <button type="button" onclick="copyToClipboard('pr-manifest-body', 'PR Markdown')" class="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-zinc-100 flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-zinc-400 hover:text-[#38BDF8] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="copy" class="w-3 h-3"></i>
                                             <span>Copy</span>
                                         </button>
-                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-zinc-100 flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-zinc-400 hover:text-[#38BDF8] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="download" class="w-3 h-3"></i>
                                             <span>Download .md</span>
                                         </button>
                                     </div>
                                 </div>
-                                <pre id="pr-manifest-body" class="p-3 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-300 whitespace-pre-wrap overflow-y-auto max-h-[160px] leading-relaxed">Awaiting pull request markdown...</pre>
+                                <textarea 
+                                    id="pr-edit-body" 
+                                    rows="9" 
+                                    placeholder="AI-synthesized Pull Request description in Markdown..." 
+                                    class="w-full p-3 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-zinc-200 leading-relaxed transition-colors shadow-inner"></textarea>
+                                <!-- Backward compatibility hidden container -->
+                                <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
                         </div>
 
-                        <!-- Signature Dark 'Open in GitHub Compare' Button -->
-                        <a 
-                            id="pr-github-compare-btn" 
-                            href="https://github.com/lokebuilds/MergeWhisper/compare/main...feat/production-sweep" 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            class="w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold">
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                            <span>Open in GitHub Compare</span>
-                        </a>
+                        <!-- Real Execution Action & Output Dock -->
+                        <div class="flex flex-col gap-3 pt-2">
+                            <!-- Validate & Publish PR Button -->
+                            <button 
+                                id="validate-publish-btn" 
+                                type="button" 
+                                onclick="validateAndPublishPR()" 
+                                class="w-full py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-[#1f2129] hover:border-[#38BDF8] hover:text-[#38BDF8] hover:shadow-[0_0_15px_rgba(56,189,248,0.15)] focus:outline-none focus:ring-2 focus:ring-[#38BDF8] transition-all uppercase tracking-wider text-xs sm:text-sm font-semibold">
+                                <i data-lucide="shield-check" class="w-4 h-4 text-[#38BDF8]"></i>
+                                <span id="validate-publish-label">Validate &amp; Publish PR</span>
+                            </button>
+
+                            <!-- Live Compare Fallback Link (Legacy & Quick Navigation) -->
+                            <a 
+                                id="pr-github-compare-btn" 
+                                href="https://github.com/lokebuilds/MergeWhisper/compare" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                class="w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-mono text-zinc-400 hover:text-white border border-transparent hover:border-[#1f2129] transition">
+                                <i data-lucide="external-link" class="w-3 h-3 text-zinc-500"></i>
+                                <span>Preview Branch in GitHub Compare</span>
+                            </a>
+
+                            <!-- DevSecOps Real-Time Subprocess Execution Logs Dock -->
+                            <div id="git-execution-dock" class="hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono">
+                                <div class="flex items-center justify-between border-b border-[#1f2129] pb-2">
+                                    <div class="flex items-center gap-2 text-[11px] text-[#38BDF8]">
+                                        <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+                                        <span class="font-semibold uppercase tracking-wider">DevSecOps Subprocess Pipeline</span>
+                                    </div>
+                                    <span id="git-execution-status-chip" class="text-[10px] px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">READY</span>
+                                </div>
+                                <pre id="git-execution-logs" class="p-3 rounded-lg bg-black/80 border border-[#1f2129] text-[#38BDF8] text-[11px] font-mono leading-relaxed overflow-x-auto overflow-y-auto max-h-[140px] whitespace-pre-wrap break-all shadow-inner">Awaiting validation trigger...</pre>
+                                <div id="git-live-pr-container" class="hidden pt-2 border-t border-[#1f2129] flex items-center justify-between">
+                                    <span class="text-[11px] text-zinc-400">Branch verified &amp; pushed</span>
+                                    <a id="git-live-pr-link" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#38BDF8]/10 text-[#38BDF8] border border-[#38BDF8]/30 hover:bg-[#38BDF8]/20 transition text-xs font-semibold">
+                                        <i data-lucide="git-pull-request" class="w-3.5 h-3.5"></i>
+                                        <span>Open Pull Request on GitHub &rarr;</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Stakeholder Broadcast & CI Pipeline Card -->
@@ -1150,7 +1201,7 @@
                                         type="button" 
                                         id="tab-btn-slack" 
                                         onclick="switchShipTab('slack')" 
-                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40">
+                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#f58e0a] shadow-2xs flex items-center gap-1.5 border border-[#f58e0a]/40">
                                         <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
                                         <span>Slack Block Kit</span>
                                     </button>
@@ -1175,16 +1226,16 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-gray-800">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
                                         <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Slack Block Kit JSON Payload</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
-                                            <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                            <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                                 <span>Copy JSON</span>
                                             </button>
                                         </div>
                                     </div>
-                                    <pre id="slack-json-box" class="p-4 rounded-lg bg-[#0c0d12] border border-gray-800 text-[#10b981] text-xs font-mono whitespace-pre-wrap overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed shadow-inner">{}</pre>
+                                    <pre id="slack-json-box" class="p-4 rounded-lg bg-[#0c0d12] border border-[#1f2129] text-[#f58e0a] text-xs font-mono whitespace-pre-wrap overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed shadow-inner">{}</pre>
                                 </div>
                             </div>
 
@@ -1198,20 +1249,20 @@
                                 </div>
 
                                 <div class="flex flex-col">
-                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-gray-800">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
                                         <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">.github/workflows/verify-pr.yml</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
-                                            <button type="button" onclick="copyCiWorkflow()" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                            <button type="button" onclick="copyCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                                 <span>Copy</span>
                                             </button>
-                                            <button type="button" onclick="downloadCiWorkflow()" class="hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center gap-1.5 transition cursor-pointer">
+                                            <button type="button" onclick="downloadCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                                 <span>Download .yml</span>
                                             </button>
                                         </div>
                                     </div>
-                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#10b981] border border-gray-800 p-4 font-mono text-xs shadow-inner rounded-lg whitespace-pre overflow-x-auto overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed"># Awaiting CI workflow synthesis...</pre>
+                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#f58e0a] border border-[#1f2129] p-4 font-mono text-xs shadow-inner rounded-lg whitespace-pre overflow-x-auto overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed"># Awaiting CI workflow synthesis...</pre>
                                 </div>
                             </div>
                         </div>
@@ -1228,12 +1279,12 @@
                     </div>
 
                     <!-- Issue Tracker Sync (Jira / Linear Webhook) Terminal Block -->
-                    <div class="lg:col-span-2 rounded-xl bg-[#08090a] border border-gray-800 p-4 shadow-xs flex flex-col gap-3 font-mono">
-                        <div class="flex items-center justify-between pb-3 border-b border-gray-800">
+                    <div class="lg:col-span-2 rounded-xl bg-[#0c0d12] border border-[#1f2129] p-4 shadow-xs flex flex-col gap-3 font-mono">
+                        <div class="flex items-center justify-between pb-3 border-b border-[#1f2129]">
                             <div class="flex items-center gap-2.5">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
                                 <div class="flex items-center gap-2">
-                                    <i data-lucide="terminal" class="w-4 h-4 text-emerald-400"></i>
+                                    <i data-lucide="terminal" class="w-4 h-4 text-[#f58e0a]"></i>
                                     <span class="text-xs font-semibold text-zinc-100 tracking-wider uppercase">ISSUE TRACKER SYNC (JIRA/LINEAR)</span>
                                 </div>
                                 <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
@@ -1253,7 +1304,7 @@
                             <span>Status Mutation Webhook &bull; Marks ticket 'Done' with release PR link</span>
                             <span class="tabular-nums font-mono text-[10px] text-zinc-500">POST /graphql &bull; 200 OK</span>
                         </div>
-                        <pre class="p-3.5 rounded-lg bg-black/60 border border-gray-800/80 overflow-x-auto overflow-y-auto max-h-[160px] leading-relaxed"><code id="issue-curl-code" class="text-xs font-mono text-emerald-400 dark:text-emerald-400 whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
+                        <pre class="p-3.5 rounded-lg bg-black/60 border border-[#1f2129] overflow-x-auto overflow-y-auto max-h-[160px] leading-relaxed"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
                     </div>
                 </div>
             </div>
@@ -1281,7 +1332,7 @@
                         <span class="font-medium text-stone-900 dark:text-zinc-100 block">lokebuilds/MergeWhisper</span>
                         <span class="text-[10px] text-stone-400">main &larr; feat/production-sweep</span>
                     </div>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600">Active</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">Active</span>
                 </div>
                 <div onclick="loadProjectRepo('supabase/postgres', 'master', 'migration/audit-partitioning', 'postgres-migration')" class="p-3 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-700 cursor-pointer transition flex items-center justify-between">
                     <div>
@@ -1316,7 +1367,7 @@
                     </div>
                     <span class="text-xs font-mono font-medium text-stone-900 dark:text-zinc-100">Autonomous Orchestration Pipeline</span>
                 </div>
-                <span class="text-xs font-mono text-amber-700 dark:text-amber-400 tabular-nums" id="exec-latency-ticker">48.2 ms</span>
+                <span class="text-xs font-mono text-[#f58e0a] tabular-nums" id="exec-latency-ticker">48.2 ms</span>
             </div>
 
             <!-- Pipeline Execution Steps -->
@@ -1355,7 +1406,7 @@
 
             <!-- Progress line -->
             <div class="w-full bg-stone-200 dark:bg-zinc-800 h-1 rounded-full overflow-hidden">
-                <div id="exec-progress-bar" class="bg-stone-900 dark:bg-zinc-100 h-full w-0 transition-all duration-300"></div>
+                <div id="exec-progress-bar" class="bg-[#f58e0a] h-full w-0 transition-all duration-300"></div>
             </div>
         </div>
     </div>
@@ -1405,9 +1456,9 @@
     <!-- ==================================================================== -->
     <div id="sre-roi-dock" class="hidden fixed bottom-4 right-4 z-40 sm:bottom-6 sm:right-6 font-mono text-xs select-none pointer-events-none">
         <div class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/95 dark:bg-[#0c0d10]/95 border border-stone-300 dark:border-zinc-800 shadow-lg backdrop-blur-md">
-            <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
             <span class="text-[11px] font-medium text-stone-700 dark:text-zinc-300">
-                ⏱️ Total Time Saved: <span id="roi-minimized-time" class="font-bold text-[#38BDF8] tabular-nums">42.5</span> mins
+                ⏱️ Total Time Saved: <span id="roi-minimized-time" class="font-bold text-[#f58e0a] tabular-nums">42.5</span> mins
             </span>
             <!-- Hidden backward-compatibility target for legacy queries -->
             <span id="roi-total-saved-today" class="hidden">42.5 mins</span>
@@ -1454,8 +1505,8 @@
         }
 
         function markModalStepComplete(stepNum) {
-            const checkSvg = '<svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
-            const spinSvg = '<svg class="w-3.5 h-3.5 text-amber-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>';
+            const checkSvg = '<svg class="w-3.5 h-3.5 text-[#f58e0a] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+            const spinSvg = '<svg class="w-3.5 h-3.5 text-[#f58e0a] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>';
 
             const stepRow = document.getElementById(`exec-step-${stepNum}`);
             const iconContainer = document.getElementById(`exec-icon-${stepNum}`);
@@ -1477,7 +1528,7 @@
         function startModalSequencer(startClock) {
             resetModalSequencer();
 
-            const spinSvg = '<svg class="w-3.5 h-3.5 text-amber-500 shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>';
+            const spinSvg = '<svg class="w-3.5 h-3.5 text-[#f58e0a] shrink-0 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>';
             const step1Row = document.getElementById('exec-step-1');
             const step1Icon = document.getElementById('exec-icon-1');
             if (step1Row) step1Row.className = "flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-100";
@@ -1502,7 +1553,7 @@
                 clearInterval(modalTickerInterval);
                 modalTickerInterval = null;
             }
-            const checkSvg = '<svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+            const checkSvg = '<svg class="w-3.5 h-3.5 text-[#f58e0a] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
             for (let i = 1; i <= 5; i++) {
                 const stepRow = document.getElementById(`exec-step-${i}`);
                 const iconContainer = document.getElementById(`exec-icon-${i}`);
@@ -1683,7 +1734,7 @@
             let colorClasses = 'bg-stone-900 text-white dark:bg-white dark:text-zinc-950 border hairline-border';
             let iconName = 'info';
             if (type === 'success') {
-                colorClasses = 'bg-emerald-900/90 text-emerald-100 border border-emerald-500/30';
+                colorClasses = 'bg-[#f58e0a]/15 text-[#f58e0a] border border-[#f58e0a]/30 dark:bg-[#0c0d12]';
                 iconName = 'check-circle-2';
             } else if (type === 'error') {
                 colorClasses = 'bg-rose-900/90 text-rose-100 border border-rose-500/30';
@@ -1961,7 +2012,7 @@
 
             // Update navigation pill states with crisp contrast
             document.querySelectorAll('.stage-nav-pill').forEach(btn => {
-                btn.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
+                btn.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#f58e0a] dark:text-zinc-400 dark:hover:text-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
             });
             const pillMap = {
                 'stage-01': 'nav-step-01',
@@ -1972,7 +2023,7 @@
             };
             const activePill = document.getElementById(pillMap[stageId]);
             if (activePill) {
-                activePill.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
+                activePill.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border border-[#f58e0a] font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
             }
 
             const labelMap = {
@@ -2026,7 +2077,7 @@
             }
 
             if (ghBtn) {
-                ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
+                ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-[#f58e0a] hover:text-[#f58e0a] hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
                 ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                 if (typeof updateGitHubCompareLink === 'function') {
                     updateGitHubCompareLink();
@@ -2153,14 +2204,14 @@
                 const origText = label.textContent;
                 label.textContent = "✓ Copied!";
                 if (btn) {
-                    btn.classList.add('text-emerald-600', 'dark:text-emerald-400');
+                    btn.classList.add('text-[#f58e0a]');
                     btn.classList.remove('text-stone-500', 'dark:text-zinc-400');
                 }
                 showToast("Copied Universal Developer Profile to clipboard", "success");
                 setTimeout(() => {
                     label.textContent = origText;
                     if (btn) {
-                        btn.classList.remove('text-emerald-600', 'dark:text-emerald-400');
+                        btn.classList.remove('text-[#f58e0a]');
                         btn.classList.add('text-stone-500', 'dark:text-zinc-400');
                     }
                 }, 2000);
@@ -2251,12 +2302,12 @@
             if (isGhostModeActive) {
                 // Active Styling
                 if (btn) {
-                    btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/40 dark:border-emerald-500/30 ring-1 ring-emerald-500/20 transition cursor-pointer active:scale-[0.98]";
+                    btn.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-medium text-[#f58e0a] bg-[#f58e0a]/10 border border-[#f58e0a]/40 ring-1 ring-[#f58e0a]/20 transition cursor-pointer active:scale-[0.98]";
                 }
                 if (label) label.textContent = "👻 Ghost Mode: ON";
                 if (statusChip) {
                     statusChip.textContent = "Protected";
-                    statusChip.className = "text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20";
+                    statusChip.className = "text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20";
                 }
                 if (badge) badge.classList.remove('hidden');
 
@@ -2323,7 +2374,7 @@
                 diff: diffVal,
                 target_repo: sanitizeRepo(document.getElementById('target-repo').value, 'lokebuilds/MergeWhisper'),
                 base_branch: sanitizeBranch(document.getElementById('base-branch').value, 'main'),
-                head_branch: sanitizeBranch(document.getElementById('head-branch').value, 'feat/live-demo'),
+                head_branch: sanitizeBranch(document.getElementById('head-branch').value.trim(), ''),
                 tech_stack: 'Python FastAPI'
             };
 
@@ -2410,7 +2461,7 @@
                             if (s1Footer) s1Footer.classList.remove('hidden');
                             const synthBtn = document.getElementById('synthesize-btn');
                             if (synthBtn) {
-                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-[#f58e0a]"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
                             }
                             refreshIcons();
                         }, 500);
@@ -2487,7 +2538,7 @@
                                 if (s1Footer) s1Footer.classList.remove('hidden');
                                 const synthBtn = document.getElementById('synthesize-btn');
                                 if (synthBtn) {
-                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-[#f58e0a]"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
                                 }
                                 refreshIcons();
                             }, 500);
@@ -2588,8 +2639,8 @@
                 if (icon) {
                     if (show) {
                         icon.classList.remove('hidden');
-                        stepBtn.classList.add('ring-1', 'ring-emerald-500/40');
-                        setTimeout(() => stepBtn.classList.remove('ring-1', 'ring-emerald-500/40'), 400);
+                        stepBtn.classList.add('ring-1', 'ring-[#f58e0a]/40', 'border-[#f58e0a]');
+                        setTimeout(() => stepBtn.classList.remove('ring-1', 'ring-[#f58e0a]/40'), 400);
                     } else {
                         icon.classList.add('hidden');
                     }
@@ -2621,7 +2672,7 @@
             if (s1Footer) s1Footer.classList.add('hidden');
             const synthBtn = document.getElementById('synthesize-btn');
             if (synthBtn) {
-                synthBtn.innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 dark:text-amber-500"></i><span id="synthesize-btn-label">Synthesize Release Specifications</span><span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>';
+                synthBtn.innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 text-[#f58e0a]"></i><span id="synthesize-btn-label">Synthesize Release Specifications</span><span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>';
             }
             navigateToStage('stage-01');
             showToast("Workspace reset for new ingest", "info");
@@ -2670,7 +2721,7 @@
         function buildGitHubCompareUrl(repo, base, head) {
             const cleanRepo = sanitizeRepo(repo, 'lokebuilds/MergeWhisper');
             const cleanBase = sanitizeBranch(base, 'main');
-            const cleanHead = sanitizeBranch(head, 'feat/live-demo');
+            const cleanHead = sanitizeBranch(head, 'feat/patch');
             return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
         }
 
@@ -2678,9 +2729,10 @@
             const repoInput = document.getElementById('target-repo');
             const baseInput = document.getElementById('base-branch');
             const headInput = document.getElementById('head-branch');
+            const editBranchInput = document.getElementById('pr-edit-branch');
             const repo = (repoInput && repoInput.value) || 'lokebuilds/MergeWhisper';
             const base = (baseInput && baseInput.value) || 'main';
-            const head = (headInput && headInput.value) || 'feat/live-demo';
+            const head = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
             return buildGitHubCompareUrl(repo, base, head);
         }
 
@@ -2775,9 +2827,9 @@
                         if (riskLevel === 'HIGH') {
                             riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
                         } else if (riskLevel === 'MEDIUM') {
-                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
+                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/30";
                         } else {
-                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
+                            riskBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/30";
                         }
                     }
 
@@ -2792,7 +2844,7 @@
                     }
 
                     if (ghBtn) {
-                        ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-gray-400 hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
+                        ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#0c0d12] text-white border border-gray-700 hover:border-[#f58e0a] hover:text-[#f58e0a] hover:bg-[#1a1b23] transition-all uppercase tracking-wider text-sm font-semibold";
                         ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                     }
                 }
@@ -2842,7 +2894,7 @@
                     edges.forEach(edge => {
                         const li = document.createElement('li');
                         li.className = "flex items-start gap-2 py-0.5";
-                        li.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5"></i><span>${edge}</span>`;
+                        li.innerHTML = `<i data-lucide="alert-circle" class="w-3.5 h-3.5 text-[#f58e0a] shrink-0 mt-0.5"></i><span>${edge}</span>`;
                         edgesList.appendChild(li);
                     });
                 }
@@ -2861,34 +2913,48 @@
                     if (bump === 'MAJOR') {
                         bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-rose-500/10 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400 border border-rose-500/30 dark:border-rose-500/20";
                     } else if (bump === 'MINOR') {
-                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-amber-500/10 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-500/30 dark:border-amber-500/20";
+                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/30";
                     } else {
-                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20";
+                        bumpBadge.className = "px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/30";
                     }
                 }
                 const clBox = document.getElementById('changelog-markdown-box');
                 if (clBox) clBox.textContent = cl.keep_a_changelog_markdown || '';
 
-                // Stage 05: Ship (Pull Request Manifest)
+                // Stage 05: Ship (Pull Request Manifest - Human-in-the-Loop Review Gate)
                 const pr = manifest.ship || manifest.pr_card || {};
                 const repoInput = document.getElementById('target-repo');
                 const baseInput = document.getElementById('base-branch');
                 const headInput = document.getElementById('head-branch');
                 const rawRepo = (repoInput && repoInput.value.trim()) || manifest.target_repo || 'lokebuilds/MergeWhisper';
                 const rawBase = (baseInput && baseInput.value.trim()) || manifest.base_branch || 'main';
-                const rawHead = manifest.head_branch || (manifest.ingest && manifest.ingest.head_branch) || (headInput && headInput.value.trim()) || 'feat/live-demo';
+                const rawHead = (pr && pr.branch_name) || manifest.head_branch || (manifest.ingest && manifest.ingest.head_branch) || (headInput && headInput.value.trim()) || 'feat/patch';
                 const targetRepo = sanitizeRepo(rawRepo, 'lokebuilds/MergeWhisper');
                 const baseBranch = sanitizeBranch(rawBase, 'main');
-                const headBranch = sanitizeBranch(rawHead, 'feat/live-demo');
+                const headBranch = sanitizeBranch(rawHead, 'feat/patch');
 
                 if (headInput) headInput.value = headBranch;
 
+                const cleanTitle = (pr.title || '').replace(/facebook\/react/g, targetRepo);
+                const cleanBody = (pr.markdown_body || '').replace(/facebook\/react/g, targetRepo);
+
+                // Populate Human-in-the-Loop Review Gate Editable Textareas
+                const editBranch = document.getElementById('pr-edit-branch');
+                if (editBranch) editBranch.value = headBranch;
+
+                const editTitle = document.getElementById('pr-edit-title');
+                if (editTitle) editTitle.value = cleanTitle;
+
+                const editBody = document.getElementById('pr-edit-body');
+                if (editBody) editBody.value = cleanBody;
+
+                // Also populate hidden legacy elements for full backward compatibility
                 const prTitle = document.getElementById('pr-manifest-title');
-                if (prTitle) prTitle.textContent = (pr.title || '').replace(/facebook\/react/g, targetRepo);
+                if (prTitle) prTitle.textContent = cleanTitle;
                 const prSummary = document.getElementById('pr-manifest-summary');
                 if (prSummary) prSummary.textContent = (pr.summary || '').replace(/facebook\/react/g, targetRepo);
                 const prBody = document.getElementById('pr-manifest-body');
-                if (prBody) prBody.textContent = (pr.markdown_body || '').replace(/facebook\/react/g, targetRepo);
+                if (prBody) prBody.textContent = cleanBody;
 
                 // Open in GitHub Compare Button (Universal URL Sanitization)
                 const compareUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch);
@@ -2966,9 +3032,10 @@
 
         // Copy Commit Title to Clipboard with Toast Notification
         function copyCommitTitle() {
-            const title = (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.title)
-                ? currentActiveManifest.ship.title
-                : (document.getElementById('pr-manifest-title') ? document.getElementById('pr-manifest-title').textContent.trim() : '');
+            const editTitleEl = document.getElementById('pr-edit-title');
+            const title = (editTitleEl && editTitleEl.value.trim())
+                || (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.title)
+                || (document.getElementById('pr-manifest-title') ? document.getElementById('pr-manifest-title').textContent.trim() : '');
 
             if (!title || title === 'Awaiting synthesis...') {
                 showToast("No commit title available to copy", "error");
@@ -2979,30 +3046,35 @@
                 showToast("Copied Commit Title to clipboard", "success");
             }).catch(err => {
                 console.error("Failed to copy commit title:", err);
-                copyToClipboard('pr-manifest-title', 'Commit Title');
+                copyToClipboard('pr-edit-title', 'Commit Title');
             });
         }
 
-        // Clipboard Copy Utility with Feedback
+        // Clipboard Copy Utility with Feedback (supports both textarea and standard elements)
         function copyToClipboard(elementId, label = 'Content') {
             const el = document.getElementById(elementId);
-            const text = el.innerText || el.textContent;
+            if (!el) return;
+            const text = (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') ? el.value : (el.innerText || el.textContent);
             navigator.clipboard.writeText(text).then(() => {
                 showToast(`Copied ${label} to clipboard`, 'success');
             }).catch(err => {
                 console.error("Copy operation failed:", err);
-                showToast("Failed to copy content", 'error');
+                if (typeof fallbackCopy === 'function') fallbackCopy(text);
+                showToast(`Copied ${label} to clipboard`, 'success');
             });
         }
 
         // Download Generated PR Manifest as Markdown Artifact (.md)
         function downloadMarkdown() {
-            if (!currentActiveManifest || !currentActiveManifest.ship || !currentActiveManifest.ship.markdown_body) {
+            const editBodyEl = document.getElementById('pr-edit-body');
+            const markdownContent = (editBodyEl && editBodyEl.value)
+                || (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.markdown_body);
+
+            if (!markdownContent) {
                 showToast("No markdown content available to download", "error");
                 return;
             }
 
-            const markdownContent = currentActiveManifest.ship.markdown_body;
             const blob = new Blob([markdownContent], { type: 'text/markdown' });
             const downloadUrl = URL.createObjectURL(blob);
 
@@ -3020,6 +3092,119 @@
         }
 
         window.downloadMarkdown = downloadMarkdown;
+
+        // Human-in-the-Loop Real DevSecOps Execution Dispatcher
+        async function validateAndPublishPR() {
+            const btn = document.getElementById('validate-publish-btn');
+            const btnLabel = document.getElementById('validate-publish-label');
+            const dock = document.getElementById('git-execution-dock');
+            const logsEl = document.getElementById('git-execution-logs');
+            const statusChip = document.getElementById('git-execution-status-chip');
+            const prLinkContainer = document.getElementById('git-live-pr-container');
+            const prLink = document.getElementById('git-live-pr-link');
+
+            const headBranch = (document.getElementById('pr-edit-branch')?.value || '').trim();
+            const title = (document.getElementById('pr-edit-title')?.value || '').trim();
+            const markdownBody = (document.getElementById('pr-edit-body')?.value || '').trim();
+            const targetRepo = (document.getElementById('target-repo')?.value || 'lokebuilds/MergeWhisper').trim();
+            const baseBranch = (document.getElementById('base-branch')?.value || 'main').trim();
+
+            if (!headBranch) {
+                showToast('Please specify a valid Git branch name.', 'error');
+                return;
+            }
+            if (!title) {
+                showToast('PR Title cannot be empty.', 'error');
+                return;
+            }
+            if (!markdownBody) {
+                showToast('PR Description cannot be empty.', 'error');
+                return;
+            }
+
+            // Update UI state to executing
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-wait');
+            }
+            if (btnLabel) btnLabel.textContent = 'Executing DevSecOps Pipeline...';
+            if (dock) dock.classList.remove('hidden');
+            if (prLinkContainer) prLinkContainer.classList.add('hidden');
+            if (statusChip) {
+                statusChip.textContent = 'EXECUTING SUBPROCESS';
+                statusChip.className = 'text-[10px] px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400';
+            }
+            if (logsEl) {
+                logsEl.textContent = `[DevSecOps Gate] Initializing Human-Validated Git Pipeline...\n[DevSecOps Gate] Target Branch: ${headBranch}\n[DevSecOps Gate] Base Target: ${baseBranch}\n[DevSecOps Gate] Dispatching to /api/publish-pr...`;
+            }
+
+            try {
+                const payload = {
+                    target_repo: targetRepo,
+                    base_branch: baseBranch,
+                    head_branch: headBranch,
+                    title: title,
+                    markdown_body: markdownBody
+                };
+
+                const res = await fetch(`${API_BASE}/api/publish-pr`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    const errMsg = data.error || (data.detail ? (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : 'Subprocess execution failed');
+                    if (statusChip) {
+                        statusChip.textContent = 'FAILED';
+                        statusChip.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30 text-red-400';
+                    }
+                    if (logsEl) {
+                        const logs = Array.isArray(data.execution_logs) ? data.execution_logs.join('\n') : '';
+                        logsEl.textContent = `${logs}\n\n[DevSecOps Gate Error]: ${errMsg}`;
+                    }
+                    showToast(`Git execution failed: ${errMsg}`, 'error');
+                    return;
+                }
+
+                // Subprocess execution succeeded
+                if (statusChip) {
+                    statusChip.textContent = 'COMMITTED & PUSHED';
+                    statusChip.className = 'text-[10px] px-2 py-0.5 rounded bg-[#38BDF8]/10 border border-[#38BDF8]/30 text-[#38BDF8]';
+                }
+                if (logsEl) {
+                    const logs = Array.isArray(data.execution_logs) ? data.execution_logs.join('\n') : 'Git commands executed successfully.';
+                    logsEl.textContent = logs;
+                }
+                if (data.pr_url && prLink && prLinkContainer) {
+                    prLink.href = data.pr_url;
+                    prLinkContainer.classList.remove('hidden');
+                }
+                showToast(`✓ Branch '${data.head_branch}' published successfully!`, 'success');
+                if (btnLabel) btnLabel.textContent = '✓ Published to Remote';
+
+            } catch (err) {
+                console.error("Subprocess execution request failed:", err);
+                if (statusChip) {
+                    statusChip.textContent = 'NETWORK ERROR';
+                    statusChip.className = 'text-[10px] px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30 text-red-400';
+                }
+                if (logsEl) {
+                    logsEl.textContent += `\n[Fatal Network Failure]: ${err.message || 'Unknown network error'}`;
+                }
+                showToast(`Network error: ${err.message}`, 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.classList.remove('cursor-wait');
+                }
+                if (typeof refreshIcons === 'function') refreshIcons();
+            }
+        }
+
+        window.validateAndPublishPR = validateAndPublishPR;
 
         // Keyboard Shortcut Handler (Ctrl + Enter to synthesize)
         window.addEventListener('keydown', (e) => {
@@ -3189,7 +3374,7 @@
                 if (ciContent) ciContent.classList.remove('hidden');
 
                 if (ciBtn) {
-                    ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40";
+                    ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#f58e0a] shadow-2xs flex items-center gap-1.5 border border-[#f58e0a]/40";
                 }
                 if (slackBtn) {
                     slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5";
@@ -3199,7 +3384,7 @@
                 if (ciContent) ciContent.classList.add('hidden');
 
                 if (slackBtn) {
-                    slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#10b981] shadow-2xs flex items-center gap-1.5 border border-[#10b981]/40";
+                    slackBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#f58e0a] shadow-2xs flex items-center gap-1.5 border border-[#f58e0a]/40";
                 }
                 if (ciBtn) {
                     ciBtn.className = "px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5";

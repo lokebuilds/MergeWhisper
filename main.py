@@ -25,6 +25,8 @@ from app.config import Settings, get_settings
 from app.mock_store import PRESETS_DATA
 from app.schemas import (
     IngestData,
+    PublishPRRequest,
+    PublishPRResponse,
     SynthesisResponse,
     SystemHealthResponse,
     VoicePatchRequest,
@@ -232,6 +234,26 @@ async def apply_voice_patch(patch_req: VoicePatchRequest) -> SynthesisResponse:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Live Gemini refinement failed: {str(exc)}",
+        )
+
+
+@app.post(
+    "/api/publish-pr",
+    response_model=PublishPRResponse,
+    status_code=status.HTTP_200_OK,
+    tags=["DevSecOps"],
+)
+async def publish_pull_request(payload: PublishPRRequest) -> PublishPRResponse:
+    """Execute real Git operations (checkout branch, commit, push) with human-validated PR text."""
+    try:
+        return await orchestrator.execute_git_publish(payload)
+    except Exception as exc:
+        logger.error("Git publication execution failure: %s", exc, exc_info=True)
+        return PublishPRResponse(
+            success=False,
+            head_branch=payload.head_branch,
+            execution_logs=[f"Execution failed: {str(exc)}"],
+            error=str(exc),
         )
 
 
