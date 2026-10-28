@@ -887,7 +887,7 @@
                     <button 
                         id="synthesize-btn" 
                         onclick="triggerSynthesis()" 
-                        class="w-full py-3.5 px-6 rounded-xl font-bold text-xs font-mono tracking-wider uppercase bg-[#f58e0a] hover:opacity-90 text-zinc-950 transition-opacity duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+                        class="w-fit ml-auto py-2.5 px-6 rounded-lg text-sm flex items-center justify-center font-bold font-mono tracking-wider uppercase bg-[#f58e0a] hover:opacity-90 text-zinc-950 transition-opacity duration-200 gap-2 cursor-pointer shadow-xs">
                         <i data-lucide="zap" class="w-3.5 h-3.5 text-zinc-950"></i>
                         <span id="synthesize-btn-label">Synthesize Release Specifications</span>
                         <span class="text-[10px] font-normal opacity-70 ml-1 text-zinc-400">Ctrl + Enter</span>
@@ -1180,7 +1180,7 @@
                                     rows="2" 
                                     readonly 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                    class="w-full max-h-[80px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
@@ -1206,7 +1206,7 @@
                                     rows="10" 
                                     readonly 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                    class="w-full max-h-[200px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
@@ -1361,7 +1361,7 @@
                         <div class="flex flex-col gap-2.5 py-1 text-xs font-mono">
                             <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
                                 <span class="text-[11px] uppercase tracking-wider">Target Remote:</span>
-                                <span class="text-gray-900 dark:text-gray-100 font-semibold truncate max-w-[150px]" id="sidebar-target-repo">lokebuilds/MergeWhisper</span>
+                                <span id="ship-target-remote" class="font-mono text-gray-900 dark:text-gray-200"></span>
                             </div>
                             <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
                                 <span class="text-[11px] uppercase tracking-wider">Base &rarr; Head:</span>
@@ -2126,6 +2126,26 @@
                 activePanel.classList.remove('hidden');
             }
 
+            // Stage 05 Dynamic State Propagation
+            if (stageId === 'stage-05') {
+                const repoInput = document.getElementById('target-repo');
+                const targetRepo = (repoInput && repoInput.value.trim()) || '';
+                const headInput = document.getElementById('head-branch');
+                const editBranchInput = document.getElementById('pr-edit-branch');
+                const headBranch = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+
+                const shipTargetRemote = document.getElementById('ship-target-remote');
+                if (shipTargetRemote) {
+                    shipTargetRemote.textContent = targetRepo;
+                }
+
+                const githubCompareBtn = document.getElementById('pr-github-compare-btn');
+                if (githubCompareBtn && !githubCompareBtn.classList.contains('cursor-not-allowed')) {
+                    githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
+                    githubCompareBtn.target = "_blank";
+                }
+            }
+
             // Update navigation pill states with crisp contrast
             document.querySelectorAll('.stage-nav-pill').forEach(btn => {
                 btn.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-[#f58e0a] hover:bg-[#1f2129]/60 font-medium transition-opacity duration-200 cursor-pointer flex items-center gap-2 shrink-0";
@@ -2868,11 +2888,21 @@
         }
 
         function updateGitHubCompareLink() {
-            const compareBtn = document.getElementById('pr-github-compare-btn');
-            if (compareBtn && !compareBtn.classList.contains('cursor-not-allowed')) {
-                const compareUrl = getDynamicGitHubCompareUrl();
-                compareBtn.href = compareUrl;
-                compareBtn.target = "_blank";
+            const githubCompareBtn = document.getElementById('pr-github-compare-btn');
+            const repoInput = document.getElementById('target-repo');
+            const targetRepo = (repoInput && repoInput.value.trim()) || '';
+            const headInput = document.getElementById('head-branch');
+            const editBranchInput = document.getElementById('pr-edit-branch');
+            const headBranch = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+
+            const shipTargetRemote = document.getElementById('ship-target-remote');
+            if (shipTargetRemote) {
+                shipTargetRemote.textContent = targetRepo;
+            }
+
+            if (githubCompareBtn && !githubCompareBtn.classList.contains('cursor-not-allowed')) {
+                githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
+                githubCompareBtn.target = "_blank";
             }
         }
 
@@ -3096,8 +3126,10 @@
                 const cleanBody = (pr.markdown_body || '').replace(/facebook\/react/g, targetRepo);
 
                 // Populate Human-in-the-Loop Review Gate Editable Textareas & Sidebar Telemetry
-                const sidebarRepo = document.getElementById('sidebar-target-repo');
-                if (sidebarRepo) sidebarRepo.textContent = targetRepo;
+                const shipTargetRemote = document.getElementById('ship-target-remote');
+                if (shipTargetRemote) {
+                    shipTargetRemote.textContent = targetRepo;
+                }
                 const sidebarFlow = document.getElementById('sidebar-branch-flow');
                 if (sidebarFlow) sidebarFlow.textContent = `${baseBranch} → ${headBranch}`;
 
@@ -3118,13 +3150,12 @@
                 const prBody = document.getElementById('pr-manifest-body');
                 if (prBody) prBody.textContent = cleanBody;
 
-                // Open in GitHub Compare Button (Universal URL Sanitization)
-                const compareUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch);
-                
-                if (!isCritical && ghBtn) {
-                    ghBtn.href = compareUrl;
-                    ghBtn.target = "_blank";
-                    ghBtn.classList.remove('pointer-events-none', 'opacity-50');
+                // Open in GitHub Compare Button (Dynamic State Propagation)
+                const githubCompareBtn = document.getElementById('pr-github-compare-btn');
+                if (!isCritical && githubCompareBtn) {
+                    githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
+                    githubCompareBtn.target = "_blank";
+                    githubCompareBtn.classList.remove('pointer-events-none', 'opacity-50');
                 }
 
                 // Stage 05: Ship (Slack Release Broadcast)
