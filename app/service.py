@@ -736,8 +736,11 @@ class MergeWhisperOrchestrator:
                 logs.append(f"  [error] {err_msg}")
                 return -1, "", err_msg
 
+        # Step 0: Stash any uncommitted leftover files to guarantee clean checkout
+        await run_git_step(["stash"], "git stash")
+
         # Step A: Checkout target branch (create or switch to it)
-        code, out, err = await run_git_step(["checkout", "-B", clean_branch], "git checkout -B")
+        code, out, err = await run_git_step(["checkout", "-B", clean_branch], f"git checkout -B {clean_branch}")
         if code != 0:
             return PublishPRResponse(
                 success=False,
@@ -756,13 +759,13 @@ class MergeWhisperOrchestrator:
                 error=f"Git add failed: {err}",
             )
 
-        # Step C: Commit with human-approved conventional title and description
+        # Step C: Commit with human-approved conventional title and description (--allow-empty)
         commit_message = f"{req.title.strip()}\n\n{req.markdown_body.strip()}"
         commit_args = ["commit", "--allow-empty", "-m", commit_message]
         if req.author_name and req.author_email:
             commit_args.extend(["--author", f"{req.author_name} <{req.author_email}>"])
 
-        code, out, err = await run_git_step(commit_args, "git commit")
+        code, out, err = await run_git_step(commit_args, "git commit --allow-empty")
         if code != 0:
             return PublishPRResponse(
                 success=False,
@@ -778,7 +781,7 @@ class MergeWhisperOrchestrator:
             logs.append(f"[DevSecOps Gate] Commit verified at SHA: {commit_sha}")
 
         # Step E: Push to remote origin
-        code, out, err = await run_git_step(["push", "-u", "origin", clean_branch, "--force"], "git push origin")
+        code, out, err = await run_git_step(["push", "-u", "origin", clean_branch, "--force"], f"git push -u origin {clean_branch} --force")
         if code != 0:
             logs.append(f"[DevSecOps Gate] Warning: git push failed: {err}")
             return PublishPRResponse(
