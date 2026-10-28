@@ -432,9 +432,21 @@ class SystemHealthResponse(BaseSchema):
 class PublishPRRequest(BaseSchema):
     """Payload for human-validated real Git commit & push execution."""
 
-    target_repo: str = Field(
-        default="lokebuilds/MergeWhisper",
+    target_repo: Optional[str] = Field(
+        default=None,
         description="Target GitHub repository in owner/repo format.",
+    )
+    target_repository: Optional[str] = Field(
+        default=None,
+        description="Target GitHub repository in owner/repo format sent from frontend.",
+    )
+    is_preset: Optional[bool] = Field(
+        default=False,
+        description="Whether the request was triggered via a demo preset.",
+    )
+    preset_id: Optional[str] = Field(
+        default=None,
+        description="Identifier of the demo preset if triggered via preset.",
     )
     base_branch: str = Field(
         default="main",

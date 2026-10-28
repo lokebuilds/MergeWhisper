@@ -34,7 +34,7 @@ function sanitizeBranch(branch, defaultBranch = 'main') {
  * @param {string} defaultRepo - Fallback repository
  * @returns {string} Sanitized and URL-safe repository path
  */
-function sanitizeRepo(repo, defaultRepo = 'lokebuilds/MergeWhisper') {
+function sanitizeRepo(repo, defaultRepo = 'lokebuilds/core-auth-service') {
     if (!repo || typeof repo !== 'string' || !repo.trim()) return defaultRepo;
     const cleaned = repo.trim()
         .replace(/\s*\/\s*/g, '/')
@@ -50,13 +50,13 @@ function sanitizeRepo(repo, defaultRepo = 'lokebuilds/MergeWhisper') {
  * Dynamic GitHub Compare URL Builder
  * Generates valid GitHub compare/pull-request URL with safely sanitized branches.
  * 
- * @param {string} repo - Repository (e.g. "lokebuilds/MergeWhisper")
+ * @param {string} repo - Repository (e.g. "lokebuilds/core-auth-service")
  * @param {string} base - Base branch (e.g. "main")
  * @param {string} head - Head/feature branch (e.g. "feat/login flow #42")
  * @returns {string} Full, safely encoded GitHub Compare URL
  */
 function buildGitHubCompareUrl(repo, base, head) {
-    const cleanRepo = sanitizeRepo(repo, 'lokebuilds/MergeWhisper');
+    const cleanRepo = sanitizeRepo(repo, 'lokebuilds/core-auth-service');
     const cleanBase = sanitizeBranch(base, 'main');
     const cleanHead = sanitizeBranch(head, 'feat/patch');
     return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;

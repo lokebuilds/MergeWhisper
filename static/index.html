@@ -800,7 +800,7 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" value="lokebuilds/MergeWhisper" placeholder="lokebuilds/MergeWhisper" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="target-repo" type="text" value="" placeholder="lokebuilds/core-auth-service" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Base Branch</span>
@@ -1594,7 +1594,7 @@
                 summary: 'Contains unredacted AWS credentials and destructive DDL DROP TABLE statement designed to test zero-trust security circuit breakers.',
                 intent: 'Emergency hotfix: bypass token cache and truncate old user session records immediately.',
                 diff: "diff --git a/config/credentials.py b/config/credentials.py\n--- a/config/credentials.py\n+++ b/config/credentials.py\n@@ -12,3 +12,4 @@\n-AWS_ACCESS_KEY_ID = os.environ.get(\"AWS_KEY\")\n+AWS_ACCESS_KEY_ID = \"AKIAIOSFODNN7EXAMPLE\"\n+AWS_SECRET_ACCESS_KEY = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\"\n--- a/db/cleanup.sql\n+++ b/db/cleanup.sql\n@@ -1,1 +1,2 @@\n+DROP TABLE customer_sessions CASCADE;",
-                target_repo: 'lokebuilds/MergeWhisper',
+                target_repo: 'lokebuilds/core-auth-service',
                 base_branch: 'main',
                 head_branch: 'feat/live-demo',
                 tech_stack: 'Python FastAPI',
@@ -1623,7 +1623,7 @@
                 summary: 'Prevents recursion in session authentication middleware by bypassing already-targeted auth endpoints and safely clearing invalid tokens.',
                 intent: 'Fix the infinite auth redirect loop in the session middleware when tokens expire, clear session cookies cleanly, and bump patch version.',
                 diff: "diff --git a/app/middleware/session.py b/app/middleware/session.py\n--- a/app/middleware/session.py\n+++ b/app/middleware/session.py\n@@ -34,8 +34,11 @@ class SessionAuthMiddleware(BaseHTTPMiddleware):\n-    return RedirectResponse(url='/auth/login')\n+    if request.url.path.startswith('/auth/'):\n+        return await call_next(request)\n+    response = RedirectResponse(url='/auth/login?reason=session_expired', status_code=303)\n+    response.delete_cookie('session_token', path='/')\n+    return response",
-                target_repo: 'lokebuilds/MergeWhisper',
+                target_repo: 'lokebuilds/core-auth-service',
                 base_branch: 'main',
                 head_branch: 'feat/live-demo',
                 tech_stack: 'Python FastAPI',
@@ -1654,7 +1654,7 @@
                 summary: 'Introduces declarative range partitioning on audit_logs by created_at timestamp to bound index bloat and accelerate historical query performance.',
                 intent: 'Add partitioned audit_logs table with range partition on created_at and composite foreign key constraint, breaking public report schema.',
                 diff: "diff --git a/migrations/20261022_audit.sql b/migrations/20261022_audit.sql\nnew file mode 100644\n--- /dev/null\n+++ b/migrations/20261022_audit.sql\n@@ -0,0 +1,8 @@\n+CREATE TABLE audit_logs (\n+    id BIGSERIAL,\n+    tenant_id UUID NOT NULL,\n+    action VARCHAR(64) NOT NULL,\n+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),\n+    PRIMARY KEY (id, created_at)\n+) PARTITION BY RANGE (created_at);",
-                target_repo: 'lokebuilds/MergeWhisper',
+                target_repo: 'lokebuilds/core-auth-service',
                 base_branch: 'main',
                 head_branch: 'feat/live-demo',
                 tech_stack: 'PostgreSQL 16',
@@ -1684,7 +1684,7 @@
                 summary: 'Closes memory leak in WebSocket broadcast pipeline by unlinking dropped client sockets on abnormal disconnect frames.',
                 intent: 'Resolve memory leak in WebSocket broadcast listener by deregistering disconnected subscriber channels on client disconnect.',
                 diff: "diff --git a/app/broadcaster.py b/app/broadcaster.py\n--- a/app/broadcaster.py\n+++ b/app/broadcaster.py\n@@ -88,4 +88,8 @@ async def handle_client(ws):\n-    pass\n+    try:\n+        await ws.listen()\n+    finally:\n+        await channel_hub.unsubscribe(ws)",
-                target_repo: 'lokebuilds/MergeWhisper',
+                target_repo: 'lokebuilds/core-auth-service',
                 base_branch: 'main',
                 head_branch: 'feat/live-demo',
                 tech_stack: 'Starlette WS',
@@ -1714,7 +1714,7 @@
                 summary: 'Shields authentication APIs from denial-of-service spikes via an atomic Redis sorted set sliding-window evaluation script.',
                 intent: 'Implement atomic sliding-window rate limiter using Redis Lua script to prevent thundering herd on auth endpoints.',
                 diff: "diff --git a/app/limiter.lua b/app/limiter.lua\nnew file mode 100644\n--- /dev/null\n+++ b/app/limiter.lua\n@@ -0,0 +1,6 @@\n+local key = KEYS[1]\n+local now = tonumber(ARGV[1])\n+local window = tonumber(ARGV[2])\n+local limit = tonumber(ARGV[3])\n+redis.call('ZREMRANGEBYSCORE', key, 0, now - window)\n+return 1",
-                target_repo: 'lokebuilds/MergeWhisper',
+                target_repo: 'lokebuilds/core-auth-service',
                 base_branch: 'main',
                 head_branch: 'feat/live-demo',
                 tech_stack: 'Redis 7 / Lua',
@@ -1832,7 +1832,7 @@
             const intent = document.getElementById('intent');
             const rawDiff = document.getElementById('raw-diff');
 
-            if (targetRepo) targetRepo.value = 'lokebuilds/MergeWhisper';
+            if (targetRepo) targetRepo.value = '';
             if (baseBranch) baseBranch.value = 'main';
             if (headBranch) headBranch.value = 'feat/live-demo';
             if (intent) intent.value = '';
@@ -2136,6 +2136,9 @@
                 const diffInput = document.getElementById('raw-diff');
                 if (diffInput) diffInput.value = '';
 
+                const targetRepoInput = document.getElementById('target-repo');
+                if (targetRepoInput) targetRepoInput.value = '';
+
                 // Close git diff drawer & reset diff status chip
                 const drawer = document.getElementById('diff-drawer-content');
                 const caret = document.getElementById('diff-drawer-caret');
@@ -2185,7 +2188,7 @@
             if (preset) {
                 document.getElementById('intent').value = preset.intent;
                 document.getElementById('raw-diff').value = preset.diff || '';
-                document.getElementById('target-repo').value = preset.target_repo;
+                document.getElementById('target-repo').value = 'lokebuilds/core-auth-service';
                 document.getElementById('base-branch').value = preset.base_branch;
                 document.getElementById('head-branch').value = preset.head_branch;
                 if (typeof updateGitHubCompareLink === 'function') {
@@ -2397,10 +2400,14 @@
                 document.getElementById('raw-diff').value = diffVal;
             }
 
+            const rawTargetRepo = (document.getElementById('target-repo').value || '').trim();
             const payload = {
                 intent: intentVal,
                 diff: diffVal,
-                target_repo: sanitizeRepo(document.getElementById('target-repo').value, 'lokebuilds/MergeWhisper'),
+                target_repo: sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service'),
+                target_repository: rawTargetRepo,
+                is_preset: !!activePresetKey,
+                preset_id: activePresetKey,
                 base_branch: sanitizeBranch(document.getElementById('base-branch').value, 'main'),
                 head_branch: sanitizeBranch(document.getElementById('head-branch').value.trim(), ''),
                 tech_stack: 'Python FastAPI'
@@ -2741,7 +2748,7 @@
                 .join('/');
         }
 
-        function sanitizeRepo(repo, defaultRepo = 'lokebuilds/MergeWhisper') {
+        function sanitizeRepo(repo, defaultRepo = 'lokebuilds/core-auth-service') {
             if (!repo || typeof repo !== 'string' || !repo.trim()) return defaultRepo;
             // Clean owner/repo format, remove internal whitespace and leading/trailing slashes
             const cleaned = repo.trim()
@@ -2755,7 +2762,7 @@
         }
 
         function buildGitHubCompareUrl(repo, base, head) {
-            const cleanRepo = sanitizeRepo(repo, 'lokebuilds/MergeWhisper');
+            const cleanRepo = sanitizeRepo(repo, 'lokebuilds/core-auth-service');
             const cleanBase = sanitizeBranch(base, 'main');
             const cleanHead = sanitizeBranch(head, 'feat/patch');
             return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
@@ -3168,7 +3175,7 @@
             const headBranch = (document.getElementById('pr-edit-branch')?.value || '').trim();
             const title = (document.getElementById('pr-edit-title')?.value || '').trim();
             const markdownBody = (document.getElementById('pr-edit-body')?.value || '').trim();
-            const targetRepo = (document.getElementById('target-repo')?.value || 'lokebuilds/MergeWhisper').trim();
+            const targetRepo = (document.getElementById('target-repo')?.value || '').trim();
             const baseBranch = (document.getElementById('base-branch')?.value || 'main').trim();
 
             if (!headBranch) {
@@ -3203,6 +3210,9 @@
             try {
                 const payload = {
                     target_repo: targetRepo,
+                    target_repository: targetRepo,
+                    is_preset: !!activePresetKey,
+                    preset_id: activePresetKey,
                     base_branch: baseBranch,
                     head_branch: headBranch,
                     title: title,

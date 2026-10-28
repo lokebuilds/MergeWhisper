@@ -133,7 +133,7 @@ index a41bc82..e89f2d1 100644
 +            response.delete_cookie("session_token", path="/")
 +            return response
          return await call_next(request)""",
-        "target_repo": "lokebuilds/MergeWhisper",
+        "target_repo": "lokebuilds/core-auth-service",
         "base_branch": "main",
         "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI",
@@ -185,7 +185,7 @@ index 0000000..f82a17b
 +
 +CREATE TABLE audit_logs_2026_10 PARTITION OF audit_logs
 +    FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');""",
-        "target_repo": "lokebuilds/MergeWhisper",
+        "target_repo": "lokebuilds/core-auth-service",
         "base_branch": "main",
         "head_branch": "feat/live-demo",
         "tech_stack": "PostgreSQL & Alembic",
@@ -233,7 +233,7 @@ index f92c10a..cb491e0 100644
 +                    del self.active_connections[client_id]
 +            self.pending_event_queues.pop(client_id, None)
 +            await websocket.close(code=1000)""",
-        "target_repo": "lokebuilds/MergeWhisper",
+        "target_repo": "lokebuilds/core-auth-service",
         "base_branch": "main",
         "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI & WebSockets",
@@ -277,7 +277,7 @@ index d81a201..f73e4b9 100644
 +            pipe.evalsha(RATE_LIMIT_LUA_SHA, 1, key, capacity, fill_rate, time.time())
 +            results = await pipe.execute()
 +            return bool(results[0])""",
-        "target_repo": "lokebuilds/MergeWhisper",
+        "target_repo": "lokebuilds/core-auth-service",
         "base_branch": "main",
         "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI & Redis",
@@ -318,7 +318,7 @@ index a41bc82..e89f2d1 100644
 +++ b/db/cleanup.sql
 @@ -1,1 +1,2 @@
 +DROP TABLE customer_sessions CASCADE;""",
-        "target_repo": "lokebuilds/MergeWhisper",
+        "target_repo": "lokebuilds/core-auth-service",
         "base_branch": "main",
         "head_branch": "feat/live-demo",
         "tech_stack": "Python FastAPI",
