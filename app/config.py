@@ -32,6 +32,13 @@ class Settings(BaseSettings):
         description="Optional comma-separated list of Google Gemini API keys for active round-robin rotation (e.g., 'key1,key2').",
     )
 
+    # Optional GitHub authorization token for ephemeral cloning and authenticated remote push
+    github_token: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices("github_token", "GITHUB_TOKEN", "gh_token", "GH_TOKEN"),
+        description="Optional personal access token for GitHub operations (cloning private repos and pushing PR branches).",
+    )
+
     # External LLM generation network timeout (30s threshold per tier)
     llm_timeout_seconds: float = Field(
         default=30.0,
