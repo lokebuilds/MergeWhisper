@@ -34,7 +34,11 @@ By fusing real-time voice dictation (powered by **Wispr Flow**) with raw syntax 
 - Automatically detects plaintext secrets, unredacted AWS/GCP access keys, and destructive database migrations (e.g., `DROP TABLE`, unindexed scans).
 - Instantly halts downstream shipment, freezes the pull request generator, and alerts the engineering security team.
 
-### 4. Immutable Release Artifacts
+### 4. Human-in-the-Loop Review Gate & Direct Remote Git Publishing
+- **Launch Control Review Gate**: Inspect and validate synthesized branch targets, conventional PR titles, and markdown descriptions in a 60/40 asymmetric dashboard.
+- **Isolated Ephemeral Workspaces**: Directly executes headless Git subprocesses (`git clone`, `checkout -B`, `commit`, and `push`) inside isolated temporary environments with token-authenticated GitHub remote dispatch.
+
+### 5. Immutable Release Artifacts
 - **Conventional Pull Requests**: Generates structured titles, detailed context, and blast-radius summaries.
 - **Exportable Markdown**: Single-click `.md` manifest download for compliance tracking and internal knowledge bases.
 - **Slack Block Kit**: Ready-to-broadcast payloads formatted for immediate dispatch to engineering channels (`#eng-deployments`).
@@ -50,7 +54,7 @@ By fusing real-time voice dictation (powered by **Wispr Flow**) with raw syntax 
 | **02** | **Audit** | SRE blast-radius assessment, rollback runbook & security scan | Risk Classification (`LOW` / `MED` / `CRITICAL`) |
 | **03** | **Verify** | QA test matrix, edge cases, and deterministic verification steps | Automated QA Checklist |
 | **04** | **Changelog** | SemVer evaluation (`MAJOR` / `MINOR` / `PATCH`) & Keep-a-Changelog Markdown | Release Notes Delta |
-| **05** | **Ship** | Final PR synthesis, Markdown export, and Slack/Linear dispatch payloads | PR Body, Downloadable `.md`, Slack Block Kit |
+| **05** | **Ship** | Final PR synthesis, Human-in-the-Loop validation, and Git remote push | Live GitHub PR, Markdown Export, Slack Block Kit |
 
 ---
 
@@ -71,7 +75,7 @@ flowchart LR
 ```
 
 ### Frontend
-- **Design Philosophy**: Strict 4px spatial physics, minimalist typography, and **Anti-Cardocalypse** layout (flat architecture, hairline borders, strict negative space, no nested card shells).
+- **Design Philosophy**: Strict 4px spatial physics, minimalist typography, and **Launch Control** dual-theme architecture (warm cream canvas `#f9faf9` in Light Mode, obsidian canvas `#0c0d12` in Dark Mode, Terminal Graphite Orange `#f58e0a` accents).
 - **Stack**: HTML5, Vanilla JavaScript (ES2024), Tailwind CSS (JIT compiler via CDN).
 - **Icons**: Lucide Icons.
 
@@ -127,6 +131,7 @@ When plaintext cloud credentials (e.g., AWS IAM access keys `AKIA...`, GCP servi
 - Python 3.10 or higher
 - Git
 - Google Gemini API Key ([Google AI Studio](https://aistudio.google.com/))
+- *(Optional)* GitHub Personal Access Token (`GITHUB_TOKEN`) with `repo` scope for automated PR publishing
 
 ### 1. Clone the Repository
 ```bash
@@ -155,10 +160,11 @@ Create a `.env` file in the project root based on `.env.example`:
 ```bash
 cp .env.example .env
 ```
-Edit `.env` and add your Gemini API key:
+Edit `.env` and add your API keys:
 ```ini
 GEMINI_API_KEY=AIzaSyYourGeminiApiKeyHere
-HASH=0.0.0.0
+GITHUB_TOKEN=ghp_YourGitHubPersonalAccessTokenHere  # Optional: for direct git push
+HOST=0.0.0.0
 PORT=8000
 ACTIVE_ENVIRONMENT=development
 APP_NAME=MergeWhisper
@@ -170,11 +176,8 @@ uvicorn main:app --reload --port 8000
 ```
 Open your browser at `http://localhost:8000` to launch the MergeWhisper Developer Console.
 
-
 ---
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-< ! - -   L i v e   d e m o   b r a n c h   a c t i v e   - - >  
- 
