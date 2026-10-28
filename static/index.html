@@ -1131,7 +1131,7 @@
 
                 <div id="stage-05-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-5 transition-opacity">
                     <!-- PR Manifest Card (Human-in-the-Loop Review Gate) -->
-                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5">
+                    <div class="editorial-card radius-outer p-6 sm:p-7 pb-6 shadow-xs flex flex-col justify-between gap-5">
                         <div class="flex flex-col gap-4">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
@@ -1199,27 +1199,30 @@
                         </div>
 
                         <!-- Real Execution Action & Output Dock -->
-                        <div class="flex flex-col gap-3 pt-2">
-                            <!-- Validate & Publish PR Button -->
-                            <button 
-                                id="validate-publish-btn" 
-                                type="button" 
-                                onclick="validateAndPublishPR()" 
-                                class="w-full py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold focus:outline-none focus:ring-2 focus:ring-[#f58e0a]/60 transition-opacity duration-200 uppercase tracking-wider text-xs sm:text-sm">
-                                <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
-                                <span id="validate-publish-label">Validate &amp; Publish PR</span>
-                            </button>
+                        <div class="flex flex-col gap-3 pt-2 pb-6">
+                            <!-- Action Buttons: Side-by-side on desktop (xl) -->
+                            <div class="flex flex-col xl:flex-row gap-3 mt-5 mb-2">
+                                <!-- Validate & Publish PR Button (Primary Action) -->
+                                <button 
+                                    id="validate-publish-btn" 
+                                    type="button" 
+                                    onclick="validateAndPublishPR()" 
+                                    class="flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
+                                    <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
+                                    <span id="validate-publish-label">Validate &amp; Publish PR</span>
+                                </button>
 
-                            <!-- Live Compare Fallback Link (Legacy & Quick Navigation) -->
-                            <a 
-                                id="pr-github-compare-btn" 
-                                href="https://github.com/lokebuilds/MergeWhisper/compare" 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
-                                class="w-full py-2 px-3 rounded-lg flex items-center justify-center gap-2 text-xs font-mono text-zinc-400 hover:text-white border border-transparent hover:border-[#1f2129] transition">
-                                <i data-lucide="external-link" class="w-3 h-3 text-zinc-500"></i>
-                                <span>Preview Branch in GitHub Compare</span>
-                            </a>
+                                <!-- Open in GitHub Compare Link (Secondary Outline Action) -->
+                                <a 
+                                    id="pr-github-compare-btn" 
+                                    href="https://github.com/lokebuilds/MergeWhisper/compare" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
+                                    class="flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
+                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
+                                    <span>Open in GitHub Compare</span>
+                                </a>
+                            </div>
 
                             <!-- DevSecOps Real-Time Subprocess Execution Logs Dock -->
                             <div id="git-execution-dock" class="terminal-dark hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono">
@@ -2149,7 +2152,7 @@
             }
 
             if (ghBtn) {
-                ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#f58e0a] text-zinc-950 font-bold hover:opacity-90 transition-opacity duration-200 uppercase tracking-wider text-sm";
+                ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
                 ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                 if (typeof updateGitHubCompareLink === 'function') {
                     updateGitHubCompareLink();
@@ -2915,7 +2918,7 @@
 
                     if (ghBtn) {
                         ghBtn.href = "#";
-                        ghBtn.className = "w-full py-3 px-4 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 flex items-center justify-center gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
+                        ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center font-medium font-mono uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 flex items-center gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
                         ghBtn.innerHTML = '<span>🛑 Shipment Locked (Secrets Detected)</span>';
                     }
                 } else {
@@ -2957,7 +2960,7 @@
                     }
 
                     if (ghBtn) {
-                        ghBtn.className = "w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99] bg-[#f58e0a] text-zinc-950 font-bold hover:opacity-90 transition-opacity duration-200 uppercase tracking-wider text-sm";
+                        ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
                         ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                     }
                 }
