@@ -1128,7 +1128,7 @@
             <!-- ------------------------------------------------------------ -->
             <!-- STAGE 05: SHIP (GITHUB PR & SLACK RELEASE BROADCAST)         -->
             <!-- ------------------------------------------------------------ -->
-            <div id="stage-panel-05" class="stage-panel hidden flex flex-col gap-6">
+            <div id="stage-panel-05" class="stage-panel hidden flex flex-col gap-6 pb-24">
                 <!-- Fatal Halt Lockout Banner (Stage 05) -->
                 <div id="stage-05-locked-banner" class="hidden p-4 rounded-xl bg-red-500/10 dark:bg-red-950/40 border border-red-500/40 flex items-center justify-between font-mono text-xs">
                     <div class="flex items-center gap-2.5 text-red-600 dark:text-red-400 font-medium">
@@ -1138,36 +1138,38 @@
                     <span class="text-[10px] tabular-nums px-2 py-0.5 rounded bg-red-500/20 text-red-700 dark:text-red-300">DISPATCH BLOCKED</span>
                 </div>
 
-                <div id="stage-05-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-5 transition-opacity">
-                    <!-- PR Manifest Card (Human-in-the-Loop Review Gate) -->
-                    <div class="editorial-card radius-outer p-6 sm:p-7 pb-6 shadow-xs flex flex-col justify-between gap-5">
+                <!-- 60/40 Asymmetric Launch Control Grid (12-Column Grid) -->
+                <div id="stage-05-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 transition-opacity">
+                    <!-- Left: Review Gate Manifest Receipt Card (60% Split -> 7 Cols) -->
+                    <div class="lg:col-span-7 editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5">
                         <div class="flex flex-col gap-4">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="shield-check" class="w-4 h-4 text-[#f58e0a]"></i>
-                                    <span class="text-xs font-semibold text-zinc-100 uppercase tracking-wider">Human-in-the-Loop Review Gate</span>
+                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Human-in-the-Loop Review Gate</span>
                                 </div>
                                 <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">Awaiting Senior Validation</span>
                             </div>
 
-                            <!-- Target Head Branch Textarea -->
+                            <!-- Target Head Branch (Manifest Receipt Style) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Target Head Branch:</label>
-                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400">Editable Git Branch</span>
+                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">TARGET HEAD BRANCH:</label>
+                                    <span class="text-[10px] font-mono text-gray-500">Finalized Branch Target</span>
                                 </div>
-                                <textarea 
+                                <input 
                                     id="pr-edit-branch" 
-                                    rows="1" 
+                                    type="text" 
+                                    readonly 
                                     placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full p-2.5 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full bg-[#f9faf9] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 text-xs font-mono shadow-sm focus:outline-none cursor-default select-text">
                             </div>
 
-                            <!-- PR Conventional Commit Title Textarea -->
+                            <!-- PR Conventional Commit Title (Manifest Receipt Style) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-title" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">PR Title (Conventional Commit):</label>
-                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                    <label for="pr-edit-title" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR TITLE:</label>
+                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                         <i data-lucide="copy" class="w-3 h-3"></i>
                                         <span>Copy</span>
                                     </button>
@@ -1175,23 +1177,24 @@
                                 <textarea 
                                     id="pr-edit-title" 
                                     rows="2" 
+                                    readonly 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full p-2.5 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono font-medium text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full bg-[#f9faf9] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 text-sm font-mono font-medium shadow-sm focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
                             </div>
 
-                            <!-- PR Description / Markdown Body Textarea -->
+                            <!-- PR Description / Markdown Body (Manifest Receipt Style) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-body" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">PR Description &amp; Verification Matrix (Markdown):</label>
+                                    <label for="pr-edit-body" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR DESCRIPTION &amp; VERIFICATION MATRIX:</label>
                                     <div class="flex items-center gap-3">
-                                        <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="copy" class="w-3 h-3"></i>
                                             <span>Copy</span>
                                         </button>
-                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="download" class="w-3 h-3"></i>
                                             <span>Download .md</span>
                                         </button>
@@ -1199,42 +1202,16 @@
                                 </div>
                                 <textarea 
                                     id="pr-edit-body" 
-                                    rows="9" 
+                                    rows="10" 
+                                    readonly 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full p-3 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full bg-[#f9faf9] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 text-sm font-mono shadow-sm focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
-                        </div>
-
-                        <!-- Real Execution Action & Output Dock -->
-                        <div class="flex flex-col gap-3 pt-2 pb-6">
-                            <!-- Action Buttons: Side-by-side on desktop (xl) -->
-                            <div class="flex flex-col xl:flex-row gap-3 mt-5 mb-2">
-                                <!-- Validate & Publish PR Button (Primary Action) -->
-                                <button 
-                                    id="validate-publish-btn" 
-                                    type="button" 
-                                    onclick="validateAndPublishPR()" 
-                                    class="py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
-                                    <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
-                                    <span id="validate-publish-label">Validate &amp; Publish PR</span>
-                                </button>
-
-                                <!-- Open in GitHub Compare Link (Secondary Outline Action) -->
-                                <a 
-                                    id="pr-github-compare-btn" 
-                                    href="https://github.com/lokebuilds/MergeWhisper/compare" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer" 
-                                    class="py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
-                                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
-                                    <span>Open in GitHub Compare</span>
-                                </a>
-                            </div>
 
                             <!-- DevSecOps Real-Time Subprocess Execution Logs Dock -->
-                            <div id="git-execution-dock" class="terminal-dark hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono">
+                            <div id="git-execution-dock" class="terminal-dark hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono mt-2">
                                 <div class="flex items-center justify-between border-b border-[#1f2129] pb-2">
                                     <div class="flex items-center gap-2 text-[11px] text-[#f58e0a]">
                                         <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
@@ -1254,8 +1231,8 @@
                         </div>
                     </div>
 
-                    <!-- Stakeholder Broadcast & CI Pipeline Card -->
-                    <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5 min-h-[460px]">
+                    <!-- Right: Stakeholder Broadcast & CI Pipeline Card (40% Split -> 5 Cols) -->
+                    <div class="lg:col-span-5 editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5 min-h-[460px]">
                         <div class="flex flex-col gap-4">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-1.5 p-0.5 rounded-lg bg-stone-100 dark:bg-zinc-800/80 border hairline-border">
@@ -1281,15 +1258,15 @@
                             <!-- Tab 1: Slack Broadcast -->
                             <div id="ship-tab-content-slack" class="flex flex-col gap-3">
                                 <div>
-                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 block mb-0.5 uppercase tracking-wider">Broadcast Summary:</span>
-                                    <div id="slack-broadcast-summary" class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed truncate">
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">BROADCAST SUMMARY:</span>
+                                    <div id="slack-broadcast-summary" class="p-3 rounded-lg bg-[#f9faf9] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
                                         Awaiting release broadcast synthesis...
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col">
                                     <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                        <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Slack Block Kit JSON Payload</span>
+                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">SLACK BLOCK KIT JSON PAYLOAD</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
                                             <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -1304,15 +1281,15 @@
                             <!-- Tab 2: CI Workflow YAML -->
                             <div id="ship-tab-content-ci" class="hidden flex flex-col gap-3">
                                 <div>
-                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 block mb-0.5 uppercase tracking-wider">CI Specification:</span>
-                                    <div class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed truncate">
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">CI SPECIFICATION:</span>
+                                    <div class="p-3 rounded-lg bg-[#f9faf9] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
                                         <span>Automated GitHub Actions PR Verification Pipeline</span>
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col">
                                     <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                        <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">.github/workflows/verify-pr.yml</span>
+                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">.GITHUB/WORKFLOWS/VERIFY-PR.YML</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
                                             <button type="button" onclick="copyCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -1340,8 +1317,8 @@
                         </div>
                     </div>
 
-                    <!-- Issue Tracker Sync (Jira / Linear Webhook) Terminal Block -->
-                    <div class="lg:col-span-2 rounded-xl bg-[#0c0d12] border border-[#1f2129] p-4 shadow-xs flex flex-col gap-3 font-mono">
+                    <!-- Issue Tracker Sync (Jira / Linear Webhook) Terminal Block (Full 12 Cols) -->
+                    <div class="lg:col-span-12 rounded-xl bg-[#0c0d12] border border-[#1f2129] p-4 shadow-xs flex flex-col gap-3 font-mono">
                         <div class="flex items-center justify-between pb-3 border-b border-[#1f2129]">
                             <div class="flex items-center gap-2.5">
                                 <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
@@ -1368,6 +1345,30 @@
                         </div>
                         <pre class="p-3.5 rounded-lg bg-black/60 border border-[#1f2129] overflow-x-auto overflow-y-auto max-h-[160px] leading-relaxed"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
                     </div>
+                </div>
+
+                <!-- Sticky Launch Control Dock (Absolute Viewport Bottom) -->
+                <div id="stage-05-launch-dock" class="fixed bottom-0 left-0 w-full bg-white/80 dark:bg-[#0c0d12]/90 backdrop-blur-md border-t border-[#e3e6e3] dark:border-[#2a2d36] py-4 px-8 flex justify-end items-center gap-4 z-50">
+                    <!-- Open in GitHub Compare Link (Secondary Outline Action) -->
+                    <a 
+                        id="pr-github-compare-btn" 
+                        href="https://github.com/lokebuilds/MergeWhisper/compare" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        class="py-2.5 px-5 text-sm rounded-lg inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
+                        <i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i>
+                        <span>Open in GitHub Compare</span>
+                    </a>
+
+                    <!-- Validate & Publish PR Button (Primary Solid Action) -->
+                    <button 
+                        id="validate-publish-btn" 
+                        type="button" 
+                        onclick="validateAndPublishPR()" 
+                        class="py-2.5 px-6 text-sm rounded-lg inline-flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
+                        <span id="validate-publish-label">Validate &amp; Publish PR</span>
+                    </button>
                 </div>
             </div>
 
@@ -2160,9 +2161,11 @@
                 proceedBtn.innerHTML = '<span>Proceed to Ship</span> &rarr;';
             }
 
+            const stage05Dock = document.getElementById('stage-05-launch-dock');
+            if (stage05Dock) stage05Dock.classList.remove('opacity-50', 'pointer-events-none');
             if (ghBtn) {
-                ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
-                ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
+                ghBtn.className = "py-2.5 px-5 text-sm rounded-lg inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
+                ghBtn.innerHTML = '<i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i><span>Open in GitHub Compare</span>';
                 if (typeof updateGitHubCompareLink === 'function') {
                     updateGitHubCompareLink();
                 }
@@ -2925,9 +2928,11 @@
                         proceedBtn.innerHTML = '<span>🛑 Shipment Locked</span>';
                     }
 
+                    const stage05Dock = document.getElementById('stage-05-launch-dock');
+                    if (stage05Dock) stage05Dock.classList.add('opacity-50', 'pointer-events-none');
                     if (ghBtn) {
                         ghBtn.href = "#";
-                        ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex font-medium font-mono uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
+                        ghBtn.className = "py-2.5 px-5 text-sm rounded-lg inline-flex items-center justify-center gap-2 font-medium font-mono uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
                         ghBtn.innerHTML = '<span>🛑 Shipment Locked (Secrets Detected)</span>';
                     }
                 } else {
@@ -2968,9 +2973,11 @@
                         proceedBtn.innerHTML = '<span>Proceed to Ship</span> &rarr;';
                     }
 
+                    const stage05Dock = document.getElementById('stage-05-launch-dock');
+                    if (stage05Dock) stage05Dock.classList.remove('opacity-50', 'pointer-events-none');
                     if (ghBtn) {
-                        ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
-                        ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
+                        ghBtn.className = "py-2.5 px-5 text-sm rounded-lg inline-flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
+                        ghBtn.innerHTML = '<i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i><span>Open in GitHub Compare</span>';
                     }
                 }
 
