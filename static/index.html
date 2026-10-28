@@ -1144,28 +1144,25 @@
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
                         <!-- Left (lg:col-span-8): Human-in-the-Loop Review Gate -->
                         <div class="lg:col-span-8 editorial-card radius-outer p-5 shadow-xs flex flex-col gap-4 bg-[#ffffff] dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-xl">
-                            <div class="border-b hairline-border pb-3 flex items-center justify-between">
-                                <div class="flex items-center gap-2">
+                            <div class="flex justify-between items-center mb-6">
+                                <h3 class="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider flex items-center gap-2">
                                     <i data-lucide="shield-check" class="w-4 h-4 text-[#f58e0a]"></i>
-                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Human-in-the-Loop Review Gate</span>
-                                </div>
-                                <span id="review-gate-badge" class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5 font-medium">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                    Awaiting Senior Validation
+                                    <span>HUMAN-IN-THE-LOOP REVIEW GATE</span>
+                                </h3>
+                                <span id="review-gate-badge" class="text-xs font-semibold bg-orange-100 dark:bg-amber-500/10 text-[#f58e0a] py-1 px-3 rounded-full flex items-center gap-1.5">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-[#f58e0a] animate-pulse"></span>
+                                    <span>Awaiting Senior Validation</span>
                                 </span>
                             </div>
 
                             <!-- Target Head Branch -->
-                            <div class="flex flex-col gap-1.5">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">TARGET HEAD BRANCH:</span>
-                                    <span class="text-[10px] font-mono text-gray-500">Immutable Target</span>
-                                </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Target Head Branch:</label>
                                 <input 
                                     id="pr-edit-branch" 
                                     type="text" 
                                     value="feat/patch" 
-                                    class="w-full text-sm font-normal text-gray-900 dark:text-gray-100 bg-white dark:bg-[#15171e] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-lg p-3 placeholder-gray-400 focus:ring-1 focus:ring-[#f58e0a] font-mono" />
+                                    class="w-full text-sm font-normal text-gray-900 dark:text-gray-100 bg-[#f9faf9] dark:bg-[#15171e] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-lg p-3 font-mono placeholder-gray-400 focus:ring-1 focus:ring-[#f58e0a]" />
                             </div>
 
                             <!-- PR Conventional Commit Title -->
@@ -1247,19 +1244,19 @@
                                     <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">Stage 05</span>
                                 </div>
 
-                                <!-- Telemetry Overview Rows (flex justify-between items-center text-sm) -->
-                                <div class="flex flex-col gap-3 py-1 font-mono">
-                                    <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <span class="text-xs uppercase tracking-wider font-semibold">TARGET REMOTE:</span>
-                                        <span id="ship-target-remote" class="font-mono text-gray-900 dark:text-gray-200 truncate max-w-[180px]"></span>
+                                <!-- Telemetry Overview Rows -->
+                                <div class="w-full flex flex-col gap-4 py-1 font-mono">
+                                    <div class="flex justify-between items-center w-full text-sm text-gray-500 dark:text-gray-400">
+                                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Target Remote:</span>
+                                        <span id="ship-target-remote" class="font-mono text-gray-900 dark:text-gray-200 truncate max-w-[170px] text-right"></span>
                                     </div>
-                                    <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <span class="text-xs uppercase tracking-wider font-semibold">BASE &rarr; HEAD:</span>
-                                        <span class="text-gray-900 dark:text-gray-100 font-semibold truncate max-w-[180px]" id="sidebar-branch-flow">main &rarr; dynamic</span>
+                                    <div class="flex justify-between items-center w-full text-sm text-gray-500 dark:text-gray-400">
+                                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Base &rarr; Head:</span>
+                                        <span class="text-gray-900 dark:text-gray-100 font-semibold truncate max-w-[170px] text-right" id="sidebar-branch-flow">main &rarr; dynamic</span>
                                     </div>
-                                    <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
-                                        <span class="text-xs uppercase tracking-wider font-semibold">PIPELINE STATUS:</span>
-                                        <span id="ship-pipeline-status" class="text-amber-500 font-semibold flex items-center gap-1.5 text-xs">
+                                    <div class="flex justify-between items-center w-full text-sm text-gray-500 dark:text-gray-400">
+                                        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Pipeline Status:</span>
+                                        <span id="ship-pipeline-status" class="text-amber-500 font-semibold flex items-center gap-1.5 text-xs whitespace-nowrap">
                                             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
                                             Awaiting Validation
                                         </span>
@@ -2024,8 +2021,8 @@
                 }
 
                 if (badge) {
-                    badge.className = "text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 flex items-center gap-1.5 font-medium";
-                    badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>Awaiting Senior Validation';
+                    badge.className = "text-xs font-semibold bg-orange-100 dark:bg-amber-500/10 text-[#f58e0a] py-1 px-3 rounded-full flex items-center gap-1.5";
+                    badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#f58e0a] animate-pulse"></span><span>Awaiting Senior Validation</span>';
                 }
                 if (pipelineStatus) {
                     pipelineStatus.className = "text-amber-500 font-semibold flex items-center gap-1.5 text-xs";
@@ -3436,7 +3433,7 @@
 
             // 2. Swap the 'Awaiting Senior Validation' badge to a green 'Shipped' badge
             if (badge) {
-                badge.className = "text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-medium";
+                badge.className = "text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 py-1 px-3 rounded-full flex items-center gap-1.5";
                 badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Shipped';
             }
             if (pipelineStatus) {
