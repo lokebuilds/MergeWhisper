@@ -1254,11 +1254,11 @@
                                         <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Base &rarr; Head:</span>
                                         <span class="text-gray-900 dark:text-gray-100 font-semibold truncate max-w-[170px] text-right" id="sidebar-branch-flow">main &rarr; dynamic</span>
                                     </div>
-                                    <div class="flex justify-between items-center w-full text-sm text-gray-500 dark:text-gray-400">
+                                    <div class="flex justify-between items-center w-full gap-2 text-sm text-gray-500 dark:text-gray-400">
                                         <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap">Pipeline Status:</span>
-                                        <span id="ship-pipeline-status" class="text-amber-500 font-semibold flex items-center gap-1.5 text-xs whitespace-nowrap">
-                                            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-                                            Awaiting Validation
+                                        <span id="ship-pipeline-status" class="text-xs font-semibold bg-orange-100 dark:bg-amber-500/10 text-[#f58e0a] py-1 px-3 rounded-full whitespace-nowrap flex-shrink-0 flex items-center gap-1.5">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-[#f58e0a] animate-pulse"></span>
+                                            <span>Awaiting Validation</span>
                                         </span>
                                     </div>
                                 </div>
@@ -1323,7 +1323,7 @@
                                     <div id="slack-broadcast-summary" class="text-sm text-gray-500 mb-3 truncate font-mono">
                                         Awaiting release broadcast synthesis...
                                     </div>
-                                    <pre id="slack-json-box" class="p-3 bg-[#0c0d12] border border-[#1f2129] text-[#f58e0a] text-xs font-mono whitespace-pre-wrap h-[180px] w-full rounded-md overflow-y-auto leading-relaxed shadow-inner">{}</pre>
+                                    <pre id="slack-json-box" class="p-3 bg-[#0c0d12] border border-[#1f2129] text-[#f58e0a] text-xs font-mono whitespace-pre-wrap h-[180px] w-full rounded-lg overflow-y-auto leading-relaxed shadow-inner">{}</pre>
                                 </div>
 
                                 <!-- Tab 2: CI Workflow YAML -->
@@ -1331,7 +1331,7 @@
                                     <div class="text-sm text-gray-500 mb-3 truncate font-mono">
                                         Automated GitHub Actions PR Verification Pipeline
                                     </div>
-                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#f58e0a] border border-[#1f2129] p-3 font-mono text-xs shadow-inner h-[180px] w-full rounded-md whitespace-pre overflow-y-auto overflow-x-auto leading-relaxed"># Awaiting CI workflow synthesis...</pre>
+                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#f58e0a] border border-[#1f2129] p-3 font-mono text-xs shadow-inner h-[180px] w-full rounded-lg whitespace-pre overflow-y-auto overflow-x-auto leading-relaxed"># Awaiting CI workflow synthesis...</pre>
                                 </div>
                             </div>
 
@@ -1372,7 +1372,7 @@
                                         <span class="truncate">Status Mutation Webhook &bull; Marks ticket 'Done'</span>
                                         <span class="tabular-nums font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold shrink-0">200 OK</span>
                                     </div>
-                                    <pre class="p-3 bg-[#0c0d12] border border-[#1f2129] h-[180px] w-full rounded-md overflow-x-auto overflow-y-auto leading-relaxed shadow-inner"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
+                                    <pre class="p-3 bg-[#0c0d12] border border-[#1f2129] h-[180px] w-full rounded-lg overflow-x-auto overflow-y-auto leading-relaxed shadow-inner"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
                                 </div>
                             </div>
 
@@ -2025,8 +2025,8 @@
                     badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#f58e0a] animate-pulse"></span><span>Awaiting Senior Validation</span>';
                 }
                 if (pipelineStatus) {
-                    pipelineStatus.className = "text-amber-500 font-semibold flex items-center gap-1.5 text-xs";
-                    pipelineStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>Awaiting Validation';
+                    pipelineStatus.className = "text-xs font-semibold bg-orange-100 dark:bg-amber-500/10 text-[#f58e0a] py-1 px-3 rounded-full whitespace-nowrap flex-shrink-0 flex items-center gap-1.5";
+                    pipelineStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-[#f58e0a] animate-pulse"></span><span>Awaiting Validation</span>';
                 }
 
                 [branchInput, titleInput, bodyInput].forEach(el => {
@@ -3437,8 +3437,8 @@
                 badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Shipped';
             }
             if (pipelineStatus) {
-                pipelineStatus.className = "text-emerald-500 font-semibold flex items-center gap-1.5 text-xs";
-                pipelineStatus.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>Deployment Live';
+                pipelineStatus.className = "text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 py-1 px-3 rounded-full whitespace-nowrap flex-shrink-0 flex items-center gap-1.5";
+                pipelineStatus.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>Deployment Live</span>';
             }
 
             // 3. Change all PR <input> and <textarea> elements to readonly
