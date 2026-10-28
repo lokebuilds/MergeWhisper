@@ -113,50 +113,51 @@
             transition: background-color 0.25s ease, color 0.25s ease;
         }
 
-        /* Obsidian Dark Application Canvas Base */
-        html {
-            background-color: #0c0d12;
-            color: #e5e7eb;
-        }
-        body {
-            background-color: #0c0d12;
-            color: #e5e7eb;
+        /* Strict Obsidian Dark Canvas Architecture */
+        html, body {
+            background-color: #0c0d12 !important;
+            color: #e5e7eb !important;
         }
         .dark body, html.dark body {
-            background-color: #0c0d12;
-            color: #e5e7eb;
+            background-color: #0c0d12 !important;
+            color: #e5e7eb !important;
         }
 
-        /* Container Cards & Bento Grid Surface Tones: Terminal Graphite #1f2129 */
-        .editorial-card {
-            background-color: #1f2129;
-            border: 1px solid #2e323b;
-            color: #e5e7eb;
+        /* Bento Cards, Presets & Surface Containers: Terminal Graphite #1f2129 with hairline #2a2d36 */
+        .editorial-card, .preset-pill, .bento-card {
+            background-color: #1f2129 !important;
+            border: 1px solid #2a2d36 !important;
+            color: #e5e7eb !important;
         }
-        .dark .editorial-card {
-            background-color: #1f2129;
-            border: 1px solid #2e323b;
-            color: #e5e7eb;
+        .dark .editorial-card, .dark .preset-pill {
+            background-color: #1f2129 !important;
+            border: 1px solid #2a2d36 !important;
+            color: #e5e7eb !important;
         }
 
-        /* Subtle Inner Input/Pre Blocks: Deep Obsidian #0c0d12 */
-        .editorial-inner {
-            background-color: #0c0d12;
-            border: 1px solid #2e323b;
-            color: #e5e7eb;
+        /* Input Fields, Textareas & Pre Blocks: Terminal Graphite #1f2129 with hairline #2a2d36 */
+        input[type="text"], input[type="search"], textarea, .editorial-inner {
+            background-color: #1f2129 !important;
+            border: 1px solid #2a2d36 !important;
+            color: #e5e7eb !important;
         }
         .dark .editorial-inner {
-            background-color: #0c0d12;
-            border: 1px solid #2e323b;
-            color: #e5e7eb;
+            background-color: #1f2129 !important;
+            border: 1px solid #2a2d36 !important;
+            color: #e5e7eb !important;
+        }
+        input[type="text"]:focus, input[type="search"]:focus, textarea:focus {
+            border-color: #38BDF8 !important;
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3) !important;
+            outline: none !important;
         }
 
         /* Soft Hairline Dividers */
         .hairline-border {
-            border-color: #2e323b;
+            border-color: #2a2d36 !important;
         }
         .dark .hairline-border {
-            border-color: #2e323b;
+            border-color: #2a2d36 !important;
         }
 
         /* Concentric Radius Laws: Outer (24px) = Inner (12px) + Padding (12px-16px) */
@@ -178,7 +179,7 @@
     <!-- ==================================================================== -->
     <!-- TOP NAVIGATION BAR                                                   -->
     <!-- ==================================================================== -->
-    <header class="sticky top-0 z-40 bg-[#0c0d12]/90 backdrop-blur-md border-b hairline-border px-4 sm:px-8 py-3 flex items-center justify-between transition-colors">
+    <header class="sticky top-0 z-40 bg-[#0c0d12]/95 backdrop-blur-md border-b border-[#2a2d36] px-4 sm:px-8 py-3 flex items-center justify-between transition-colors">
         <!-- Left Side: Minimal Brand Mark Only (routes cleanly back to landing view) -->
         <button id="brand-logo-btn" type="button" onclick="switchView('landing')" class="flex items-center gap-2 cursor-pointer select-none group text-left">
             <span class="text-sm font-semibold tracking-tight text-stone-900 dark:text-zinc-100 group-hover:text-stone-700 dark:group-hover:text-zinc-300 transition">MergeWhisper</span>
@@ -228,21 +229,14 @@
             </button>
 
             <!-- Theme Switcher Button -->
-            <button 
-                type="button" 
-                onclick="toggleTheme()" 
-                id="theme-toggle-btn" 
-                title="Switch Theme" 
-                class="w-8 h-8 rounded-xl editorial-card hover:bg-stone-100 dark:hover:bg-zinc-800 text-stone-700 dark:text-zinc-300 flex items-center justify-center transition cursor-pointer shadow-2xs">
-                <i id="theme-icon" data-lucide="moon" class="w-3.5 h-3.5"></i>
-            </button>
+            <!-- Theme toggle stripped in hard dark rollback -->
 
             <!-- Primary Open Workspace Button (Visible on landing; completely hidden inside workspace) -->
             <button 
                 type="button" 
                 onclick="openWorkspace()" 
                 id="workspace-nav-btn" 
-                class="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-stone-900 hover:bg-stone-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-950 font-medium text-xs font-mono transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95">
+                class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1.5 shadow-xs">
                 <span>Open Workspace</span>
                 <i data-lucide="arrow-right" class="w-3 h-3 text-stone-400 dark:text-zinc-500"></i>
             </button>
@@ -282,7 +276,7 @@
                         <button 
                             type="button" 
                             onclick="openWorkspace()" 
-                            class="py-3 px-6 rounded-xl bg-stone-900 hover:bg-stone-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-950 font-medium text-xs tracking-wider transition shadow-sm flex items-center gap-2 cursor-pointer active:scale-95">
+                            class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1.5 shadow-xs">
                             <span>Open Workspace</span>
                             <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-stone-400 dark:text-zinc-500"></i>
                         </button>
@@ -807,21 +801,21 @@
                         id="intent" 
                         rows="4" 
                         placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#fcfbf7] dark:bg-[#0c0d12] border border-[#e6e5e0] dark:border-[#23252a] rounded-lg focus:border-stone-400 dark:focus:border-zinc-600 outline-none transition-colors resize-none placeholder-stone-400 dark:placeholder-zinc-600"></textarea>
+                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#1f2129] border border-[#2a2d36] rounded-lg text-gray-200 focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8]/40 outline-none transition-colors resize-none placeholder-zinc-500"></textarea>
 
                     <!-- Compact Repository Metadata -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-[#1f2129] border border-[#2a2d36] text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#38BDF8]">
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Base Branch</span>
-                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-[#1f2129] border border-[#2a2d36] text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#38BDF8]">
                         </div>
                         <div>
                             <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full editorial-inner radius-inner px-3 py-2 text-xs font-mono focus:outline-none">
+                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-[#1f2129] border border-[#2a2d36] text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#38BDF8]">
                         </div>
                     </div>
 
@@ -844,7 +838,7 @@
                                     Ghost Shield Active
                                 </span>
                             </div>
-                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full editorial-inner radius-inner p-3 font-mono text-xs focus:outline-none leading-relaxed"></textarea>
+                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-[#1f2129] border border-[#2a2d36] text-gray-200 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#38BDF8] leading-relaxed placeholder-zinc-500"></textarea>
                         </div>
                     </div>
 
@@ -853,10 +847,10 @@
                     <button 
                         id="synthesize-btn" 
                         onclick="triggerSynthesis()" 
-                        class="w-full py-3.5 px-6 rounded-xl font-bold text-xs font-mono tracking-wider uppercase bg-[#38BDF8] hover:bg-[#38BDF8]/90 text-zinc-950 transition flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-[0.99]">
-                        <i data-lucide="zap" class="w-3.5 h-3.5 text-zinc-950"></i>
+                        class="w-full py-3.5 px-6 rounded-xl font-medium text-xs font-mono tracking-wider uppercase bg-[#1f2129] border border-[#38BDF8]/50 hover:border-[#38BDF8] text-gray-200 transition-opacity duration-200 hover:opacity-90 flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+                        <i data-lucide="zap" class="w-3.5 h-3.5 text-[#38BDF8]"></i>
                         <span id="synthesize-btn-label">Synthesize Release Specifications</span>
-                        <span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>
+                        <span class="text-[10px] font-normal opacity-70 ml-1 text-zinc-400">Ctrl + Enter</span>
                     </button>
 
                     <!-- Navigation Footer for Stage 01 -->
@@ -865,7 +859,7 @@
                             type="button" 
                             id="proceed-to-audit-btn" 
                             onclick="proceedToStage('stage-02')" 
-                            class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1 shadow-xs active:scale-[0.98]">
+                            class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
                             <span>Proceed to Audit</span>
                             &rarr;
                         </button>
@@ -979,7 +973,7 @@
                         <button type="button" onclick="navigateToStage('stage-01')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Ingest
                         </button>
-                        <button id="proceed-to-verify-btn" type="button" onclick="proceedToStage('stage-03')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button id="proceed-to-verify-btn" type="button" onclick="proceedToStage('stage-03')" class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
                             <span>Proceed to Verify</span>
                             &rarr;
                         </button>
@@ -1027,7 +1021,7 @@
                         <button type="button" onclick="navigateToStage('stage-02')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Audit
                         </button>
-                        <button type="button" onclick="proceedToStage('stage-04')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button type="button" onclick="proceedToStage('stage-04')" class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
                             <span>Proceed to Changelog</span>
                             &rarr;
                         </button>
@@ -1083,7 +1077,7 @@
                         <button type="button" onclick="navigateToStage('stage-03')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer">
                             &larr; Back to Verify
                         </button>
-                        <button type="button" id="proceed-to-ship-btn" onclick="proceedToStage('stage-05')" class="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-zinc-100 dark:hover:bg-white text-white dark:text-zinc-900 font-medium text-xs font-mono transition cursor-pointer flex items-center gap-1">
+                        <button type="button" id="proceed-to-ship-btn" onclick="proceedToStage('stage-05')" class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#38BDF8]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
                             <span>Proceed to Ship</span>
                             &rarr;
                         </button>
@@ -1126,7 +1120,7 @@
                                     id="pr-edit-branch" 
                                     rows="1" 
                                     placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full p-2.5 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-zinc-100 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-[#1f2129] border border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-gray-200 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                             </div>
 
                             <!-- PR Conventional Commit Title Textarea -->
@@ -1142,7 +1136,7 @@
                                     id="pr-edit-title" 
                                     rows="2" 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full p-2.5 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono font-medium text-zinc-100 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-[#1f2129] border border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono font-medium text-gray-200 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
@@ -1167,7 +1161,7 @@
                                     id="pr-edit-body" 
                                     rows="9" 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full p-3 rounded-lg bg-[#0c0d12] border border-[#1f2129] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-zinc-200 leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-3 rounded-lg bg-[#1f2129] border border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#38BDF8] focus:border-[#38BDF8] text-xs font-mono text-gray-200 leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
@@ -1795,23 +1789,11 @@
             }, 2600);
         }
 
-        // Toggle Theme (Warm Editorial Cream <-> Obsidian Minimal)
+        // Locked to Obsidian Dark Architecture
         function toggleTheme() {
             const htmlRoot = document.getElementById('html-root');
-            const themeIcon = document.getElementById('theme-icon');
-
-            if (htmlRoot.classList.contains('dark')) {
-                htmlRoot.classList.remove('dark');
-                isDarkMode = false;
-                if (themeIcon) themeIcon.setAttribute('data-lucide', 'moon');
-                showToast("Warm Editorial Cream enabled", "info");
-            } else {
-                htmlRoot.classList.add('dark');
-                isDarkMode = true;
-                if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
-                showToast("Obsidian Dark enabled", "info");
-            }
-            refreshIcons();
+            if (htmlRoot) htmlRoot.classList.add('dark');
+            isDarkMode = true;
         }
 
         // Switch View: Landing Hero vs Focused Workspace
@@ -1865,7 +1847,7 @@
 
             // Reset all preset pills to unselected state
             document.querySelectorAll('.preset-pill').forEach(pill => {
-                pill.classList.remove('border-stone-900', 'dark:border-zinc-100', 'ring-1', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
+                pill.classList.remove('border-[#38BDF8]', 'ring-1', 'ring-[#38BDF8]/40', 'border-stone-900', 'dark:border-zinc-100', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
             });
 
             // Reset active preset label
@@ -2059,7 +2041,7 @@
 
             // Update navigation pill states with crisp contrast
             document.querySelectorAll('.stage-nav-pill').forEach(btn => {
-                btn.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-[#38BDF8] dark:text-zinc-400 dark:hover:text-[#38BDF8] font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
+                btn.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-[#38BDF8] hover:bg-[#1f2129]/60 font-medium transition-opacity duration-200 cursor-pointer flex items-center gap-2 shrink-0";
             });
             const pillMap = {
                 'stage-01': 'nav-step-01',
@@ -2070,7 +2052,7 @@
             };
             const activePill = document.getElementById(pillMap[stageId]);
             if (activePill) {
-                activePill.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 border border-[#38BDF8] font-medium transition cursor-pointer flex items-center gap-2 shrink-0";
+                activePill.className = "stage-nav-pill px-3.5 py-1.5 rounded-lg bg-[#1f2129] text-white border border-[#38BDF8] font-medium transition-opacity duration-200 cursor-pointer flex items-center gap-2 shrink-0";
             }
 
             const labelMap = {
@@ -2145,7 +2127,7 @@
 
                 // Remove active/highlighted styling from all preset buttons
                 document.querySelectorAll('.preset-pill').forEach(pill => {
-                    pill.classList.remove('border-stone-900', 'dark:border-zinc-100', 'ring-1', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
+                    pill.classList.remove('border-[#38BDF8]', 'ring-1', 'ring-[#38BDF8]/40', 'border-stone-900', 'dark:border-zinc-100', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
                 });
 
                 // Clear intent textarea and git diff drawer
@@ -2185,11 +2167,11 @@
 
             // Highlight chosen preset pill
             document.querySelectorAll('.preset-pill').forEach(pill => {
-                pill.classList.remove('border-stone-900', 'dark:border-zinc-100', 'ring-1', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
+                pill.classList.remove('border-[#38BDF8]', 'ring-1', 'ring-[#38BDF8]/40', 'border-stone-900', 'dark:border-zinc-100', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
             });
             const chosenPill = document.getElementById(`pill-${presetKey}`);
             if (chosenPill) {
-                chosenPill.classList.add('border-stone-900', 'dark:border-zinc-100', 'ring-1', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
+                chosenPill.classList.add('border-[#38BDF8]', 'ring-1', 'ring-[#38BDF8]/40');
             }
 
             // Attempt backend fetch with local fallback guarantee
@@ -2515,7 +2497,7 @@
                             if (s1Footer) s1Footer.classList.remove('hidden');
                             const synthBtn = document.getElementById('synthesize-btn');
                             if (synthBtn) {
-                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-zinc-950"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-[#38BDF8]"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
                             }
                             refreshIcons();
                         }, 500);
@@ -2592,7 +2574,7 @@
                                 if (s1Footer) s1Footer.classList.remove('hidden');
                                 const synthBtn = document.getElementById('synthesize-btn');
                                 if (synthBtn) {
-                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-zinc-950"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
+                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-[#38BDF8]"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
                                 }
                                 refreshIcons();
                             }, 500);
@@ -2734,7 +2716,7 @@
             if (s1Footer) s1Footer.classList.add('hidden');
             const synthBtn = document.getElementById('synthesize-btn');
             if (synthBtn) {
-                synthBtn.innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 text-zinc-950"></i><span id="synthesize-btn-label">Synthesize Release Specifications</span><span class="text-[10px] font-normal opacity-70 ml-1">Ctrl + Enter</span>';
+                synthBtn.innerHTML = '<i data-lucide="zap" class="w-3.5 h-3.5 text-[#38BDF8]"></i><span id="synthesize-btn-label">Synthesize Release Specifications</span><span class="text-[10px] font-normal opacity-70 ml-1 text-zinc-400">Ctrl + Enter</span>';
             }
             navigateToStage('stage-01');
             showToast("Workspace reset for new ingest", "info");
@@ -3360,12 +3342,10 @@
             refreshIcons();
             fetchSystemHealth();
 
-            // Strictly enforce Obsidian Dark mode on initial load and hard refresh
+            // Strictly lock to Obsidian Dark Canvas Architecture
             const htmlRoot = document.getElementById('html-root');
-            htmlRoot.classList.add('dark');
+            if (htmlRoot) htmlRoot.classList.add('dark');
             isDarkMode = true;
-            const themeIcon = document.getElementById('theme-icon');
-            if (themeIcon) themeIcon.setAttribute('data-lucide', 'sun');
 
             // Default State and Page Load Flow: ALWAYS default to the Cinematic Landing Hero view!
             switchView('landing');
