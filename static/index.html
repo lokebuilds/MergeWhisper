@@ -1877,50 +1877,78 @@
             const copyDevProfileBtn = document.getElementById('copy-dev-profile-btn');
 
             if (viewName === 'landing') {
-                landingView.classList.remove('hidden');
-                workspaceView.classList.add('hidden');
+                if (landingView) landingView.classList.remove('hidden');
+                if (workspaceView) workspaceView.classList.add('hidden');
                 if (navBtn) navBtn.classList.remove('hidden');
                 if (copyDevProfileBtn) copyDevProfileBtn.classList.remove('hidden');
             } else {
                 if (!preserveState) {
-                    resetWorkspaceState();
+                    try {
+                        resetWorkspaceState();
+                    } catch (e) {
+                        console.warn("Non-fatal error in resetWorkspaceState:", e);
+                    }
                 }
-                landingView.classList.add('hidden');
-                workspaceView.classList.remove('hidden');
+                if (landingView) landingView.classList.add('hidden');
+                if (workspaceView) {
+                    workspaceView.classList.remove('hidden');
+                    try {
+                        navigateToStage(activeStage || 'stage-01');
+                    } catch (e) {
+                        console.warn("Non-fatal error navigating to stage:", e);
+                        const s1 = document.getElementById('stage-panel-01');
+                        if (s1) s1.classList.remove('hidden');
+                    }
+                }
                 // CRITICAL: When inside the active workspace, completely hide/remove the 'Overview' button from the header.
                 // Navigating back home is handled solely by clicking the brand mark.
                 if (navBtn) navBtn.classList.add('hidden');
                 if (copyDevProfileBtn) copyDevProfileBtn.classList.remove('hidden');
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            refreshIcons();
+            try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (e) {}
+            try {
+                refreshIcons();
+            } catch (e) {}
         }
 
         // Surgical Reset Workspace State: Explicitly selects #target-repo, #base-branch, #head-branch, #intent, and #raw-diff
         function resetWorkspaceState() {
-            // Explicitly select all 5 input elements
-            const targetRepo = document.getElementById('target-repo');
-            const baseBranch = document.getElementById('base-branch');
-            const headBranch = document.getElementById('head-branch');
-            const intent = document.getElementById('intent');
-            const rawDiff = document.getElementById('raw-diff');
+            try {
+                // Explicitly select all 5 input elements
+                const targetRepo = document.getElementById('target-repo');
+                const baseBranch = document.getElementById('base-branch');
+                const headBranch = document.getElementById('head-branch');
+                const intent = document.getElementById('intent');
+                const rawDiff = document.getElementById('raw-diff');
 
-            if (targetRepo) targetRepo.value = '';
-            if (baseBranch) baseBranch.value = 'main';
-            if (headBranch) headBranch.value = 'feat/live-demo';
-            if (intent) intent.value = '';
-            if (rawDiff) rawDiff.value = '';
-            if (typeof updateGitHubCompareLink === 'function') {
-                updateGitHubCompareLink();
+                if (targetRepo) targetRepo.value = '';
+                if (baseBranch) baseBranch.value = 'main';
+                if (headBranch) headBranch.value = 'feat/live-demo';
+                if (intent) intent.value = '';
+                if (rawDiff) rawDiff.value = '';
+            } catch (e) {
+                console.warn("Input reset error:", e);
+            }
+
+            try {
+                if (typeof updateGitHubCompareLink === 'function') {
+                    updateGitHubCompareLink();
+                }
+            } catch (e) {
+                console.warn("updateGitHubCompareLink error:", e);
             }
 
             // Reset active preset key
             activePresetKey = null;
 
             // Reset all preset pills to unselected state
-            document.querySelectorAll('.preset-pill').forEach(pill => {
-                pill.classList.remove('border-[#f58e0a]', 'ring-1', 'ring-[#f58e0a]/40', 'border-stone-900', 'dark:border-zinc-100', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
-            });
+            try {
+                document.querySelectorAll('.preset-pill').forEach(pill => {
+                    pill.classList.remove('border-[#f58e0a]', 'ring-1', 'ring-[#f58e0a]/40', 'border-stone-900', 'dark:border-zinc-100', 'ring-stone-900/10', 'dark:ring-zinc-100/20', 'bg-stone-50/80', 'dark:bg-zinc-800/40');
+                });
+            } catch (e) {}
 
             // Reset active preset label
             const label = document.getElementById('active-preset-label');
@@ -1929,34 +1957,42 @@
             }
 
             // Close git diff drawer & reset diff status chip
-            const drawer = document.getElementById('diff-drawer-content');
-            const caret = document.getElementById('diff-drawer-caret');
-            const statusChip = document.getElementById('diff-status-chip');
-            if (drawer && !drawer.classList.contains('hidden')) {
-                drawer.classList.add('hidden');
-            }
-            if (caret) caret.style.transform = 'rotate(0deg)';
-            if (statusChip) statusChip.textContent = 'Attached';
+            try {
+                const drawer = document.getElementById('diff-drawer-content');
+                const caret = document.getElementById('diff-drawer-caret');
+                const statusChip = document.getElementById('diff-status-chip');
+                if (drawer && !drawer.classList.contains('hidden')) {
+                    drawer.classList.add('hidden');
+                }
+                if (caret) caret.style.transform = 'rotate(0deg)';
+                if (statusChip) statusChip.textContent = 'Attached';
+            } catch (e) {}
 
             // Reset word count to 0
-            if (typeof updateWordCounter === 'function') {
-                updateWordCounter();
-            } else {
-                const counterEl = document.getElementById('intent-word-count');
-                if (counterEl) counterEl.textContent = '0';
-            }
+            try {
+                if (typeof updateWordCounter === 'function') {
+                    updateWordCounter();
+                } else {
+                    const counterEl = document.getElementById('intent-word-count');
+                    if (counterEl) counterEl.textContent = '0';
+                }
+            } catch (e) {}
 
             // Reset Fatal Halt visual state
-            if (typeof resetFatalHaltUI === 'function') {
-                resetFatalHaltUI();
-            }
+            try {
+                if (typeof resetFatalHaltUI === 'function') {
+                    resetFatalHaltUI();
+                }
+            } catch (e) {}
 
             // Clear any pending staggered checkmark timers & hide checkmarks
-            if (typeof stageTickTimeouts !== 'undefined' && Array.isArray(stageTickTimeouts)) {
-                stageTickTimeouts.forEach(t => clearTimeout(t));
-                stageTickTimeouts = [];
-            }
-            document.querySelectorAll('.check-icon').forEach(icon => icon.classList.add('hidden'));
+            try {
+                if (typeof stageTickTimeouts !== 'undefined' && Array.isArray(stageTickTimeouts)) {
+                    stageTickTimeouts.forEach(t => clearTimeout(t));
+                    stageTickTimeouts = [];
+                }
+                document.querySelectorAll('.check-icon').forEach(icon => icon.classList.add('hidden'));
+            } catch (e) {}
 
             // Hide SRE ROI dock on clean reset
             const roiDock = document.getElementById('sre-roi-dock');
@@ -1965,18 +2001,27 @@
             }
 
             // Navigate cleanly to Stage 01
-            if (typeof navigateToStage === 'function') {
-                navigateToStage('stage-01');
+            try {
+                if (typeof navigateToStage === 'function') {
+                    navigateToStage('stage-01');
+                }
+            } catch (e) {
+                console.warn("navigateToStage error in resetWorkspaceState:", e);
             }
         }
 
         // Wrapper function that FIRST executes resetWorkspaceState() and THEN executes the view switch
         function openWorkspace() {
-            resetWorkspaceState();
+            try {
+                resetWorkspaceState();
+            } catch (err) {
+                console.warn("Non-fatal error in resetWorkspaceState:", err);
+            }
             switchView('workspace', true);
         }
 
         // Global window bindings to guarantee accessibility from inline onclick handlers
+        window.switchView = switchView;
         window.resetWorkspaceState = resetWorkspaceState;
         window.openWorkspace = openWorkspace;
 
@@ -2117,7 +2162,7 @@
                 const targetRepo = (repoInput && repoInput.value.trim()) || '';
                 const headInput = document.getElementById('head-branch');
                 const editBranchInput = document.getElementById('pr-edit-branch');
-                const headBranch = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+                const headBranch = (editBranchInput && (editBranchInput.value || editBranchInput.textContent || '').trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
 
                 const shipTargetRemote = document.getElementById('ship-target-remote');
                 if (shipTargetRemote) {
@@ -2868,7 +2913,7 @@
             const editBranchInput = document.getElementById('pr-edit-branch');
             const repo = (repoInput && repoInput.value) || 'lokebuilds/MergeWhisper';
             const base = (baseInput && baseInput.value) || 'main';
-            const head = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+            const head = (editBranchInput && (editBranchInput.value || editBranchInput.textContent || '').trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
             return buildGitHubCompareUrl(repo, base, head);
         }
 
@@ -2878,7 +2923,7 @@
             const targetRepo = (repoInput && repoInput.value.trim()) || '';
             const headInput = document.getElementById('head-branch');
             const editBranchInput = document.getElementById('pr-edit-branch');
-            const headBranch = (editBranchInput && editBranchInput.value.trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+            const headBranch = (editBranchInput && (editBranchInput.value || editBranchInput.textContent || '').trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
 
             const shipTargetRemote = document.getElementById('ship-target-remote');
             if (shipTargetRemote) {
@@ -3220,7 +3265,7 @@
         // Copy Commit Title to Clipboard with Toast Notification
         function copyCommitTitle() {
             const editTitleEl = document.getElementById('pr-edit-title');
-            const title = (editTitleEl && editTitleEl.value.trim())
+            const title = (editTitleEl && (editTitleEl.value || editTitleEl.textContent || '').trim())
                 || (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.title)
                 || (document.getElementById('pr-manifest-title') ? document.getElementById('pr-manifest-title').textContent.trim() : '');
 
