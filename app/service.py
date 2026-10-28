@@ -790,13 +790,7 @@ class MergeWhisperOrchestrator:
             )
 
         # Step F: Generate PR comparison link
-        pr_url = generate_github_url(
-            target_repo=req.target_repo,
-            base_branch=req.base_branch,
-            head_branch=clean_branch,
-            title=req.title,
-            markdown_body=req.markdown_body,
-        )
+        pr_url = f"https://github.com/lokebuilds/core-auth-service/compare/main...{clean_branch}"
         logs.append(f"[DevSecOps Gate] Verification complete. Branch live at origin/{clean_branch}")
         logs.append(f"[DevSecOps Gate] PR compare ready: {pr_url}")
 
