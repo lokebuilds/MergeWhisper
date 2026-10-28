@@ -789,8 +789,60 @@ class MergeWhisperOrchestrator:
                 error=f"Git push failed: {err}",
             )
 
-        # Step F: Generate PR comparison link
-        pr_url = f"https://github.com/lokebuilds/core-auth-service/compare/main...{clean_branch}"
+        # Step F: Dynamically resolve remote origin URL with fallback for demo presets
+        base_url = "https://github.com/lokebuilds/core-auth-service"
+        try:
+            # Check if this invocation corresponds to a demo preset
+            demo_indicators = [
+                "core-auth-service",
+                "auth-loop",
+                "postgres-migration",
+                "websocket-leak",
+                "redis-limiter",
+                "red-team",
+                "sessionmanager",
+                "infinite token refresh",
+                "customer_sessions",
+            ]
+            req_text = f"{req.target_repo} {req.title} {clean_branch}".lower()
+            is_demo_preset = any(indicator in req_text for indicator in demo_indicators)
+
+            if not is_demo_preset:
+                proc = await asyncio.create_subprocess_exec(
+                    "git",
+                    "config",
+                    "--get",
+                    "remote.origin.url",
+                    cwd=str(repo_root),
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                )
+                stdout_bytes, _ = await asyncio.wait_for(proc.communicate(), timeout=5.0)
+                raw_origin = stdout_bytes.decode("utf-8", errors="replace").strip()
+
+                if raw_origin and proc.returncode == 0:
+                    # Strip .git suffix and trailing slash
+                    parsed_url = raw_origin[:-4] if raw_origin.endswith(".git") else raw_origin
+                    parsed_url = parsed_url.rstrip("/")
+
+                    # Convert SSH (git@github.com:owner/repo) to HTTPS (https://github.com/owner/repo)
+                    ssh_match = re.match(r"^(?:ssh:\/\/)?git@([^:]+):(.+)$", parsed_url)
+                    if ssh_match:
+                        host, path = ssh_match.group(1), ssh_match.group(2)
+                        base_url = f"https://{host}/{path.lstrip('/')}"
+                    elif re.match(r"^https?://", parsed_url):
+                        # Strip credentials if present (e.g. https://user:pass@github.com/...)
+                        clean_http = re.sub(r"^(https?://)[^/@]+@", r"\1", parsed_url)
+                        if clean_http.startswith("http://"):
+                            clean_http = "https://" + clean_http[len("http://"):]
+                        base_url = clean_http
+                    elif parsed_url:
+                        base_url = f"https://{parsed_url.lstrip('/')}"
+        except Exception as exc:
+            logs.append(f"[DevSecOps Gate] Remote origin resolution fallback: {str(exc)}")
+            base_url = "https://github.com/lokebuilds/core-auth-service"
+
+        pr_url = f"{base_url}/compare/main...{clean_branch}"
         logs.append(f"[DevSecOps Gate] Verification complete. Branch live at origin/{clean_branch}")
         logs.append(f"[DevSecOps Gate] PR compare ready: {pr_url}")
 
