@@ -1140,10 +1140,38 @@
 
                 <!-- 70/30 Asymmetric Launch Control Grid (12-Column Grid) -->
                 <div id="stage-05-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 transition-opacity">
-                    <!-- Left Column (The Data Stack): 8 Columns (lg:col-span-8) -->
-                    <div class="lg:col-span-8 flex flex-col gap-6">
-                        <!-- Review Gate Card -->
-                        <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5">
+                    <!-- Unified Left Column Container: Tabbed Command Deck (8 Columns) -->
+                    <div class="lg:col-span-8 editorial-card radius-outer shadow-xs h-[500px] flex flex-col overflow-hidden">
+                        <!-- Tab Navigation Header -->
+                        <div class="flex border-b border-[#e3e6e3] dark:border-[#2a2d36] px-4 pt-2 gap-6 shrink-0 bg-white dark:bg-[#1f2129]">
+                            <button 
+                                type="button" 
+                                id="ship-deck-tab-pr" 
+                                onclick="switchShipDeckTab('pr')" 
+                                class="ship-deck-tab border-b-2 border-[#f58e0a] text-gray-900 dark:text-white pb-2 font-semibold text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
+                                <span>PR Manifest</span>
+                            </button>
+                            <button 
+                                type="button" 
+                                id="ship-deck-tab-slack" 
+                                onclick="switchShipDeckTab('slack')" 
+                                class="ship-deck-tab text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 pb-2 text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5">
+                                <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                                <span>Slack Payload</span>
+                            </button>
+                            <button 
+                                type="button" 
+                                id="ship-deck-tab-jira" 
+                                onclick="switchShipDeckTab('jira')" 
+                                class="ship-deck-tab text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 pb-2 text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5">
+                                <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+                                <span>JIRA Sync</span>
+                            </button>
+                        </div>
+
+                        <!-- Panel 1: Review Gate (PR Manifest) -->
+                        <div id="ship-deck-panel-pr" class="ship-deck-panel flex-1 overflow-y-auto p-4 flex flex-col gap-4">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="shield-check" class="w-4 h-4 text-[#f58e0a]"></i>
@@ -1163,7 +1191,7 @@
                                     type="text" 
                                     readonly 
                                     placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none cursor-default select-text">
+                                    class="w-full bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none cursor-default select-text">
                             </div>
 
                             <!-- PR Conventional Commit Title (Deployment Receipt Style) -->
@@ -1171,7 +1199,7 @@
                                 <div class="flex items-center justify-between">
                                     <label for="pr-edit-title" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR TITLE:</label>
                                     <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
-                                        <i data-lucide="copy" class="w-3 h-3"></i>
+                                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                         <span>Copy</span>
                                     </button>
                                 </div>
@@ -1180,7 +1208,7 @@
                                     rows="2" 
                                     readonly 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full max-h-[80px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                    class="w-full max-h-[80px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
@@ -1192,27 +1220,27 @@
                                     <label for="pr-edit-body" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR DESCRIPTION &amp; VERIFICATION MATRIX:</label>
                                     <div class="flex items-center gap-3">
                                         <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
-                                            <i data-lucide="copy" class="w-3 h-3"></i>
+                                            <i data-lucide="copy" class="w-3.5 h-3.5"></i>
                                             <span>Copy</span>
                                         </button>
                                         <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
-                                            <i data-lucide="download" class="w-3 h-3"></i>
+                                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                             <span>Download .md</span>
                                         </button>
                                     </div>
                                 </div>
                                 <textarea 
                                     id="pr-edit-body" 
-                                    rows="10" 
+                                    rows="8" 
                                     readonly 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full max-h-[200px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                    class="w-full max-h-[180px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
 
                             <!-- DevSecOps Real-Time Subprocess Execution Logs Dock -->
-                            <div id="git-execution-dock" class="terminal-dark hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono mt-2">
+                            <div id="git-execution-dock" class="terminal-dark hidden flex flex-col gap-2 p-3.5 rounded-xl bg-[#08090d] border border-[#1f2129] text-xs font-mono mt-1">
                                 <div class="flex items-center justify-between border-b border-[#1f2129] pb-2">
                                     <div class="flex items-center gap-2 text-[11px] text-[#f58e0a]">
                                         <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
@@ -1231,83 +1259,81 @@
                             </div>
                         </div>
 
-                        <!-- Stakeholder Broadcast & CI Pipeline Card -->
-                        <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col justify-between gap-5 min-h-[460px]">
-                            <div class="flex flex-col gap-4">
-                                <div class="border-b hairline-border pb-3 flex items-center justify-between">
-                                    <div class="flex items-center gap-1.5 p-0.5 rounded-lg bg-stone-100 dark:bg-zinc-800/80 border hairline-border">
-                                        <button 
-                                            type="button" 
-                                            id="tab-btn-slack" 
-                                            onclick="switchShipTab('slack')" 
-                                            class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#f58e0a] shadow-2xs flex items-center gap-1.5 border border-[#f58e0a]/40">
-                                            <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
-                                            <span>Slack Block Kit</span>
-                                        </button>
-                                        <button 
-                                            type="button" 
-                                            id="tab-btn-ci" 
-                                            onclick="switchShipTab('ci')" 
-                                            class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5">
-                                            <i data-lucide="cog" class="w-3.5 h-3.5"></i>
-                                            <span>⚙️ CI Workflow</span>
-                                        </button>
+                        <!-- Panel 2: Stakeholder Broadcast & CI Payload -->
+                        <div id="ship-deck-panel-slack" class="ship-deck-panel hidden flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+                            <div class="border-b hairline-border pb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-1.5 p-0.5 rounded-lg bg-stone-100 dark:bg-zinc-800/80 border hairline-border">
+                                    <button 
+                                        type="button" 
+                                        id="tab-btn-slack" 
+                                        onclick="switchShipTab('slack')" 
+                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer bg-white dark:bg-zinc-700 text-[#f58e0a] shadow-2xs flex items-center gap-1.5 border border-[#f58e0a]/40">
+                                        <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                                        <span>Slack Block Kit</span>
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        id="tab-btn-ci" 
+                                        onclick="switchShipTab('ci')" 
+                                        class="px-2.5 py-1 rounded-md text-xs font-mono font-medium transition cursor-pointer text-stone-500 hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100 flex items-center gap-1.5">
+                                        <i data-lucide="cog" class="w-3.5 h-3.5"></i>
+                                        <span>⚙️ CI Workflow</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tab 1: Slack Broadcast -->
+                            <div id="ship-tab-content-slack" class="flex flex-col gap-3">
+                                <div>
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">BROADCAST SUMMARY:</span>
+                                    <div id="slack-broadcast-summary" class="p-3 rounded-lg bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
+                                        Awaiting release broadcast synthesis...
                                     </div>
                                 </div>
 
-                                <!-- Tab 1: Slack Broadcast -->
-                                <div id="ship-tab-content-slack" class="flex flex-col gap-3">
-                                    <div>
-                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">BROADCAST SUMMARY:</span>
-                                        <div id="slack-broadcast-summary" class="p-3 rounded-lg bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
-                                            Awaiting release broadcast synthesis...
+                                <div class="flex flex-col">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
+                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">SLACK BLOCK KIT JSON PAYLOAD</span>
+                                        <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
+                                            <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                                <span>Copy JSON</span>
+                                            </button>
                                         </div>
                                     </div>
+                                    <pre id="slack-json-box" class="p-4 rounded-lg bg-[#0c0d12] border border-[#1f2129] text-[#f58e0a] text-xs font-mono whitespace-pre-wrap overflow-y-auto min-h-[220px] max-h-[220px] w-full leading-relaxed shadow-inner">{}</pre>
+                                </div>
+                            </div>
 
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                            <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">SLACK BLOCK KIT JSON PAYLOAD</span>
-                                            <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
-                                                <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
-                                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                                                    <span>Copy JSON</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <pre id="slack-json-box" class="p-4 rounded-lg bg-[#0c0d12] border border-[#1f2129] text-[#f58e0a] text-xs font-mono whitespace-pre-wrap overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed shadow-inner">{}</pre>
+                            <!-- Tab 2: CI Workflow YAML -->
+                            <div id="ship-tab-content-ci" class="hidden flex flex-col gap-3">
+                                <div>
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">CI SPECIFICATION:</span>
+                                    <div class="p-3 rounded-lg bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
+                                        <span>Automated GitHub Actions PR Verification Pipeline</span>
                                     </div>
                                 </div>
 
-                                <!-- Tab 2: CI Workflow YAML -->
-                                <div id="ship-tab-content-ci" class="hidden flex flex-col gap-3">
-                                    <div>
-                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase block mb-1">CI SPECIFICATION:</span>
-                                        <div class="p-3 rounded-lg bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] text-xs font-mono text-gray-900 dark:text-gray-100 leading-relaxed shadow-sm truncate">
-                                            <span>Automated GitHub Actions PR Verification Pipeline</span>
+                                <div class="flex flex-col">
+                                    <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
+                                        <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">.GITHUB/WORKFLOWS/VERIFY-PR.YML</span>
+                                        <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
+                                            <button type="button" onclick="copyCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                                <span>Copy</span>
+                                            </button>
+                                            <button type="button" onclick="downloadCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
+                                                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                                                <span>Download .yml</span>
+                                            </button>
                                         </div>
                                     </div>
-
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                            <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">.GITHUB/WORKFLOWS/VERIFY-PR.YML</span>
-                                            <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
-                                                <button type="button" onclick="copyCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
-                                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                                                    <span>Copy</span>
-                                                </button>
-                                                <button type="button" onclick="downloadCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
-                                                    <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                                                    <span>Download .yml</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#f58e0a] border border-[#1f2129] p-4 font-mono text-xs shadow-inner rounded-lg whitespace-pre overflow-x-auto overflow-y-auto min-h-[250px] max-h-[250px] w-full leading-relaxed"># Awaiting CI workflow synthesis...</pre>
-                                    </div>
+                                    <pre id="ci-workflow-box" class="bg-[#0c0d12] text-[#f58e0a] border border-[#1f2129] p-4 font-mono text-xs shadow-inner rounded-lg whitespace-pre overflow-x-auto overflow-y-auto min-h-[220px] max-h-[220px] w-full leading-relaxed"># Awaiting CI workflow synthesis...</pre>
                                 </div>
                             </div>
 
                             <!-- Reset / New Ingest Link -->
-                            <div class="flex items-center justify-between text-xs font-mono pt-2 border-t hairline-border">
+                            <div class="flex items-center justify-between text-xs font-mono pt-2 border-t hairline-border mt-auto">
                                 <button type="button" onclick="navigateToStage('stage-04')" class="text-stone-500 hover:text-stone-800 dark:hover:text-zinc-200 transition cursor-pointer">
                                     &larr; Back to Changelog
                                 </button>
@@ -1317,8 +1343,8 @@
                             </div>
                         </div>
 
-                        <!-- Issue Tracker Sync (Jira / Linear Webhook) Terminal Block -->
-                        <div class="rounded-xl bg-[#0c0d12] border border-[#1f2129] p-4 shadow-xs flex flex-col gap-3 font-mono">
+                        <!-- Panel 3: Issue Tracker Sync (JIRA / Linear) -->
+                        <div id="ship-deck-panel-jira" class="ship-deck-panel hidden flex-1 overflow-y-auto p-4 flex flex-col gap-3 font-mono bg-[#0c0d12] text-gray-200">
                             <div class="flex items-center justify-between pb-3 border-b border-[#1f2129]">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
@@ -1332,7 +1358,7 @@
                                 </div>
                                 <button 
                                     type="button" 
-                                    id="copy-issue-curl-btn"
+                                    id="copy-issue-curl-btn" 
                                     onclick="copyIssueCurl()" 
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-medium text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-700/60 transition cursor-pointer active:scale-[0.98]">
                                     <i data-lucide="copy" class="w-3.5 h-3.5 text-zinc-400"></i>
@@ -1343,12 +1369,12 @@
                                 <span>Status Mutation Webhook &bull; Marks ticket 'Done' with release PR link</span>
                                 <span class="tabular-nums font-mono text-[10px] text-zinc-500">POST /graphql &bull; 200 OK</span>
                             </div>
-                            <pre class="p-3.5 rounded-lg bg-black/60 border border-[#1f2129] overflow-x-auto overflow-y-auto max-h-[160px] leading-relaxed"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
+                            <pre class="p-3.5 rounded-lg bg-black/60 border border-[#1f2129] overflow-x-auto overflow-y-auto max-h-[300px] leading-relaxed"><code id="issue-curl-code" class="text-xs font-mono text-[#f58e0a] whitespace-pre-wrap break-all leading-relaxed">Awaiting issue tracker webhook synthesis...</code></pre>
                         </div>
                     </div>
 
                     <!-- Right Column (Launch Sidebar): 4 Columns (lg:col-span-4) -->
-                    <div class="lg:col-span-4 bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-6 h-fit sticky top-6 flex flex-col gap-4 shadow-sm">
+                    <div class="lg:col-span-4 bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-6 h-fit lg:h-[500px] sticky top-6 flex flex-col justify-between shadow-sm">
                         <div class="border-b hairline-border pb-3 flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <i data-lucide="rocket" class="w-4 h-4 text-[#f58e0a]"></i>
@@ -3558,6 +3584,30 @@
         // ==============================================================================
         // Enterprise Ship Tabs, CI Workflow & SRE ROI Telemetry Handlers
         // ==============================================================================
+        function switchShipDeckTab(tabKey) {
+            const tabs = {
+                pr: { tab: 'ship-deck-tab-pr', panel: 'ship-deck-panel-pr' },
+                slack: { tab: 'ship-deck-tab-slack', panel: 'ship-deck-panel-slack' },
+                jira: { tab: 'ship-deck-tab-jira', panel: 'ship-deck-panel-jira' }
+            };
+            const activeClasses = 'ship-deck-tab border-b-2 border-[#f58e0a] text-gray-900 dark:text-white pb-2 font-semibold text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5';
+            const inactiveClasses = 'ship-deck-tab text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 pb-2 text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5';
+
+            Object.keys(tabs).forEach(k => {
+                const tEl = document.getElementById(tabs[k].tab);
+                const pEl = document.getElementById(tabs[k].panel);
+                if (k === tabKey) {
+                    if (tEl) tEl.className = activeClasses;
+                    if (pEl) pEl.classList.remove('hidden');
+                } else {
+                    if (tEl) tEl.className = inactiveClasses;
+                    if (pEl) pEl.classList.add('hidden');
+                }
+            });
+            if (typeof refreshIcons === 'function') refreshIcons();
+        }
+        window.switchShipDeckTab = switchShipDeckTab;
+
         function switchShipTab(tab) {
             const slackContent = document.getElementById('ship-tab-content-slack');
             const ciContent = document.getElementById('ship-tab-content-ci');
