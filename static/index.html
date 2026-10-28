@@ -1118,10 +1118,23 @@
                             &larr; Back to Verify
                         </button>
                         <button type="button" id="proceed-to-ship-btn" onclick="proceedToStage('stage-05')" class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
-                            <span>Proceed to Ship</span>
+                            <span>Inspect Telemetry</span>
                             &rarr;
                         </button>
                     </div>
+                </div>
+
+                <!-- Sticky Deployment Gate Action Bar -->
+                <div class="sticky bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-[#e3e6e3] dark:bg-[#1f2129]/90 dark:border-[#2a2d36] p-4 flex justify-between items-center z-40 mt-8 rounded-b-xl shadow-sm">
+                    <span class="text-sm font-semibold text-gray-500 uppercase tracking-wider">Awaiting Senior Validation</span>
+                    <button 
+                        id="validate-publish-btn" 
+                        type="button" 
+                        onclick="validateAndPublishPR()" 
+                        class="py-2.5 px-6 rounded-lg flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold text-sm uppercase tracking-wider transition-opacity duration-200">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
+                        <span id="validate-publish-label">VALIDATE &amp; PUBLISH PR</span>
+                    </button>
                 </div>
             </div>
 
@@ -1138,58 +1151,55 @@
                     <span class="text-[10px] tabular-nums px-2 py-0.5 rounded bg-red-500/20 text-red-700 dark:text-red-300">DISPATCH BLOCKED</span>
                 </div>
 
-                <!-- Executive Dashboard: Two-Tier Architecture -->
+                <!-- Executive Dashboard: Read-Only Telemetry Two-Tier Architecture -->
                 <div id="stage-05-grid" class="flex flex-col gap-6 transition-opacity">
-                    <!-- Tier 1: Primary Approval (70/30 Split) -->
+                    <!-- Tier 1: Read-Only PR Manifest & Launch Control (70/30 Split) -->
                     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-                        <!-- Left (lg:col-span-8): Human-in-the-Loop Review Gate -->
+                        <!-- Left (lg:col-span-8): Locked Deployment Target (Read-Only PR Manifest) -->
                         <div class="lg:col-span-8 editorial-card radius-outer p-5 shadow-xs flex flex-col gap-4 bg-[#ffffff] dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-xl">
                             <div class="border-b hairline-border pb-3 flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <i data-lucide="shield-check" class="w-4 h-4 text-[#f58e0a]"></i>
-                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Human-in-the-Loop Review Gate</span>
+                                    <span class="text-xs font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Locked Deployment Target</span>
                                 </div>
-                                <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">Awaiting Senior Validation</span>
+                                <span class="text-[10px] font-mono tabular-nums px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1.5 font-medium">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    Deployment Artifact
+                                </span>
                             </div>
 
-                            <!-- Target Head Branch (Deployment Receipt Style) -->
+                            <!-- Target Head Branch (Read-Only Div Block) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">TARGET HEAD BRANCH:</label>
-                                    <span class="text-[10px] font-mono text-gray-500">Locked Deployment Target</span>
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">TARGET HEAD BRANCH:</span>
+                                    <span class="text-[10px] font-mono text-gray-500">Immutable Target</span>
                                 </div>
-                                <input 
-                                    id="pr-edit-branch" 
-                                    type="text" 
-                                    readonly 
-                                    placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none cursor-default select-text">
+                                <div id="pr-edit-branch" class="w-full bg-[#f4f5f4] dark:bg-[#191a21] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-md p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner select-text">
+                                    feat/patch
+                                </div>
                             </div>
 
-                            <!-- PR Conventional Commit Title (Deployment Receipt Style) -->
+                            <!-- PR Conventional Commit Title (Read-Only Div Block) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-title" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR TITLE:</label>
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR TITLE:</span>
                                     <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                         <i data-lucide="copy" class="w-3 h-3"></i>
                                         <span>Copy</span>
                                     </button>
                                 </div>
-                                <textarea 
-                                    id="pr-edit-title" 
-                                    rows="2" 
-                                    readonly 
-                                    placeholder="Conventional Commit PR Title..." 
-                                    class="w-full max-h-[100px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                <div id="pr-edit-title" class="w-full max-h-[100px] overflow-y-auto bg-[#f4f5f4] dark:bg-[#191a21] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-md p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner leading-relaxed select-text">
+                                    Conventional Commit PR Title...
+                                </div>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
                             </div>
 
-                            <!-- PR Description / Markdown Body (Deployment Receipt Style) with YAML Export -->
+                            <!-- PR Description / Markdown Body (Read-Only Div Block with Exports) -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-body" class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR DESCRIPTION &amp; VERIFICATION MATRIX:</label>
+                                    <span class="text-[10px] font-mono text-gray-500 font-semibold tracking-wider uppercase">PR DESCRIPTION &amp; VERIFICATION MATRIX:</span>
                                     <div class="flex items-center gap-3">
                                         <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-gray-500 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="copy" class="w-3 h-3"></i>
@@ -1205,12 +1215,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <textarea 
-                                    id="pr-edit-body" 
-                                    rows="3" 
-                                    readonly 
-                                    placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full max-h-[100px] overflow-y-auto bg-[#f4f5f4] border border-[#e3e6e3] dark:bg-[#191a21] dark:border-[#2a2d36] rounded-lg p-3 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner focus:outline-none resize-none leading-relaxed cursor-default select-text"></textarea>
+                                <div id="pr-edit-body" class="w-full max-h-[100px] overflow-y-auto bg-[#f4f5f4] dark:bg-[#191a21] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-md p-4 text-gray-900 dark:text-gray-100 font-mono text-sm shadow-inner leading-relaxed whitespace-pre-wrap select-text">
+                                    AI-synthesized Pull Request description in Markdown...
+                                </div>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
@@ -1235,7 +1242,7 @@
                             </div>
                         </div>
 
-                        <!-- Right (lg:col-span-4): Launch Control White Sidebar (Height Equalized: h-full flex flex-col mt-auto buttons) -->
+                        <!-- Right (lg:col-span-4): Launch Control White Sidebar (Read-Only Telemetry, Action buttons deleted except Open Compare) -->
                         <div class="lg:col-span-4 bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-5 h-full flex flex-col shadow-sm">
                             <!-- Top Metadata Wrapper -->
                             <div class="flex flex-col gap-4">
@@ -1259,27 +1266,16 @@
                                     </div>
                                     <div class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
                                         <span class="text-xs uppercase tracking-wider font-semibold">PIPELINE STATUS:</span>
-                                        <span class="text-[#f58e0a] font-semibold flex items-center gap-1.5 text-xs">
-                                            <span class="w-2 h-2 rounded-full bg-[#f58e0a] animate-pulse"></span>
-                                            Ready to Ship
+                                        <span class="text-emerald-500 font-semibold flex items-center gap-1.5 text-xs">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            Deployment Live
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Stacked Full-Width Action Buttons (Forced flush to bottom with mt-auto) -->
+                            <!-- Single Remaining Action Button: Open in GitHub Compare -->
                             <div class="flex flex-col gap-3 pt-4 border-t hairline-border mt-auto">
-                                <!-- Validate & Publish PR Button (Primary Solid Action, Full-Width) -->
-                                <button 
-                                    id="validate-publish-btn" 
-                                    type="button" 
-                                    onclick="validateAndPublishPR()" 
-                                    class="w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
-                                    <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
-                                    <span id="validate-publish-label">Validate &amp; Publish PR</span>
-                                </button>
-
-                                <!-- Open in GitHub Compare Link (Secondary Outline Action, Full-Width) -->
                                 <a 
                                     id="pr-github-compare-btn" 
                                     href="https://github.com/lokebuilds/MergeWhisper/compare" 
@@ -3123,13 +3119,22 @@
                 if (sidebarFlow) sidebarFlow.textContent = `${baseBranch} → ${headBranch}`;
 
                 const editBranch = document.getElementById('pr-edit-branch');
-                if (editBranch) editBranch.value = headBranch;
+                if (editBranch) {
+                    if ('value' in editBranch) editBranch.value = headBranch;
+                    editBranch.textContent = headBranch;
+                }
 
                 const editTitle = document.getElementById('pr-edit-title');
-                if (editTitle) editTitle.value = cleanTitle;
+                if (editTitle) {
+                    if ('value' in editTitle) editTitle.value = cleanTitle;
+                    editTitle.textContent = cleanTitle;
+                }
 
                 const editBody = document.getElementById('pr-edit-body');
-                if (editBody) editBody.value = cleanBody;
+                if (editBody) {
+                    if ('value' in editBody) editBody.value = cleanBody;
+                    editBody.textContent = cleanBody;
+                }
 
                 // Also populate hidden legacy elements for full backward compatibility
                 const prTitle = document.getElementById('pr-manifest-title');
@@ -3252,9 +3257,9 @@
             const branchEl = document.getElementById('pr-edit-branch');
             const editBodyEl = document.getElementById('pr-edit-body');
             
-            const title = (titleEl && titleEl.value) || '';
-            const branch = (branchEl && branchEl.value) || '';
-            const body = (editBodyEl && editBodyEl.value) || '';
+            const title = (titleEl && (titleEl.value || titleEl.textContent)) || '';
+            const branch = (branchEl && (branchEl.value || branchEl.textContent)) || '';
+            const body = (editBodyEl && (editBodyEl.value || editBodyEl.textContent)) || '';
 
             const yamlLines = [
                 'release_manifest:',
@@ -3287,7 +3292,7 @@
 
         function downloadMarkdown() {
             const editBodyEl = document.getElementById('pr-edit-body');
-            const markdownContent = (editBodyEl && editBodyEl.value)
+            const markdownContent = (editBodyEl && (editBodyEl.value || editBodyEl.textContent))
                 || (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.markdown_body);
 
             if (!markdownContent) {
@@ -3315,6 +3320,9 @@
 
         // Human-in-the-Loop Real DevSecOps Execution Dispatcher
         async function validateAndPublishPR() {
+            // Requirement 4: Automatically transition UI from Stage 04 to Stage 05 Telemetry Dashboard
+            navigateToStage('stage-05');
+
             const btn = document.getElementById('validate-publish-btn');
             const btnLabel = document.getElementById('validate-publish-label');
             const dock = document.getElementById('git-execution-dock');
@@ -3323,9 +3331,9 @@
             const prLinkContainer = document.getElementById('git-live-pr-container');
             const prLink = document.getElementById('git-live-pr-link');
 
-            const headBranch = (document.getElementById('pr-edit-branch')?.value || '').trim();
-            const title = (document.getElementById('pr-edit-title')?.value || '').trim();
-            const markdownBody = (document.getElementById('pr-edit-body')?.value || '').trim();
+            const headBranch = ((document.getElementById('pr-edit-branch')?.value || document.getElementById('pr-edit-branch')?.textContent || currentActiveManifest?.ship?.branch_name || '')).trim();
+            const title = ((document.getElementById('pr-edit-title')?.value || document.getElementById('pr-edit-title')?.textContent || currentActiveManifest?.ship?.title || '')).trim();
+            const markdownBody = ((document.getElementById('pr-edit-body')?.value || document.getElementById('pr-edit-body')?.textContent || currentActiveManifest?.ship?.markdown_body || '')).trim();
             const targetRepo = (document.getElementById('target-repo')?.value || '').trim();
             const baseBranch = (document.getElementById('base-branch')?.value || 'main').trim();
 
