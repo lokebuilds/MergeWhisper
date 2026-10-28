@@ -171,6 +171,13 @@
             box-shadow: 0 0 0 1px rgba(245, 142, 10, 0.35) !important;
             outline: none !important;
         }
+        /* High-contrast placeholders for light and dark modes */
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af !important; /* gray-400 */
+        }
+        html.dark input::placeholder, html.dark textarea::placeholder {
+            color: #6b7280 !important; /* gray-500 */
+        }
 
         /* -- Dual-Theme Hairline Dividers ----------------------------------- */
         .hairline-border { border-color: #e3e6e3; }
@@ -775,7 +782,7 @@
                 <!-- Preset Pills -->
                 <div class="flex flex-col gap-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-mono text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Enterprise Presets</span>
+                        <span class="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Enterprise Presets</span>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                         <button type="button" onclick="selectPreset('auth-loop')" id="pill-auth-loop" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
@@ -823,7 +830,7 @@
                 <!-- Spacious Editorial Text Area (Paste Wispr Flow Transcripts Cleanly) -->
                 <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-4">
                     <div class="flex items-center justify-between">
-                        <label for="intent" class="text-xs font-mono font-medium text-stone-700 dark:text-zinc-300 uppercase tracking-wider">
+                        <label for="intent" class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Developer Intent Ingest
                         </label>
                     </div>
@@ -832,21 +839,21 @@
                         id="intent" 
                         rows="4" 
                         placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                        class="w-full p-4 text-xs font-mono leading-relaxed bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-lg text-gray-900 dark:text-gray-200 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none placeholder-gray-400 dark:placeholder-zinc-500"></textarea>
+                        class="w-full p-4 text-xs font-mono leading-relaxed bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
 
                     <!-- Compact Repository Metadata -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
                         <div>
-                            <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 dark:text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Target Repository</span>
+                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                         <div>
-                            <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Base Branch</span>
-                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 dark:text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Base Branch</span>
+                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                         <div>
-                            <span class="text-[11px] text-stone-500 dark:text-zinc-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 dark:text-gray-200 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Head Branch</span>
+                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                     </div>
 
@@ -862,14 +869,14 @@
                         </div>
                         <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-white dark:bg-[#0c0d12] hidden">
                             <div class="flex items-center justify-between pb-2 mb-1.5 border-b hairline-border">
-                                <span class="text-[10px] font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">
+                                <span class="text-[10px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
                                     Raw Unified Diff Telemetry
                                 </span>
                                 <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
                                     Ghost Shield Active
                                 </span>
                             </div>
-                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 dark:text-gray-200 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed placeholder-gray-400 dark:placeholder-zinc-500"></textarea>
+                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
                         </div>
                     </div>
 
@@ -931,7 +938,7 @@
 
                     <div class="flex items-center justify-between border-b hairline-border pb-4">
                         <div>
-                            <span class="text-xs font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">SRE Risk Assessment & Rollback Runbook</span>
+                            <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">SRE Risk Assessment & Rollback Runbook</span>
                             <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">Subsystem Blast Radius & Hazard Boundary</h3>
                         </div>
                         <div id="arch-risk-badge" class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
@@ -942,7 +949,7 @@
                     <!-- Telemetry Metrics Cards -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
                         <div class="p-3.5 rounded-xl editorial-inner flex flex-col justify-between">
-                            <span class="text-[11px] text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Pipeline Latency</span>
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pipeline Latency</span>
                             <div class="my-1.5 text-2xl font-normal text-stone-900 dark:text-zinc-100 tabular-nums" id="metric-latency">
                                 0.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">ms</span>
                             </div>
@@ -950,7 +957,7 @@
                         </div>
 
                         <div class="p-3.5 rounded-xl editorial-inner flex flex-col justify-between">
-                            <span class="text-[11px] text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Spoken Intent Words</span>
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider">Spoken Intent Words</span>
                             <div class="my-1.5 text-2xl font-normal text-stone-900 dark:text-zinc-100 tabular-nums" id="metric-words">
                                 0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">words</span>
                             </div>
@@ -958,7 +965,7 @@
                         </div>
 
                         <div class="p-3.5 rounded-xl editorial-inner flex flex-col justify-between">
-                            <span class="text-[11px] text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Engineering Time Saved</span>
+                            <span class="text-[11px] text-gray-500 dark:text-gray-400 uppercase tracking-wider">Engineering Time Saved</span>
                             <div class="my-1.5 text-2xl font-normal text-stone-900 dark:text-zinc-100 tabular-nums" id="metric-time-saved">
                                 0.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">min</span>
                             </div>
@@ -979,8 +986,8 @@
 
                     <!-- Affected Blast Radius -->
                     <div>
-                        <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider block mb-1">Subsystem Boundaries</span>
-                        <div id="blast-radius-box" class="p-3 rounded-xl editorial-inner text-xs font-mono leading-relaxed">
+                        <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">Subsystem Boundaries</span>
+                        <div id="blast-radius-box" class="p-3 rounded-xl editorial-inner text-xs font-mono leading-relaxed text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500">
                             Awaiting synthesis...
                         </div>
                     </div>
@@ -988,7 +995,7 @@
                     <!-- Rollback Runbook Terminal Box -->
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Incident Rollback Runbook</span>
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Incident Rollback Runbook</span>
                             <button type="button" onclick="copyToClipboard('rollback-code-box', 'Rollback Command')" class="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-zinc-100 flex items-center gap-1 transition cursor-pointer">
                                 <i data-lucide="copy" class="w-3 h-3"></i>
                                 <span>Copy</span>
@@ -1018,13 +1025,13 @@
             <div id="stage-panel-03" class="stage-panel hidden flex flex-col gap-6">
                 <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5">
                     <div class="border-b hairline-border pb-4">
-                        <span class="text-xs font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">QA Verification Matrix & Test Steps</span>
+                        <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">QA Verification Matrix & Test Steps</span>
                         <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">Primary Verification Objective & Test Steps</h3>
                     </div>
 
                     <!-- Objective Box -->
                     <div>
-                        <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider block mb-1">Primary Objective</span>
+                        <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">Primary Objective</span>
                         <div id="qa-objective-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono text-[#f58e0a] leading-relaxed">
                             Awaiting synthesis...
                         </div>
@@ -1033,14 +1040,14 @@
                     <!-- 2-Column QA Grid: Ordered Steps & Edge Cases -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="flex flex-col gap-2">
-                            <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Ordered Verification Checklist</span>
-                            <ul id="qa-steps-list" class="space-y-2 p-3.5 rounded-xl editorial-inner min-h-[140px] text-xs font-mono text-stone-800 dark:text-zinc-200">
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ordered Verification Checklist</span>
+                            <ul id="qa-steps-list" class="space-y-2 p-3.5 rounded-xl editorial-inner min-h-[140px] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500">
                                 <li class="text-stone-400 italic">No verification steps synthesized yet.</li>
                             </ul>
                         </div>
 
                         <div class="flex flex-col gap-2">
-                            <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Boundary Regression & Edge Cases</span>
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Boundary Regression & Edge Cases</span>
                             <ul id="qa-edges-list" class="space-y-2 p-3.5 rounded-xl editorial-inner min-h-[140px] text-xs font-mono text-[#f58e0a]">
                                 <li class="text-stone-400 italic">No boundary conditions analyzed yet.</li>
                             </ul>
@@ -1067,7 +1074,7 @@
                 <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5">
                     <div class="border-b hairline-border pb-4 flex items-center justify-between">
                         <div>
-                            <span class="text-xs font-mono uppercase tracking-wider text-stone-400 dark:text-zinc-500">SemVer Evaluation & Keep-a-Changelog</span>
+                            <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">SemVer Evaluation & Keep-a-Changelog</span>
                             <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">Projected Release & Keep-a-Changelog Markdown</h3>
                         </div>
                         <span id="cl-bump-badge" class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 border hairline-border">
@@ -1094,13 +1101,13 @@
                     <!-- Changelog Markdown -->
                     <div class="flex flex-col gap-1.5">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-mono font-medium text-stone-500 dark:text-zinc-400 uppercase tracking-wider">Keep-a-Changelog Markdown</span>
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Keep-a-Changelog Markdown</span>
                             <button type="button" onclick="copyToClipboard('changelog-markdown-box', 'Changelog Markdown')" class="text-xs font-mono text-stone-500 hover:text-stone-900 dark:hover:text-zinc-100 flex items-center gap-1 transition cursor-pointer">
                                 <i data-lucide="copy" class="w-3 h-3"></i>
                                 <span>Copy</span>
                             </button>
                         </div>
-                        <pre id="changelog-markdown-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 whitespace-pre-wrap overflow-y-auto max-h-[220px] leading-relaxed">Awaiting changelog generation...</pre>
+                        <pre id="changelog-markdown-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 whitespace-pre-wrap overflow-y-auto max-h-[220px] leading-relaxed">Awaiting changelog generation...</pre>
                     </div>
 
                     <!-- Navigation Footer -->
@@ -1144,21 +1151,21 @@
                             <!-- Target Head Branch Textarea -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Target Head Branch:</label>
-                                    <span class="text-[10px] font-mono text-zinc-500">Editable Git Branch</span>
+                                    <label for="pr-edit-branch" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Target Head Branch:</label>
+                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400">Editable Git Branch</span>
                                 </div>
                                 <textarea 
                                     id="pr-edit-branch" 
                                     rows="1" 
                                     placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 dark:text-gray-200 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                             </div>
 
                             <!-- PR Conventional Commit Title Textarea -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-title" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">PR Title (Conventional Commit):</label>
-                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-zinc-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                    <label for="pr-edit-title" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">PR Title (Conventional Commit):</label>
+                                    <button type="button" onclick="copyCommitTitle()" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                         <i data-lucide="copy" class="w-3 h-3"></i>
                                         <span>Copy</span>
                                     </button>
@@ -1167,7 +1174,7 @@
                                     id="pr-edit-title" 
                                     rows="2" 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono font-medium text-gray-900 dark:text-gray-200 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono font-medium text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
@@ -1176,13 +1183,13 @@
                             <!-- PR Description / Markdown Body Textarea -->
                             <div class="flex flex-col gap-1.5">
                                 <div class="flex items-center justify-between">
-                                    <label for="pr-edit-body" class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">PR Description &amp; Verification Matrix (Markdown):</label>
+                                    <label for="pr-edit-body" class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">PR Description &amp; Verification Matrix (Markdown):</label>
                                     <div class="flex items-center gap-3">
-                                        <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-zinc-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="copyToClipboard('pr-edit-body', 'PR Markdown')" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="copy" class="w-3 h-3"></i>
                                             <span>Copy</span>
                                         </button>
-                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-zinc-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
+                                        <button type="button" onclick="downloadMarkdown()" class="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-[#f58e0a] flex items-center gap-1 transition cursor-pointer">
                                             <i data-lucide="download" class="w-3 h-3"></i>
                                             <span>Download .md</span>
                                         </button>
@@ -1192,7 +1199,7 @@
                                     id="pr-edit-body" 
                                     rows="9" 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full p-3 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 dark:text-gray-200 leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-3 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
@@ -1207,7 +1214,7 @@
                                     id="validate-publish-btn" 
                                     type="button" 
                                     onclick="validateAndPublishPR()" 
-                                    class="flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
+                                    class="py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 shadow-sm cursor-pointer active:scale-[0.99] bg-[#f58e0a] hover:opacity-90 text-zinc-950 font-bold uppercase tracking-wider transition-opacity duration-200">
                                     <i data-lucide="shield-check" class="w-4 h-4 text-zinc-950"></i>
                                     <span id="validate-publish-label">Validate &amp; Publish PR</span>
                                 </button>
@@ -1218,7 +1225,7 @@
                                     href="https://github.com/lokebuilds/MergeWhisper/compare" 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
-                                    class="flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
+                                    class="py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
                                     <i data-lucide="external-link" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
                                     <span>Open in GitHub Compare</span>
                                 </a>
@@ -1272,15 +1279,15 @@
                             <!-- Tab 1: Slack Broadcast -->
                             <div id="ship-tab-content-slack" class="flex flex-col gap-3">
                                 <div>
-                                    <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 block mb-0.5 uppercase tracking-wider">Broadcast Summary:</span>
-                                    <div id="slack-broadcast-summary" class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 leading-relaxed truncate">
+                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 block mb-0.5 uppercase tracking-wider">Broadcast Summary:</span>
+                                    <div id="slack-broadcast-summary" class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed truncate">
                                         Awaiting release broadcast synthesis...
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col">
                                     <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                        <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">Slack Block Kit JSON Payload</span>
+                                        <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Slack Block Kit JSON Payload</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
                                             <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -1295,15 +1302,15 @@
                             <!-- Tab 2: CI Workflow YAML -->
                             <div id="ship-tab-content-ci" class="hidden flex flex-col gap-3">
                                 <div>
-                                    <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 block mb-0.5 uppercase tracking-wider">CI Specification:</span>
-                                    <div class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-stone-800 dark:text-zinc-200 leading-relaxed truncate">
+                                    <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 block mb-0.5 uppercase tracking-wider">CI Specification:</span>
+                                    <div class="p-2.5 rounded-lg editorial-inner text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed truncate">
                                         <span>Automated GitHub Actions PR Verification Pipeline</span>
                                     </div>
                                 </div>
 
                                 <div class="flex flex-col">
                                     <div class="flex items-center justify-between w-full pb-2 mb-2 border-b border-gray-200 dark:border-[#1f2129]">
-                                        <span class="text-[10px] font-mono text-stone-400 dark:text-zinc-500 uppercase tracking-wider">.github/workflows/verify-pr.yml</span>
+                                        <span class="text-[10px] font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">.github/workflows/verify-pr.yml</span>
                                         <div class="flex items-center gap-4 text-xs font-semibold text-gray-500">
                                             <button type="button" onclick="copyCiWorkflow()" class="hover:text-[#f58e0a] flex items-center gap-1.5 transition cursor-pointer">
                                                 <i data-lucide="copy" class="w-3.5 h-3.5"></i>
@@ -2152,7 +2159,7 @@
             }
 
             if (ghBtn) {
-                ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
+                ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
                 ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                 if (typeof updateGitHubCompareLink === 'function') {
                     updateGitHubCompareLink();
@@ -2918,7 +2925,7 @@
 
                     if (ghBtn) {
                         ghBtn.href = "#";
-                        ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center font-medium font-mono uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 flex items-center gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
+                        ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex font-medium font-mono uppercase bg-stone-300 dark:bg-zinc-800 text-stone-500 dark:text-zinc-500 gap-2 shadow-xs transition pointer-events-none opacity-50 cursor-not-allowed";
                         ghBtn.innerHTML = '<span>🛑 Shipment Locked (Secrets Detected)</span>';
                     }
                 } else {
@@ -2960,7 +2967,7 @@
                     }
 
                     if (ghBtn) {
-                        ghBtn.className = "flex-1 py-2.5 px-4 text-sm rounded-lg justify-center flex items-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
+                        ghBtn.className = "py-2 px-4 text-sm rounded-lg flex-1 justify-center items-center flex gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors";
                         ghBtn.innerHTML = '<i data-lucide="external-link" class="w-3.5 h-3.5"></i><span>Open in GitHub Compare</span>';
                     }
                 }
