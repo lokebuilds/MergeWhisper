@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root" class="dark">
+<html lang="en" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,10 +114,12 @@
         }
 
         /* -- Dual-Theme Canvas ------------------------------------------------- */
+        html { background-color: #f9faf9; }
+        html.dark { background-color: #0c0d12; }
         html:not(.dark) body { background-color: #f9faf9; color: #111827; }
         html.dark body       { background-color: #0c0d12; color: #e5e7eb; }
 
-        /* -- Dual-Theme Editorial Cards & Bento Surfaces -------------------- */
+        /* -- Dual-Theme Editorial Cards & Bento Surfaces (Elevated Pure White) - */
         .editorial-card, .bento-card {
             background-color: #ffffff;
             border: 1px solid #e3e6e3;
@@ -129,9 +131,9 @@
             color: #e5e7eb;
         }
 
-        /* -- Dual-Theme Editorial Inner & Preset Pills ----------------------- */
+        /* -- Dual-Theme Editorial Inner & Preset Pills (Cream Inset Depth) ----- */
         .editorial-inner {
-            background-color: #ffffff;
+            background-color: #f9faf9;
             border: 1px solid #e3e6e3;
             color: #111827;
         }
@@ -141,7 +143,7 @@
             color: #e5e7eb;
         }
         .preset-pill {
-            background-color: #f3f4f6;
+            background-color: #f9faf9;
             border: 1px solid #e3e6e3;
             color: #374151;
         }
@@ -151,11 +153,11 @@
             color: #e5e7eb;
         }
 
-        /* -- Dual-Theme Inputs & Textareas ---------------------------------- */
+        /* -- Dual-Theme Inputs & Textareas (Cream Inset Depth) ---------------- */
         html:not(.dark) input[type="text"],
         html:not(.dark) input[type="search"],
         html:not(.dark) textarea {
-            background-color: #ffffff;
+            background-color: #f9faf9;
             border-color: #e3e6e3;
             color: #111827;
         }
@@ -284,7 +286,7 @@
     <!-- ==================================================================== -->
     <!-- VIEW 1: CINEMATIC LANDING HERO (SPECFLOW EDITORIAL STYLE)            -->
     <!-- ==================================================================== -->
-    <div id="landing-view" class="min-h-[100dvh] flex flex-col justify-between max-w-7xl w-full mx-auto px-4 sm:px-8 py-4 sm:py-8">
+    <div id="landing-view" class="min-h-[100dvh] flex flex-col justify-between max-w-7xl w-full mx-auto px-4 sm:px-8 py-4 sm:py-8 bg-[#f9faf9] dark:bg-[#0c0d12]">
         
         <!-- ==================================================================== -->
         <!-- ASYMMETRIC SPLIT-SCREEN HERO (BENCHMARKED AGAINST SPECFLOW)          -->
@@ -728,7 +730,7 @@
     <!-- VIEW 2: INTERACTIVE WORKSPACE (DOCUMENT-STYLE STAGE NAVIGATION)      -->
     <!-- Only the active stage is displayed to eliminate vertical clutter     -->
     <!-- ==================================================================== -->
-    <div id="workspace-view" class="hidden flex-1 flex flex-col max-w-5xl w-full mx-auto px-8 py-8">
+    <div id="workspace-view" class="hidden flex-1 flex flex-col max-w-5xl w-full mx-auto px-8 py-8 bg-[#f9faf9] dark:bg-[#0c0d12]">
         
         <!-- Document-Style Stage Navigation Bar (Centered Balance) -->
         <div class="mb-8 border-b hairline-border pb-4 flex items-center justify-center">
@@ -839,21 +841,21 @@
                         id="intent" 
                         rows="4" 
                         placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                        class="w-full p-4 text-xs font-mono leading-relaxed bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
+                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
 
                     <!-- Compact Repository Metadata -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
                         <div>
                             <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                         <div>
                             <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Base Branch</span>
-                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                         <div>
                             <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                         </div>
                     </div>
 
@@ -867,7 +869,7 @@
                                 <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
                             </button>
                         </div>
-                        <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-white dark:bg-[#0c0d12] hidden">
+                        <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-[#f9faf9] dark:bg-[#0c0d12] hidden">
                             <div class="flex items-center justify-between pb-2 mb-1.5 border-b hairline-border">
                                 <span class="text-[10px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
                                     Raw Unified Diff Telemetry
@@ -876,7 +878,7 @@
                                     Ghost Shield Active
                                 </span>
                             </div>
-                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
+                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
                         </div>
                     </div>
 
@@ -1158,7 +1160,7 @@
                                     id="pr-edit-branch" 
                                     rows="1" 
                                     placeholder="e.g. fix/session-cookie-recursion" 
-                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                             </div>
 
                             <!-- PR Conventional Commit Title Textarea -->
@@ -1174,7 +1176,7 @@
                                     id="pr-edit-title" 
                                     rows="2" 
                                     placeholder="Conventional Commit PR Title..." 
-                                    class="w-full p-2.5 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono font-medium text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-2.5 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono font-medium text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 resize-none leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <div id="pr-manifest-title" class="hidden"></div>
                                 <div id="pr-manifest-summary" class="hidden"></div>
@@ -1199,7 +1201,7 @@
                                     id="pr-edit-body" 
                                     rows="9" 
                                     placeholder="AI-synthesized Pull Request description in Markdown..." 
-                                    class="w-full p-3 rounded-lg bg-white dark:bg-[#1f2129] border border-[#e3e6e3] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed transition-colors shadow-inner"></textarea>
+                                    class="w-full p-3 rounded-lg bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] focus:outline-none focus:ring-1 focus:ring-[#f58e0a]/60 focus:border-[#f58e0a] text-xs font-mono text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 leading-relaxed transition-colors shadow-inner"></textarea>
                                 <!-- Backward compatibility hidden container -->
                                 <pre id="pr-manifest-body" class="hidden"></pre>
                             </div>
