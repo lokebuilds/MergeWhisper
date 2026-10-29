@@ -884,14 +884,18 @@
 
 
                     <!-- Primary Synthesis Action -->
-                    <button 
-                        id="synthesize-btn" 
-                        onclick="triggerSynthesis()" 
-                        class="w-fit ml-auto py-2.5 px-6 rounded-lg text-sm flex items-center justify-center font-bold font-mono tracking-wider uppercase bg-[#f58e0a] hover:opacity-90 text-zinc-950 transition-opacity duration-200 gap-2 cursor-pointer shadow-xs">
-                        <i data-lucide="zap" class="w-3.5 h-3.5 text-zinc-950"></i>
-                        <span id="synthesize-btn-label">Synthesize Release Specifications</span>
-                        <span class="text-[10px] font-normal opacity-70 ml-1 text-zinc-400">Ctrl + Enter</span>
-                    </button>
+                    <div class="w-full mt-4">
+                        <button 
+                            type="button"
+                            id="synthesize-btn" 
+                            onclick="triggerSynthesis()" 
+                            class="w-full py-3.5 bg-[#f58e0a] hover:bg-[#e07d08] text-white text-sm font-bold tracking-widest uppercase rounded-lg transition-colors flex justify-center items-center gap-2 shadow-sm"
+                            style="cursor: pointer;">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
+                            <span id="synthesize-btn-label">Synthesize Release Specifications</span>
+                            <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
+                        </button>
+                    </div>
 
                     <!-- Navigation Footer for Stage 01 -->
                     <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
