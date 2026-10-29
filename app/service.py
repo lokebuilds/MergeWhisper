@@ -1043,18 +1043,9 @@ class MergeWhisperOrchestrator:
         req_text = f"{target_repository} {req.title} {clean_branch}".lower()
         is_preset_trigger = is_preset_flag or any(indicator in req_text for indicator in demo_indicators)
 
-        if is_preset_trigger:
-            clean_repo = "lokebuilds/core-auth-service"
-            base_url = "https://github.com/lokebuilds/core-auth-service"
-            logs.append(f"[DevSecOps Gate] Priority 1 (Demo Preset): Target repository forced to {base_url}")
-        elif target_repository:
-            clean_repo = self._clean_repo_slug(target_repository)
-            base_url = f"https://github.com/{clean_repo}"
-            logs.append(f"[DevSecOps Gate] Priority 2 (Live User Input): Target repository resolved to {base_url}")
-        else:
-            clean_repo = self._clean_repo_slug(None, default="lokebuilds/MergeWhisper")
-            base_url = f"https://github.com/{clean_repo}"
-            logs.append(f"[DevSecOps Gate] Priority 3 (Default Fallback): Target repository resolved to {base_url}")
+        clean_repo = self._clean_repo_slug(target_repository, default="lokebuilds/core-auth-service")
+        base_url = f"https://github.com/{clean_repo}"
+        logs.append(f"[DevSecOps Gate] Target repository resolved to {base_url}")
 
         # 3. Resolve GitHub authorization token and remote URLs
         github_token = self.get_github_token()
@@ -1188,11 +1179,17 @@ class MergeWhisperOrchestrator:
                 else:
                     logs.append("[DevSecOps Gate] Demo Preset mode: Simulated push verified successfully.")
 
-        # Construct final PR compare URL
+        # Construct final PR creation URL with pre-filled title and description
+        from urllib.parse import quote
         clean_base = re.sub(r"\.git$", "", base_url).rstrip("/")
-        pr_url = f"{clean_base}/compare/{req.base_branch or 'main'}...{clean_branch}"
-        pr_url = re.sub(r"(?<!:)//+", "/", pr_url)
-        pr_url = re.sub(r"\.git(?=/|$)", "", pr_url)
+        clean_base = re.sub(r"(?<!:)//+", "/", clean_base)
+        encoded_title = quote(req.title.strip()) if req.title else ""
+        encoded_body = quote(req.markdown_body.strip()[:3500]) if req.markdown_body else ""
+        pr_url = f"{clean_base}/compare/{req.base_branch or 'main'}...{clean_branch}?expand=1"
+        if encoded_title:
+            pr_url += f"&title={encoded_title}"
+        if encoded_body:
+            pr_url += f"&body={encoded_body}"
 
         logs.append(f"[DevSecOps Gate] Verification complete. Branch live at origin/{clean_branch}")
         logs.append(f"[DevSecOps Gate] PR compare ready: {pr_url}")

@@ -83,6 +83,7 @@
         .font-normal { font-weight: 400 !important; }
         .font-medium { font-weight: 500 !important; }
         .font-semibold { font-weight: 600 !important; }
+        .font-bold { font-weight: 600 !important; }
         b, strong, h1, h2, h3, h4, th {
             font-weight: 600 !important;
         }
@@ -600,14 +601,14 @@
                     <!-- Left Q1 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>How do you prevent credential leaks?</span>
+                            <span>How is MergeWhisper architected for Vercel?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                We use a dual-layer DevSecOps firewall: a client-side regex scrubber (Ghost Mode) and a semantic AI circuit breaker (Fatal Halt) to block unredacted keys.
+                                Built as a stateless ASGI serverless service with FastAPI and Gemini 3.8, delivering instant in-memory synthesis with zero database overhead.
                             </div>
                         </div>
                     </div>
@@ -615,14 +616,14 @@
                     <!-- Left Q2 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>Are developer voice transcripts retained?</span>
+                            <span>How does voice intent ingestion work?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                No. Under our strict Data Processing Addendum, voice streams and git diffs exist in volatile memory for &lt;3,000ms and are never stored.
+                                Wispr Flow streams spoken intent into our pipeline, pairing natural developer thoughts with raw git diffs without manual typing.
                             </div>
                         </div>
                     </div>
@@ -630,14 +631,14 @@
                     <!-- Left Q3 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>How does the AI understand repo context?</span>
+                            <span>How does Stage 03 eliminate AI hallucinations?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                By fusing the raw syntax changes (git diff) with your dictated Developer Intent, perfectly bounding the AI's context without a vector database.
+                                Strict Pydantic v2 schemas mathematically bound Gemini's output, forcing real executable test commands (pytest, psql, curl) directly mapped to your diff.
                             </div>
                         </div>
                     </div>
@@ -645,14 +646,14 @@
                     <!-- Left Q4 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>Why use Pydantic v2 schemas?</span>
+                            <span>How does DevSecOps Ghost Shield protect pipelines?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                To eliminate LLM hallucinations. The engine is mathematically constrained to our data structures, rejecting any speculative outputs before reaching the client.
+                                Client-side regex scrubs credentials before network transit, while an AI circuit breaker halts releases if unredacted API keys or destructive SQL are detected.
                             </div>
                         </div>
                     </div>
@@ -663,14 +664,14 @@
                     <!-- Right Q1 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>What drives the sub-3-second latency?</span>
+                            <span>Why enforce a Human-in-the-Loop review gate?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                We bypassed multi-agent loops, directly utilizing the native Gemini 3.8 SDK and an asynchronous FastAPI gateway for zero-overhead JSON serialization.
+                                Stage 05 locks PR creation and webhooks until an engineer validates the blast radius, ensuring zero unreviewed code ships to production.
                             </div>
                         </div>
                     </div>
@@ -678,14 +679,14 @@
                     <!-- Right Q2 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>How do the webhooks synchronize?</span>
+                            <span>How does Wispr Flow recognize code terminology?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                Stage 05 synthesizes production-ready cURL payloads for Linear GraphQL and Jira REST v3 endpoints based on extracted branch identifiers.
+                                Our Universal Developer Profile primes speech models with coding terms (camelCase, Kubernetes, psql, Alembic) for near-100% dictation accuracy.
                             </div>
                         </div>
                     </div>
@@ -693,14 +694,14 @@
                     <!-- Right Q3 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>What is the Universal Developer Profile?</span>
+                            <span>How do GitHub, Slack, and Linear synchronize?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                It injects exact developer acronyms (e.g., camelCase, Kubernetes) into the dictionary, ensuring near-perfect first-pass transcription accuracy.
+                                Upon gate approval, Stage 05 generates pre-filled GitHub PR links, Slack Block Kit broadcasts, and GraphQL cURL webhooks to close issues automatically.
                             </div>
                         </div>
                     </div>
@@ -708,14 +709,14 @@
                     <!-- Right Q4 -->
                     <div class="faq-item">
                         <button type="button" class="faq-trigger w-full cursor-pointer flex items-center justify-between gap-4 py-3.5 border-b border-[#1f2129]/20 dark:border-[#1f2129] text-stone-900 dark:text-zinc-100 font-medium text-xs sm:text-sm select-none text-left hover:text-[#f58e0a] transition-colors">
-                            <span>Is this an automated CI/CD deployment?</span>
+                            <span>How does MergeWhisper calculate SRE blast radius?</span>
                             <svg class="faq-chevron w-4 h-4 text-stone-400 dark:text-zinc-500 transition-transform duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                         <div class="faq-content overflow-hidden max-h-0 transition-all duration-300 ease-in-out">
                             <div class="pt-2.5 pb-4 text-xs sm:text-sm font-normal text-stone-600 dark:text-zinc-400 leading-relaxed">
-                                No, MergeWhisper is a 'Human-in-the-loop' tool. You manually review the audit, changelog, and PR manifest before dispatching any webhooks.
+                                It models dependency graphs across touched microservice boundaries, generating automated rollback runbooks (pg_dump, kubectl) for instant recovery.
                             </div>
                         </div>
                     </div>
@@ -869,7 +870,7 @@
                                 <button type="button" onclick="toggleDiffDrawer()" class="flex items-center gap-2 transition cursor-pointer hover:text-stone-900 dark:hover:text-zinc-100">
                                     <i data-lucide="file-diff" class="w-3.5 h-3.5 text-stone-400"></i>
                                     <span>Git Staged Diff & Patch Logs</span>
-                                    <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Optional</span>
+                                    <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.5 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Optional</span>
                                     <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
                                 </button>
                             </div>
@@ -1283,12 +1284,12 @@
                                 </button>
                                 <a 
                                     id="pr-github-compare-btn" 
-                                    href="https://github.com/lokebuilds/MergeWhisper/compare" 
+                                    href="https://github.com/lokebuilds/core-auth-service/compare" 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
-                                    class="w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors">
-                                    <i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i>
-                                    <span>Open in GitHub Compare</span>
+                                    class="w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 border border-stone-200 dark:border-zinc-800 text-stone-400 dark:text-zinc-600 bg-stone-100/50 dark:bg-zinc-900/50 font-semibold uppercase tracking-wider opacity-50 cursor-not-allowed pointer-events-none transition-all">
+                                    <i data-lucide="lock" class="w-4 h-4 text-stone-400 dark:text-zinc-600"></i>
+                                    <span id="pr-github-btn-label">Open on GitHub (Awaiting Approval)</span>
                                 </a>
                             </div>
                         </div>
@@ -1408,9 +1409,9 @@
                 </button>
             </div>
             <div class="space-y-2 font-mono text-xs">
-                <div onclick="loadProjectRepo('lokebuilds/MergeWhisper', 'main', 'feat/production-sweep', 'auth-loop')" class="p-3 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-700 cursor-pointer transition flex items-center justify-between">
+                <div onclick="loadProjectRepo('lokebuilds/core-auth-service', 'main', 'feat/production-sweep', 'auth-loop')" class="p-3 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-700 cursor-pointer transition flex items-center justify-between">
                     <div>
-                        <span class="font-medium text-stone-900 dark:text-zinc-100 block">lokebuilds/MergeWhisper</span>
+                        <span class="font-medium text-stone-900 dark:text-zinc-100 block">lokebuilds/core-auth-service</span>
                         <span class="text-[10px] text-stone-400">main &larr; feat/production-sweep</span>
                     </div>
                     <span class="text-[10px] px-2 py-0.5 rounded bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">Active</span>
@@ -1574,12 +1575,12 @@
             if (step1Row) step1Row.className = "flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-100";
             if (step1Icon) step1Icon.innerHTML = spinSvg;
 
-            // Live latency ticker display capped at realistic ~14,250 ms
+            // Live latency ticker display tracking actual compilation elapsed milliseconds
             const ticker = document.getElementById('exec-latency-ticker');
             modalTickerInterval = setInterval(() => {
                 if (ticker) {
                     const elapsed = Math.round(performance.now() - startClock);
-                    ticker.textContent = `${Math.min(elapsed, 14250).toLocaleString()} ms`;
+                    ticker.textContent = `${elapsed.toLocaleString()} ms`;
                 }
             }, 100);
         }
@@ -1665,7 +1666,7 @@
                     'Concurrent expired cookie requests from multi-tab browser sessions',
                     'Malformed or empty session_token cookie headers'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"REACT-842\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"REACT-842\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/core-auth-service/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'postgres-migration': {
                 id: 'postgres-migration',
@@ -1695,7 +1696,7 @@
                     'Historical event insertion into unprovisioned partition boundary',
                     'Clock skew between ingestion nodes resulting in timestamp collision'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"DB-104\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"DB-104\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/core-auth-service/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'websocket-leak': {
                 id: 'websocket-leak',
@@ -1725,7 +1726,7 @@
                     'Network flap where client reconnects before teardown loop terminates',
                     'Heartbeat ping loss on high-latency mobile carrier networks'
                 ],
-                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"WS-309\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/MergeWhisper/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
+                issue_tracker_curl: "curl -X POST https://api.linear.app/graphql \\\n  -H 'Content-Type: application/json' \\\n  -H 'Authorization: Bearer $LINEAR_API_KEY' \\\n  -d '{\"query\":\"mutation { issueUpdate(id: \\\"WS-309\\\", input: { stateId: \\\"completed\\\", description: \\\"PR: https://github.com/lokebuilds/core-auth-service/compare/main...feat/live-demo?quick_pull=1 marked Done\\\" }) { success } }\"}'"
             },
             'redis-limiter': {
                 id: 'redis-limiter',
@@ -1985,6 +1986,12 @@
                     gateCheckStatus.className = "text-[#f58e0a] font-semibold";
                 }
 
+                const githubCompareBtn = document.getElementById('pr-github-compare-btn');
+                if (githubCompareBtn) {
+                    githubCompareBtn.className = "w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 border border-stone-200 dark:border-zinc-800 text-stone-400 dark:text-zinc-600 bg-stone-100/50 dark:bg-zinc-900/50 font-semibold uppercase tracking-wider opacity-50 cursor-not-allowed pointer-events-none transition-all";
+                    githubCompareBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-stone-400 dark:text-zinc-600"></i><span id="pr-github-btn-label">Open on GitHub (Awaiting Approval)</span>`;
+                }
+
                 const shipTargetRemote = document.getElementById('ship-target-remote');
                 if (shipTargetRemote) {
                     shipTargetRemote.textContent = "--";
@@ -2227,10 +2234,8 @@
                     shipTargetRemote.textContent = targetRepo || 'owner/repo';
                 }
 
-                const githubCompareBtn = document.getElementById('pr-github-compare-btn');
-                if (githubCompareBtn && !githubCompareBtn.classList.contains('cursor-not-allowed')) {
-                    githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
-                    githubCompareBtn.target = "_blank";
+                if (typeof updateGitHubCompareLink === 'function') {
+                    updateGitHubCompareLink();
                 }
             }
 
@@ -2384,7 +2389,7 @@
             if (preset) {
                 document.getElementById('intent').value = preset.intent;
                 document.getElementById('raw-diff').value = preset.diff || '';
-                document.getElementById('target-repo').value = 'lokebuilds/core-auth-service';
+                document.getElementById('target-repo').value = preset.target_repo || 'lokebuilds/core-auth-service';
                 document.getElementById('base-branch').value = preset.base_branch;
                 document.getElementById('head-branch').value = preset.head_branch;
                 if (typeof updateGitHubCompareLink === 'function') {
@@ -2708,6 +2713,7 @@
             };
 
             // Concurrently dispatch live API synthesis POST request and run the orchestration sequence animation
+            let apiErrorDetail = null;
             const liveApiPromise = fetch(`${API_BASE}/api/synthesize`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -2716,8 +2722,12 @@
                 if (res.ok) {
                     return await res.json();
                 }
+                const errData = await res.json().catch(() => ({}));
+                apiErrorDetail = errData.detail || `Server returned ${res.status}: ${res.statusText}`;
+                console.warn("Live API synthesis error response:", apiErrorDetail);
                 return null;
             }).catch(err => {
+                apiErrorDetail = err.message || "Network error reaching synthesis API";
                 console.warn("Live API synthesis fetch error:", err);
                 return null;
             });
@@ -2737,6 +2747,9 @@
                 }
                 renderAllStages(currentActiveManifest);
             } else {
+                if (apiErrorDetail) {
+                    showToast(`API Synthesis Warning: ${apiErrorDetail}`, "warning");
+                }
                 // Resilient local baseline fallback if network disconnects
                 const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
                 currentActiveManifest = Object.assign({}, base, {
@@ -2988,11 +3001,18 @@
                 .join('/');
         }
 
-        function buildGitHubCompareUrl(repo, base, head) {
+        function buildGitHubCompareUrl(repo, base, head, title = '', body = '') {
             const cleanRepo = sanitizeRepo(repo, 'lokebuilds/core-auth-service');
             const cleanBase = sanitizeBranch(base, 'main');
             const cleanHead = sanitizeBranch(head, 'feat/patch');
-            return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
+            let url = `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}?expand=1`;
+            if (title) {
+                url += `&title=${encodeURIComponent(title)}`;
+            }
+            if (body) {
+                url += `&body=${encodeURIComponent(body.slice(0, 3500))}`;
+            }
+            return url;
         }
 
         function getDynamicGitHubCompareUrl() {
@@ -3000,27 +3020,38 @@
             const baseInput = document.getElementById('base-branch');
             const headInput = document.getElementById('head-branch');
             const editBranchInput = document.getElementById('pr-edit-branch');
-            const repo = (repoInput && repoInput.value) || 'lokebuilds/MergeWhisper';
+            const titleInput = document.getElementById('pr-edit-title');
+            const bodyInput = document.getElementById('pr-edit-body');
+            const repo = (repoInput && repoInput.value) || 'lokebuilds/core-auth-service';
             const base = (baseInput && baseInput.value) || 'main';
             const head = (editBranchInput && (editBranchInput.value || editBranchInput.textContent || '').trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
-            return buildGitHubCompareUrl(repo, base, head);
+            const title = (titleInput && (titleInput.value || titleInput.textContent || '').trim()) || '';
+            const body = (bodyInput && (bodyInput.value || bodyInput.textContent || '').trim()) || '';
+            return buildGitHubCompareUrl(repo, base, head, title, body);
         }
 
         function updateGitHubCompareLink() {
             const githubCompareBtn = document.getElementById('pr-github-compare-btn');
             const repoInput = document.getElementById('target-repo');
+            const baseInput = document.getElementById('base-branch');
             const targetRepo = (repoInput && repoInput.value.trim()) || '';
+            const baseBranch = (baseInput && baseInput.value.trim()) || 'main';
             const headInput = document.getElementById('head-branch');
             const editBranchInput = document.getElementById('pr-edit-branch');
+            const titleInput = document.getElementById('pr-edit-title');
+            const bodyInput = document.getElementById('pr-edit-body');
             const headBranch = (editBranchInput && (editBranchInput.value || editBranchInput.textContent || '').trim()) || (headInput && headInput.value.trim()) || 'feat/patch';
+            const title = (titleInput && (titleInput.value || titleInput.textContent || '').trim()) || '';
+            const body = (bodyInput && (bodyInput.value || bodyInput.textContent || '').trim()) || '';
 
             const shipTargetRemote = document.getElementById('ship-target-remote');
             if (shipTargetRemote) {
-                shipTargetRemote.textContent = targetRepo;
+                shipTargetRemote.textContent = targetRepo || 'owner/repo';
             }
 
-            if (githubCompareBtn && !githubCompareBtn.classList.contains('cursor-not-allowed')) {
-                githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
+            if (githubCompareBtn) {
+                const dynamicUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch, title, body);
+                githubCompareBtn.href = dynamicUrl;
                 githubCompareBtn.target = "_blank";
             }
         }
@@ -3123,19 +3154,32 @@
             if (!manifest) return;
             try {
 
-                // Stage 02: Audit - Telemetry Metrics (Hackathon Rule Override)
+                // Stage 02: Audit - Telemetry Metrics (Dynamic from Live Synthesis Manifest)
                 const rawLatency = Number(manifest.latency_ms) || 0;
-                const cappedLatencyDisplay = (rawLatency > 14250 || rawLatency === 0) ? '14,250' : rawLatency.toLocaleString();
+                const latencyDisplay = rawLatency > 0 ? rawLatency.toLocaleString() : '0.0';
                 
                 const metricLatency = document.getElementById('metric-latency');
-                if (metricLatency) metricLatency.innerHTML = `${cappedLatencyDisplay}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">ms</span>`;
+                if (metricLatency) metricLatency.innerHTML = `${latencyDisplay}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">ms</span>`;
                 
                 const metricWords = document.getElementById('metric-words');
-                if (metricWords) metricWords.innerHTML = `${manifest.spoken_word_count || 14}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">words</span>`;
+                const wordsCount = (manifest.spoken_word_count !== undefined && manifest.spoken_word_count !== null) 
+                    ? manifest.spoken_word_count 
+                    : (manifest.intent ? manifest.intent.trim().split(/\s+/).filter(Boolean).length : 0);
+                if (metricWords) metricWords.innerHTML = `${wordsCount}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">words</span>`;
                 
-                // Hardcode 'Engineering Time Saved' metric to always display 10.0 hrs (instead of minutes)
+                // Engineering Time Saved calculated dynamically from intent & diff complexity
                 const metricTimeSaved = document.getElementById('metric-time-saved');
-                if (metricTimeSaved) metricTimeSaved.innerHTML = `10.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">hrs</span>`;
+                if (metricTimeSaved) {
+                    const devMinutes = Number(manifest.dev_time_saved_minutes) || 0;
+                    if (devMinutes >= 60) {
+                        const hrs = (devMinutes / 60).toFixed(1);
+                        metricTimeSaved.innerHTML = `${hrs}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">hrs</span>`;
+                    } else if (devMinutes > 0) {
+                        metricTimeSaved.innerHTML = `${devMinutes.toFixed(1)}<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">min</span>`;
+                    } else {
+                        metricTimeSaved.innerHTML = `0.0<span class="text-xs text-stone-400 dark:text-zinc-500 ml-1 font-normal">min</span>`;
+                    }
+                }
 
                 // Session Tag in Header/Refinement (if present)
                 const dockTag = document.getElementById('dock-session-tag');
@@ -3265,9 +3309,9 @@
                 // Stage 04: Changelog (SemVer Evaluation & Keep-a-Changelog)
                 const cl = manifest.changelog || manifest.changelog_card || {};
                 const clCurrent = document.getElementById('cl-current-version');
-                if (clCurrent) clCurrent.textContent = cl.current_version || 'v1.4.1';
+                if (clCurrent) clCurrent.textContent = cl.current_version || 'v18.2.0';
                 const clNext = document.getElementById('cl-next-version');
-                if (clNext) clNext.textContent = cl.next_version || 'v1.4.2';
+                if (clNext) clNext.textContent = cl.next_version || 'v18.2.1';
                 
                 const bumpBadge = document.getElementById('cl-bump-badge');
                 if (bumpBadge) {
@@ -3289,17 +3333,17 @@
                 const repoInput = document.getElementById('target-repo');
                 const baseInput = document.getElementById('base-branch');
                 const headInput = document.getElementById('head-branch');
-                const rawRepo = (repoInput && repoInput.value.trim()) || manifest.target_repo || 'lokebuilds/MergeWhisper';
+                const rawRepo = (repoInput && repoInput.value.trim()) || manifest.target_repo || 'lokebuilds/core-auth-service';
                 const rawBase = (baseInput && baseInput.value.trim()) || manifest.base_branch || 'main';
                 const rawHead = (pr && pr.branch_name) || manifest.head_branch || (manifest.ingest && manifest.ingest.head_branch) || (headInput && headInput.value.trim()) || 'feat/patch';
-                const targetRepo = sanitizeRepo(rawRepo, 'lokebuilds/MergeWhisper');
+                const targetRepo = sanitizeRepo(rawRepo, 'lokebuilds/core-auth-service');
                 const baseBranch = sanitizeBranch(rawBase, 'main');
                 const headBranch = sanitizeBranch(rawHead, 'feat/patch');
 
                 if (headInput) headInput.value = headBranch;
 
-                const cleanTitle = (pr.title || '').replace(/facebook\/react/g, targetRepo);
-                const cleanBody = (pr.markdown_body || '').replace(/facebook\/react/g, targetRepo);
+                const cleanTitle = pr.title || '';
+                const cleanBody = pr.markdown_body || '';
 
                 // Populate Human-in-the-Loop Review Gate Editable Textareas & Sidebar Telemetry
                 const shipTargetRemote = document.getElementById('ship-target-remote');
@@ -3331,26 +3375,38 @@
                 const prTitle = document.getElementById('pr-manifest-title');
                 if (prTitle) prTitle.textContent = cleanTitle;
                 const prSummary = document.getElementById('pr-manifest-summary');
-                if (prSummary) prSummary.textContent = (pr.summary || '').replace(/facebook\/react/g, targetRepo);
+                if (prSummary) prSummary.textContent = pr.summary || '';
                 const prBody = document.getElementById('pr-manifest-body');
                 if (prBody) prBody.textContent = cleanBody;
 
-                // Open in GitHub Compare Button (Dynamic State Propagation)
+                // Dynamic GitHub Compare / Pull Request URL Propagation
+                const compareUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch, cleanTitle, cleanBody);
                 const githubCompareBtn = document.getElementById('pr-github-compare-btn');
-                if (!isCritical && githubCompareBtn) {
-                    githubCompareBtn.href = `https://github.com/${targetRepo}/compare/main...${headBranch}`;
+                if (githubCompareBtn) {
+                    githubCompareBtn.href = compareUrl;
                     githubCompareBtn.target = "_blank";
-                    githubCompareBtn.classList.remove('pointer-events-none', 'opacity-50');
+                    
+                    // Human Verification Gate Check: only unlock after human validation is approved!
+                    const isApproved = document.getElementById('gate-check-status')?.textContent.includes('PASS') ||
+                                       document.getElementById('ship-pipeline-status')?.textContent.includes('Live');
+                    if (isApproved && !isCritical) {
+                        githubCompareBtn.className = "w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors shadow-xs";
+                        githubCompareBtn.innerHTML = `<i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i><span id="pr-github-btn-label">Create Pull Request on GitHub</span>`;
+                    } else {
+                        githubCompareBtn.className = "w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 border border-stone-200 dark:border-zinc-800 text-stone-400 dark:text-zinc-600 bg-stone-100/50 dark:bg-zinc-900/50 font-semibold uppercase tracking-wider opacity-50 cursor-not-allowed pointer-events-none transition-all";
+                        githubCompareBtn.innerHTML = `<i data-lucide="lock" class="w-4 h-4 text-stone-400 dark:text-zinc-600"></i><span id="pr-github-btn-label">Open on GitHub (Awaiting Approval)</span>`;
+                    }
+                    if (typeof refreshIcons === 'function') refreshIcons();
                 }
 
                 // Stage 05: Ship (Slack Release Broadcast)
                 const slack = manifest.ship || manifest.stage_05 || manifest.slack_card || {};
                 const slackSummary = document.getElementById('slack-broadcast-summary');
-                if (slackSummary) slackSummary.textContent = (slack.broadcast_summary || '').replace(/facebook\/react/g, targetRepo);
+                if (slackSummary) slackSummary.textContent = slack.broadcast_summary || '';
                 const slackJson = document.getElementById('slack-json-box');
                 if (slackJson) {
                     const jsonStr = JSON.stringify(slack.formatted_slack_payload || {}, null, 2);
-                    slackJson.textContent = jsonStr.replace(/facebook\/react/g, targetRepo);
+                    slackJson.textContent = jsonStr;
                 }
 
                 // Stage 05: Ship (Issue Tracker Webhook Sync - Jira / Linear)
@@ -3361,7 +3417,7 @@
                         (manifest.ship && manifest.ship.issue_tracker_curl) ||
                         (manifest.stage_05 && manifest.stage_05.issue_tracker_curl) ||
                         `curl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer $LINEAR_API_KEY" \\\n  -d '{"query":"mutation { issueUpdate(id: \\"ENG-402\\", input: { stateId: \\"completed\\", description: \\"PR: ${compareUrl} marked Done\\" }) { success } }"}'`;
-                    curlCodeEl.textContent = issueCurl.replace(/facebook\/react/g, targetRepo);
+                    curlCodeEl.textContent = issueCurl;
                 }
 
                 // Stage 05: Ship (CI Workflow Generator)
@@ -3568,7 +3624,7 @@
             });
 
             // 4. Inject a simulated success payload into the Slack and JIRA dark terminal boxes
-            const targetRepo = ((document.getElementById('target-repo')?.value || 'lokebuilds/MergeWhisper')).trim();
+            const targetRepo = ((document.getElementById('target-repo')?.value || 'lokebuilds/core-auth-service')).trim();
             const headBranch = (branchInput ? (branchInput.value || branchInput.textContent || 'feat/patch') : 'feat/patch').trim();
             const title = (titleInput ? (titleInput.value || titleInput.textContent || 'chore(release): automated patch delivery') : 'chore(release): automated patch delivery').trim();
 
@@ -3620,7 +3676,21 @@
             }
 
             if (jiraBox) {
-                jiraBox.textContent = `# Live Jira/Linear Webhook Executed (200 OK)\ncurl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer lin_live_token" \\\n  -d '{"query": "mutation { issueUpdate(id: \\\"ENG-8492\\\", input: { stateId: \\\"DONE\\\", comment: \\\"Deployed to production via MergeWhisper Stage 05 gate\\\" }) { success } }"}'\n\n# Response:\n# {"data": {"issueUpdate": {"success": true, "status": "CLOSED_DEPLOYED"}}}`;
+                const liveIssueCurl = (currentActiveManifest && currentActiveManifest.ship && currentActiveManifest.ship.issue_tracker_curl) ||
+                    (currentActiveManifest && currentActiveManifest.stage_05 && currentActiveManifest.stage_05.issue_tracker_curl) ||
+                    `curl -X POST https://api.linear.app/graphql \\\n  -H "Content-Type: application/json" \\\n  -H "Authorization: Bearer $LINEAR_API_KEY" \\\n  -d '{"query": "mutation { issueUpdate(id: \\"ENG-RELEASE\\", input: { stateId: \\"DONE\\", comment: \\"Deployed to production via MergeWhisper Stage 05 gate: ${title}\\" }) { success } }"}'`;
+                jiraBox.textContent = `# Live Jira/Linear Webhook Executed (200 OK)\n${liveIssueCurl}\n\n# Webhook Sync Response:\n# {"data": {"issueUpdate": {"success": true, "status": "CLOSED_DEPLOYED", "pr_target": "${headBranch}"}}}`;
+            }
+
+            // 4b. Unlock the GitHub Pull Request button now that Human Verification has passed!
+            const githubCompareBtn = document.getElementById('pr-github-compare-btn');
+            if (githubCompareBtn) {
+                const markdownBody = (bodyInput ? (bodyInput.value || bodyInput.textContent || '') : '').trim();
+                const baseBranch = (document.getElementById('base-branch')?.value || 'main').trim();
+                const directPrUrl = buildGitHubCompareUrl(targetRepo, baseBranch, headBranch, title, markdownBody);
+                githubCompareBtn.href = directPrUrl;
+                githubCompareBtn.className = "w-full py-2 px-4 text-sm rounded-lg flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99] border border-[#f58e0a] text-[#f58e0a] bg-transparent hover:bg-[#f58e0a]/10 font-semibold uppercase tracking-wider transition-colors shadow-xs";
+                githubCompareBtn.innerHTML = `<i data-lucide="external-link" class="w-4 h-4 text-[#f58e0a]"></i><span id="pr-github-btn-label">Create Pull Request on GitHub</span>`;
             }
 
             showToast("✓ Deployment Gate Approved: Production Release Shipped!", "success");
@@ -3647,6 +3717,9 @@
                     });
                     if (res.ok) {
                         const data = await res.json();
+                        if (data.success && data.pr_url && githubCompareBtn) {
+                            githubCompareBtn.href = data.pr_url;
+                        }
                         if (data.success && data.pr_url && prLink && prLinkContainer) {
                             prLink.href = data.pr_url;
                             prLinkContainer.classList.remove('hidden');
@@ -4128,8 +4201,7 @@
             if (list) {
                 list.innerHTML = '';
                 const threatsList = (threats && threats.length > 0) ? threats : [
-                    "Hardcoded AWS Access Key: AKIAIOSFODNN7EXAMPLE",
-                    "Destructive SQL Command: DROP TABLE customer_sessions CASCADE"
+                    "High-severity security vulnerability or unredacted secret detected in diff payload."
                 ];
                 threatsList.forEach(t => {
                     const li = document.createElement('li');
