@@ -105,7 +105,7 @@ class MergeWhisperOrchestrator:
         )
         keys: List[str] = []
         for part in raw.split(","):
-            cleaned = part.strip()
+            cleaned = part.strip().strip("'\"")
             if cleaned and cleaned != "your_api_key_here" and cleaned not in keys:
                 keys.append(cleaned)
         return keys

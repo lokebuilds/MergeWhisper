@@ -121,7 +121,7 @@ class Settings(BaseSettings):
         raw = self.gemini_api_keys or self.gemini_api_key or ""
         keys: list[str] = []
         for part in raw.split(","):
-            cleaned = part.strip()
+            cleaned = part.strip().strip("'\"")
             if cleaned and cleaned != "your_api_key_here" and cleaned not in keys:
                 keys.append(cleaned)
         return keys
