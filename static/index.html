@@ -829,84 +829,88 @@
                     </div>
                 </div>
 
-                <!-- Spacious Editorial Text Area (Paste Wispr Flow Transcripts Cleanly) -->
-                <div class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-4">
-                    <div class="flex items-center justify-between">
-                        <label for="intent" class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            Developer Intent Ingest
+                <!-- Dedicated Bento Container for Developer Intent Ingest -->
+                <div class="w-full bg-[#ffffff] rounded-xl border border-[#e3e6e3] overflow-hidden shadow-xs flex flex-col">
+                    <!-- Edge-to-Edge Bento Header Block -->
+                    <div class="bg-[#f9faf9] border-b border-[#e3e6e3] px-5 py-4 flex items-center justify-between">
+                        <label for="intent" class="text-xs font-mono font-medium text-gray-500 uppercase tracking-widest cursor-pointer">
+                            DEVELOPER INTENT INGEST
                         </label>
+                        <span class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">STAGE 01 // INGEST</span>
                     </div>
 
-                    <textarea 
-                        id="intent" 
-                        rows="4" 
-                        placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                        class="w-full p-4 text-xs font-mono leading-relaxed bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
+                    <!-- Pure White Body Section -->
+                    <div class="p-6 sm:p-7 bg-[#ffffff] flex flex-col gap-4">
+                        <textarea 
+                            id="intent" 
+                            rows="4" 
+                            placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
+                            class="w-full p-4 text-xs font-mono leading-relaxed bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
 
-                    <!-- Compact Repository Metadata -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                        <div>
-                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Target Repository</span>
-                            <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                        <!-- Compact Repository Metadata -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+                            <div>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Target Repository</span>
+                                <input id="target-repo" type="text" value="" placeholder="owner/repo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
+                            <div>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Base Branch</span>
+                                <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
+                            <div>
+                                <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Head Branch</span>
+                                <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Base Branch</span>
-                            <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
-                        </div>
-                        <div>
-                            <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Head Branch</span>
-                            <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
-                        </div>
-                    </div>
 
-                    <!-- Collapsible Diff Inspector with DevSecOps Ghost Mode -->
-                    <div class="border hairline-border rounded-xl overflow-hidden bg-stone-50/50 dark:bg-black/20">
-                        <div class="w-full px-4 py-2.5 flex items-center justify-between text-xs font-mono text-stone-700 dark:text-zinc-300">
-                            <button type="button" onclick="toggleDiffDrawer()" class="flex items-center gap-2 transition cursor-pointer hover:text-stone-900 dark:hover:text-zinc-100">
-                                <i data-lucide="file-diff" class="w-3.5 h-3.5 text-stone-400"></i>
-                                <span>Git Staged Diff & Patch Logs</span>
-                                <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Optional</span>
-                                <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
+                        <!-- Collapsible Diff Inspector with DevSecOps Ghost Mode -->
+                        <div class="border hairline-border rounded-xl overflow-hidden bg-stone-50/50 dark:bg-black/20">
+                            <div class="w-full px-4 py-2.5 flex items-center justify-between text-xs font-mono text-stone-700 dark:text-zinc-300">
+                                <button type="button" onclick="toggleDiffDrawer()" class="flex items-center gap-2 transition cursor-pointer hover:text-stone-900 dark:hover:text-zinc-100">
+                                    <i data-lucide="file-diff" class="w-3.5 h-3.5 text-stone-400"></i>
+                                    <span>Git Staged Diff & Patch Logs</span>
+                                    <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.2 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Optional</span>
+                                    <i id="diff-drawer-caret" data-lucide="chevron-down" class="w-3.5 h-3.5 text-stone-400 transition-transform"></i>
+                                </button>
+                            </div>
+                            <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-[#f9faf9] dark:bg-[#0c0d12] hidden">
+                                <div class="flex items-center justify-between pb-2 mb-1.5 border-b hairline-border">
+                                    <span class="text-[10px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                        Raw Unified Diff Telemetry
+                                    </span>
+                                    <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
+                                        Ghost Shield Active
+                                    </span>
+                                </div>
+                                <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Primary Synthesis Action -->
+                        <div class="w-full mt-4">
+                            <button 
+                                type="button"
+                                id="synthesize-btn" 
+                                onclick="triggerSynthesis()" 
+                                class="w-full py-3.5 bg-[#f58e0a] hover:bg-[#e07d08] text-white text-sm font-bold tracking-widest uppercase rounded-lg transition-colors flex justify-center items-center gap-2 shadow-sm"
+                                style="cursor: pointer;">
+                                <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
+                                <span id="synthesize-btn-label">Synthesize Release Specifications</span>
+                                <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
                             </button>
                         </div>
-                        <div id="diff-drawer-content" class="p-3 border-t hairline-border bg-[#f9faf9] dark:bg-[#0c0d12] hidden">
-                            <div class="flex items-center justify-between pb-2 mb-1.5 border-b hairline-border">
-                                <span class="text-[10px] font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                                    Raw Unified Diff Telemetry
-                                </span>
-                                <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
-                                    Ghost Shield Active
-                                </span>
-                            </div>
-                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (optional)..." class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
+
+                        <!-- Navigation Footer for Stage 01 -->
+                        <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
+                            <button 
+                                type="button" 
+                                id="proceed-to-audit-btn" 
+                                onclick="proceedToStage('stage-02')" 
+                                class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
+                                <span>Proceed to Audit</span>
+                                &rarr;
+                            </button>
                         </div>
-                    </div>
-
-
-                    <!-- Primary Synthesis Action -->
-                    <div class="w-full mt-4">
-                        <button 
-                            type="button"
-                            id="synthesize-btn" 
-                            onclick="triggerSynthesis()" 
-                            class="w-full py-3.5 bg-[#f58e0a] hover:bg-[#e07d08] text-white text-sm font-bold tracking-widest uppercase rounded-lg transition-colors flex justify-center items-center gap-2 shadow-sm"
-                            style="cursor: pointer;">
-                            <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
-                            <span id="synthesize-btn-label">Synthesize Release Specifications</span>
-                            <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
-                        </button>
-                    </div>
-
-                    <!-- Navigation Footer for Stage 01 -->
-                    <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
-                        <button 
-                            type="button" 
-                            id="proceed-to-audit-btn" 
-                            onclick="proceedToStage('stage-02')" 
-                            class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
-                            <span>Proceed to Audit</span>
-                            &rarr;
-                        </button>
                     </div>
                 </div>
             </div>
@@ -4375,9 +4379,9 @@ jobs:
     <!-- AUTONOMOUS ORCHESTRATION PIPELINE MODAL OVERLAY                     -->
     <!-- ==================================================================== -->
     <div id="orchestration-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-        <div class="bg-[#ffffff] rounded-2xl w-full max-w-md border border-[#e3e6e3] p-6 shadow-2xl flex flex-col gap-4 text-left">
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between border-b border-[#e3e6e3] pb-3">
+        <div class="bg-[#ffffff] rounded-2xl w-full max-w-md border border-[#e3e6e3] shadow-2xl overflow-hidden flex flex-col text-left">
+            <!-- Modal Header (Edge-to-Edge with distinct background tint) -->
+            <div class="bg-[#f9faf9] border-b border-gray-200 px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-2.5">
                     <svg class="w-4 h-4 text-gray-700 animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
@@ -4388,33 +4392,36 @@ jobs:
                 <span id="orchestration-latency-counter" class="text-xs font-mono text-gray-500 tabular-nums">0.0 ms</span>
             </div>
 
-            <!-- 5-Step Checklist -->
-            <div class="flex flex-col gap-3 py-1 text-xs font-mono text-gray-500">
-                <div id="orch-step-1" class="flex items-center justify-between transition-colors duration-200 text-gray-500">
-                    <span class="orch-step-text">1. Ingesting developer intent &amp; git context</span>
-                    <span id="orch-status-1" class="font-mono tabular-nums">...</span>
+            <!-- Padded Modal Body Container -->
+            <div class="p-6 bg-white flex flex-col gap-4">
+                <!-- 5-Step Checklist -->
+                <div class="flex flex-col gap-3 py-1 text-xs font-mono text-gray-500">
+                    <div id="orch-step-1" class="flex items-center justify-between transition-colors duration-200 text-gray-500">
+                        <span class="orch-step-text">1. Ingesting developer intent &amp; git context</span>
+                        <span id="orch-status-1" class="font-mono tabular-nums">...</span>
+                    </div>
+                    <div id="orch-step-2" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
+                        <span class="orch-step-text">2. Evaluating DevOps blast radius &amp; risk</span>
+                        <span id="orch-status-2" class="font-mono tabular-nums">...</span>
+                    </div>
+                    <div id="orch-step-3" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
+                        <span class="orch-step-text">3. Synthesizing conventional commit PR</span>
+                        <span id="orch-status-3" class="font-mono tabular-nums">...</span>
+                    </div>
+                    <div id="orch-step-4" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
+                        <span class="orch-step-text">4. Computing SemVer bump &amp; changelog</span>
+                        <span id="orch-status-4" class="font-mono tabular-nums">...</span>
+                    </div>
+                    <div id="orch-step-5" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
+                        <span class="orch-step-text">5. Formatting Slack Block Kit payload</span>
+                        <span id="orch-status-5" class="font-mono tabular-nums">...</span>
+                    </div>
                 </div>
-                <div id="orch-step-2" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
-                    <span class="orch-step-text">2. Evaluating DevOps blast radius &amp; risk</span>
-                    <span id="orch-status-2" class="font-mono tabular-nums">...</span>
-                </div>
-                <div id="orch-step-3" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
-                    <span class="orch-step-text">3. Synthesizing conventional commit PR</span>
-                    <span id="orch-status-3" class="font-mono tabular-nums">...</span>
-                </div>
-                <div id="orch-step-4" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
-                    <span class="orch-step-text">4. Computing SemVer bump &amp; changelog</span>
-                    <span id="orch-status-4" class="font-mono tabular-nums">...</span>
-                </div>
-                <div id="orch-step-5" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
-                    <span class="orch-step-text">5. Formatting Slack Block Kit payload</span>
-                    <span id="orch-status-5" class="font-mono tabular-nums">...</span>
-                </div>
-            </div>
 
-            <!-- Progress Bar Track (Light Mode) -->
-            <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
-                <div id="orchestration-progress-bar" class="h-full w-0 bg-[#f58e0a] shadow-sm transition-all duration-500 ease-out rounded-full"></div>
+                <!-- Progress Bar Track (Light Mode) -->
+                <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
+                    <div id="orchestration-progress-bar" class="h-full w-0 bg-[#f58e0a] shadow-sm transition-all duration-500 ease-out rounded-full"></div>
+                </div>
             </div>
         </div>
     </div>
