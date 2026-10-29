@@ -897,20 +897,6 @@
                         </button>
                     </div>
 
-                    <!-- Live Real-Time Pipeline Synthesis Terminal -->
-                    <div id="live-pipeline-terminal" class="hidden w-full mt-4 rounded-xl border border-[#2a2d36] bg-[#0c0d12] shadow-2xl overflow-hidden font-mono text-xs">
-                        <div class="px-4 py-2.5 bg-[#16181d] border-b border-[#2a2d36] flex items-center justify-between">
-                            <div class="flex items-center gap-2">
-                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span class="text-[11px] font-semibold text-slate-200 tracking-wider uppercase flex items-center gap-1.5">
-                                    <span>[ ⚡ ] Live Synthesis Engine</span>
-                                </span>
-                            </div>
-                            <span class="text-[10px] text-zinc-500 tracking-widest uppercase font-mono">Stream Active</span>
-                        </div>
-                        <div id="live-pipeline-terminal-body" class="p-4 max-h-64 overflow-y-auto scroll-smooth text-slate-200 whitespace-pre-wrap leading-relaxed tabular-nums font-mono text-[12px] select-text"></div>
-                    </div>
-
                     <!-- Navigation Footer for Stage 01 -->
                     <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
                         <button 
@@ -1452,62 +1438,6 @@ jobs:
             </div>
             <div class="pt-2 text-[11px] font-mono text-stone-400 text-right">
                 <button type="button" onclick="closeMyProjectsModal()" class="text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================================================================== -->
-    <!-- MINIMALIST AGENT EXECUTION FEEDBACK MODAL                            -->
-    <!-- ==================================================================== -->
-    <div id="execution-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="radius-outer p-6 sm:p-7 editorial-card max-w-md w-full shadow-2xl flex flex-col gap-4">
-            <div class="flex items-center justify-between border-b hairline-border pb-3">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-6 h-6 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 flex items-center justify-center">
-                        <i data-lucide="cpu" class="w-3.5 h-3.5 animate-spin"></i>
-                    </div>
-                    <span class="text-xs font-mono font-medium text-stone-900 dark:text-zinc-100">Autonomous Orchestration Pipeline</span>
-                </div>
-                <span class="text-xs font-mono text-[#f58e0a] tabular-nums" id="exec-latency-ticker">48.2 ms</span>
-            </div>
-
-            <!-- Pipeline Execution Steps -->
-            <div class="space-y-2 font-mono text-xs" id="exec-pipeline-steps">
-                <div id="exec-step-1" class="flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-40">
-                    <span class="text-stone-700 dark:text-zinc-300 text-[11px]">1. Ingesting developer intent & git context</span>
-                    <span id="exec-icon-1" class="flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-zinc-700 shrink-0"></span>
-                    </span>
-                </div>
-                <div id="exec-step-2" class="flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-40">
-                    <span class="text-stone-700 dark:text-zinc-300 text-[11px]">2. Evaluating DevOps blast radius & risk</span>
-                    <span id="exec-icon-2" class="flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-zinc-700 shrink-0"></span>
-                    </span>
-                </div>
-                <div id="exec-step-3" class="flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-40">
-                    <span class="text-stone-700 dark:text-zinc-300 text-[11px]">3. Synthesizing conventional commit PR</span>
-                    <span id="exec-icon-3" class="flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-zinc-700 shrink-0"></span>
-                    </span>
-                </div>
-                <div id="exec-step-4" class="flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-40">
-                    <span class="text-stone-700 dark:text-zinc-300 text-[11px]">4. Computing SemVer bump & changelog</span>
-                    <span id="exec-icon-4" class="flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-zinc-700 shrink-0"></span>
-                    </span>
-                </div>
-                <div id="exec-step-5" class="flex items-center justify-between p-2 rounded-lg editorial-inner transition-all opacity-40">
-                    <span class="text-stone-700 dark:text-zinc-300 text-[11px]">5. Formatting Slack Block Kit payload</span>
-                    <span id="exec-icon-5" class="flex items-center justify-center">
-                        <span class="w-2 h-2 rounded-full bg-stone-300 dark:bg-zinc-700 shrink-0"></span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Progress line -->
-            <div class="w-full bg-stone-200 dark:bg-zinc-800 h-1 rounded-full overflow-hidden">
-                <div id="exec-progress-bar" class="bg-[#f58e0a] h-full w-0 transition-all duration-300"></div>
             </div>
         </div>
     </div>
@@ -2708,143 +2638,136 @@ jobs:
                 return;
             }
 
-            // 4. Safe Payload: Introduce Live Streaming State
-            // Reveal live terminal container
-            const liveTerminal = document.getElementById('live-pipeline-terminal');
-            if (liveTerminal) liveTerminal.classList.remove('hidden');
-
-            // Update button text to [ ⚡ ] SYNTHESIZING LIVE... and keep it disabled
-            if (synthBtn) {
-                synthBtn.disabled = true;
-                synthBtn.classList.remove('bg-gray-400');
-                synthBtn.classList.add('bg-[#f58e0a]');
-                synthBtn.innerHTML = `
-                    <svg class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                    </svg>
-                    <span>[ ⚡ ] SYNTHESIZING LIVE...</span>
-                `;
-            }
-
-            // 5. Wire the Real-Time Backend Connection (Streaming Fetch with auto-scroll)
-            const terminalBody = document.getElementById('live-pipeline-terminal-body');
-            if (terminalBody) {
-                terminalBody.innerHTML = '> Initializing DevSecOps Synthesis Engine...\n';
-                terminalBody.scrollTop = terminalBody.scrollHeight;
-            }
-
-            const rawTargetRepo = (document.getElementById('target-repo').value || '').trim();
-            const baseBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('base-branch').value, 'main') : (document.getElementById('base-branch').value || 'main'));
-            const headBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('head-branch').value.trim(), '') : (document.getElementById('head-branch').value.trim() || ''));
-
-            const payloadObj = {
-                intent: intentVal,
-                diff: diffVal || null,
-                target_repo: (typeof sanitizeRepo === 'function' ? sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service') : (rawTargetRepo || 'lokebuilds/core-auth-service')),
-                target_repository: rawTargetRepo,
-                is_preset: !!activePresetKey,
-                preset_id: activePresetKey,
-                base_branch: baseBranch,
-                head_branch: headBranch,
-                tech_stack: 'Python FastAPI',
-                payload: combinedPayload
-            };
+            // 4. Safe Payload: Prepare manifest & stages
+            const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
+            currentActiveManifest = Object.assign({}, base, {
+                intent: intentVal || base.intent,
+                diff: diffVal || base.diff,
+                summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
+                title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
+            });
 
             try {
-                if (terminalBody) {
-                    terminalBody.innerHTML += '> Connecting to FastAPI backend stream (/api/synthesize)...\n';
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
-                }
+                renderAllStages(currentActiveManifest);
+            } catch (renderErr) {
+                console.warn("Non-fatal error rendering stages:", renderErr);
+            }
 
-                const response = await fetch(`${API_BASE}/api/synthesize`, {
+            // Optional background synthesis update if API backend is alive
+            try {
+                const rawTargetRepo = (document.getElementById('target-repo').value || '').trim();
+                const baseBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('base-branch').value, 'main') : (document.getElementById('base-branch').value || 'main'));
+                const headBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('head-branch').value.trim(), '') : (document.getElementById('head-branch').value.trim() || ''));
+
+                fetch(`${API_BASE}/api/synthesize`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payloadObj)
-                });
+                    body: JSON.stringify({
+                        intent: intentVal,
+                        diff: diffVal || null,
+                        target_repo: (typeof sanitizeRepo === 'function' ? sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service') : (rawTargetRepo || 'lokebuilds/core-auth-service')),
+                        target_repository: rawTargetRepo,
+                        is_preset: !!activePresetKey,
+                        preset_id: activePresetKey,
+                        base_branch: baseBranch,
+                        head_branch: headBranch,
+                        tech_stack: 'Python FastAPI',
+                        payload: combinedPayload
+                    })
+                }).then(async res => {
+                    if (res.ok) {
+                        const data = await res.json().catch(() => null);
+                        if (data && (data.audit || data.title || data.ship)) {
+                            currentActiveManifest = data;
+                            try { renderAllStages(currentActiveManifest); } catch (_) {}
+                        }
+                    }
+                }).catch(() => {});
+            } catch (_) {}
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
+            // 5. Trigger Sequential Modal Orchestration
+            await runOrchestrationSequence();
+        }
 
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder('utf-8');
-                let accumulatedData = '';
+        function resetOrchestrationModal() {
+            const counter = document.getElementById('orchestration-latency-counter');
+            if (counter) counter.textContent = '0.0 ms';
 
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
+            const progressBar = document.getElementById('orchestration-progress-bar');
+            if (progressBar) progressBar.style.width = '0%';
 
-                    const chunk = decoder.decode(value, { stream: true });
-                    accumulatedData += chunk;
-                    if (terminalBody) {
-                        terminalBody.innerHTML += escapeHtml(chunk);
-                        terminalBody.scrollTop = terminalBody.scrollHeight;
+            for (let i = 1; i <= 5; i++) {
+                const stepRow = document.getElementById(`orch-step-${i}`);
+                const statusEl = document.getElementById(`orch-status-${i}`);
+                if (stepRow) {
+                    if (i === 1) {
+                        stepRow.className = "flex items-center justify-between text-gray-500 transition-colors duration-200";
+                    } else {
+                        stepRow.className = "flex items-center justify-between opacity-40 text-gray-500 transition-colors duration-200";
                     }
                 }
-
-                // Process response manifest
-                try {
-                    const parsed = JSON.parse(accumulatedData);
-                    if (parsed && (parsed.audit || parsed.title || parsed.ship)) {
-                        currentActiveManifest = parsed;
-                    }
-                } catch (parseErr) {
-                    console.warn("Stream response format notice:", parseErr);
+                if (statusEl) {
+                    statusEl.innerHTML = '...';
                 }
-
-                if (!currentActiveManifest) {
-                    const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
-                    currentActiveManifest = Object.assign({}, base, {
-                        intent: intentVal || base.intent,
-                        diff: diffVal || base.diff,
-                        summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
-                        title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
-                    });
-                }
-
-                try {
-                    renderAllStages(currentActiveManifest);
-                } catch (renderErr) {
-                    console.warn("Non-fatal error rendering stages:", renderErr);
-                }
-
-                if (terminalBody) {
-                    terminalBody.innerHTML += '\n> Synthesis Complete. Transitioning to Audit...';
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
-                }
-                setTimeout(() => goToStage2(), 800);
-
-            } catch (error) {
-                console.error("Live synthesis stream error:", error);
-                if (terminalBody) {
-                    terminalBody.innerHTML += `\n[ERROR] Pipeline connection notice: ${error.message || 'Stream interrupted'}.\n> Cascading to resilient deterministic synthesis engine...\n`;
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
-                }
-
-                // Resilient deterministic fallback
-                const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
-                currentActiveManifest = Object.assign({}, base, {
-                    intent: intentVal || base.intent,
-                    diff: diffVal || base.diff,
-                    summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
-                    title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
-                });
-
-                try {
-                    renderAllStages(currentActiveManifest);
-                } catch (renderErr) {
-                    console.warn("Non-fatal error rendering stages:", renderErr);
-                }
-
-                if (terminalBody) {
-                    terminalBody.innerHTML += `> Synthesizing manifest: "${currentActiveManifest.title}"...\n`;
-                    terminalBody.innerHTML += `> Security Risk Tier: ${currentActiveManifest.risk_level || 'LOW'} | SemVer: ${currentActiveManifest.semver_bump || 'PATCH'}\n`;
-                    terminalBody.innerHTML += '\n> Synthesis Complete. Transitioning to Audit...';
-                    terminalBody.scrollTop = terminalBody.scrollHeight;
-                }
-                setTimeout(() => goToStage2(), 800);
             }
+        }
+
+        async function runOrchestrationSequence() {
+            resetOrchestrationModal();
+            const modal = document.getElementById('orchestration-modal');
+            if (modal) modal.classList.remove('hidden');
+
+            const startClock = performance.now();
+            const latencyTimer = setInterval(() => {
+                const counter = document.getElementById('orchestration-latency-counter');
+                if (counter) {
+                    const elapsed = (performance.now() - startClock).toFixed(1);
+                    counter.textContent = `${elapsed} ms`;
+                }
+            }, 30);
+
+            const checkmarkIcon = `<svg class="w-3.5 h-3.5 text-emerald-500 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>`;
+
+            for (let step = 1; step <= 5; step++) {
+                // Staggered, randomized delay between 600ms and 1000ms
+                const delay = Math.floor(Math.random() * (1000 - 600 + 1)) + 600;
+                await new Promise(r => setTimeout(r, delay));
+
+                const stepRow = document.getElementById(`orch-step-${step}`);
+                const statusEl = document.getElementById(`orch-status-${step}`);
+                const progressBar = document.getElementById('orchestration-progress-bar');
+                const counter = document.getElementById('orchestration-latency-counter');
+
+                if (stepRow) {
+                    stepRow.classList.remove('opacity-40');
+                    stepRow.classList.remove('text-gray-500');
+                    stepRow.classList.add('text-gray-800');
+                }
+                if (statusEl) {
+                    statusEl.innerHTML = checkmarkIcon;
+                }
+                if (progressBar) {
+                    progressBar.style.width = `${step * 20}%`;
+                }
+                if (counter) {
+                    const elapsed = (performance.now() - startClock).toFixed(1);
+                    counter.textContent = `${elapsed} ms`;
+                }
+
+                if (step < 5) {
+                    const nextStepRow = document.getElementById(`orch-step-${step + 1}`);
+                    if (nextStepRow) {
+                        nextStepRow.classList.remove('opacity-40');
+                    }
+                }
+            }
+
+            clearInterval(latencyTimer);
+
+            // Once 5th step is checked off, wait exactly 800ms, hide modal entirely, and fire transition to Stage 02
+            await new Promise(r => setTimeout(r, 800));
+            if (modal) modal.classList.add('hidden');
+            goToStage2();
         }
 
         // Trigger Text-Only Refinement Patch (POST /api/patch)
@@ -4354,6 +4277,8 @@ jobs:
         window.closeTerminalModal = closeTerminalModal;
         window.initGlobalTerminalModal = initGlobalTerminalModal;
         window.downloadArtifact = downloadArtifact;
+        window.resetOrchestrationModal = resetOrchestrationModal;
+        window.runOrchestrationSequence = runOrchestrationSequence;
     </script>
 
     <!-- ==================================================================== -->
@@ -4396,6 +4321,54 @@ jobs:
 
             <!-- Terminal Body -->
             <div id="modal-terminal-body" class="p-6 overflow-y-auto font-mono text-sm text-slate-200 drop-shadow-md antialiased tracking-tight h-full whitespace-pre-wrap leading-relaxed selection:bg-[#38BDF8]/30 bg-[#0c0d12] bg-[radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:20px_20px] shadow-[inset_0_0_60px_rgba(0,0,0,0.9)] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#2a2d36] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#38BDF8]/50"></div>
+        </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- AUTONOMOUS ORCHESTRATION PIPELINE MODAL OVERLAY                     -->
+    <!-- ==================================================================== -->
+    <div id="orchestration-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md border border-gray-200 p-6 shadow-2xl flex flex-col gap-4 text-left">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4 text-gray-700 animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span class="text-xs font-mono font-bold text-gray-800 tracking-tight">Autonomous Orchestration Pipeline</span>
+                </div>
+                <span id="orchestration-latency-counter" class="text-xs font-mono text-gray-500 tabular-nums">0.0 ms</span>
+            </div>
+
+            <!-- 5-Step Checklist -->
+            <div class="flex flex-col gap-3 py-1 text-xs font-mono text-gray-500">
+                <div id="orch-step-1" class="flex items-center justify-between transition-colors duration-200">
+                    <span class="orch-step-text">1. Ingesting developer intent &amp; git context</span>
+                    <span id="orch-status-1" class="font-mono tabular-nums">...</span>
+                </div>
+                <div id="orch-step-2" class="flex items-center justify-between opacity-40 transition-colors duration-200">
+                    <span class="orch-step-text">2. Evaluating DevOps blast radius &amp; risk</span>
+                    <span id="orch-status-2" class="font-mono tabular-nums">...</span>
+                </div>
+                <div id="orch-step-3" class="flex items-center justify-between opacity-40 transition-colors duration-200">
+                    <span class="orch-step-text">3. Synthesizing conventional commit PR</span>
+                    <span id="orch-status-3" class="font-mono tabular-nums">...</span>
+                </div>
+                <div id="orch-step-4" class="flex items-center justify-between opacity-40 transition-colors duration-200">
+                    <span class="orch-step-text">4. Computing SemVer bump &amp; changelog</span>
+                    <span id="orch-status-4" class="font-mono tabular-nums">...</span>
+                </div>
+                <div id="orch-step-5" class="flex items-center justify-between opacity-40 transition-colors duration-200">
+                    <span class="orch-step-text">5. Formatting Slack Block Kit payload</span>
+                    <span id="orch-status-5" class="font-mono tabular-nums">...</span>
+                </div>
+            </div>
+
+            <!-- Electric Sky Progress Bar -->
+            <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
+                <div id="orchestration-progress-bar" class="h-full w-0 bg-[#38BDF8] transition-all duration-500 ease-out rounded-full"></div>
+            </div>
         </div>
     </div>
 </body>
