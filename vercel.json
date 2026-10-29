@@ -5,11 +5,19 @@
       "src": "main.py",
       "use": "@vercel/python",
       "config": {
-        "maxDuration": 60
+        "maxDuration": 60,
+        "includeFiles": [
+          "static/**",
+          "app/**"
+        ]
       }
     }
   ],
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "main.py"
