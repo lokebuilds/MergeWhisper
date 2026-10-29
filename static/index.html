@@ -1279,6 +1279,9 @@
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">⚙️ CI/CD Workflow</span>
                                 <div class="flex items-center gap-3">
+                                    <button type="button" class="quick-copy-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Copy to Clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
                                     <button type="button" class="quick-download-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Download Data" data-target="ci-terminal-content">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                     </button>
@@ -1315,6 +1318,9 @@ jobs:
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">💬 Slack Block Kit</span>
                                 <div class="flex items-center gap-3">
+                                    <button type="button" class="quick-copy-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Copy to Clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
                                     <button type="button" class="quick-download-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Download Data" data-target="slack-terminal-content">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                     </button>
@@ -1348,6 +1354,9 @@ jobs:
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">&gt;_ JIRA / Linear Sync</span>
                                 <div class="flex items-center gap-3">
+                                    <button type="button" class="quick-copy-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Copy to Clipboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    </button>
                                     <button type="button" class="quick-download-btn text-gray-400 hover:text-[#38BDF8] transition-colors cursor-pointer" title="Download Data" data-target="jira-terminal-content">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                     </button>
@@ -4170,6 +4179,45 @@ jobs:
                     }
                 });
             }
+
+            // Wire Quick Copy Buttons on bottom cards
+            document.querySelectorAll('.quick-copy-btn').forEach(btn => {
+                let copyTimeout = null;
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const card = btn.closest('.editorial-card');
+                    let targetEl = null;
+                    if (card) {
+                        targetEl = card.querySelector('[id$="-terminal-content"]') || card.querySelector('pre') || card;
+                    }
+                    const textContent = targetEl ? (targetEl.innerText || targetEl.textContent || '') : '';
+
+                    const handleCopyFeedback = () => {
+                        if (copyTimeout) clearTimeout(copyTimeout);
+                        btn.classList.remove('text-gray-400', 'hover:text-[#38BDF8]');
+                        btn.classList.add('text-[#10b981]');
+                        btn.style.color = '#10b981';
+
+                        copyTimeout = setTimeout(() => {
+                            btn.classList.remove('text-[#10b981]');
+                            btn.classList.add('text-gray-400', 'hover:text-[#38BDF8]');
+                            btn.style.color = '';
+                            copyTimeout = null;
+                        }, 2000);
+                    };
+
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(textContent).then(handleCopyFeedback).catch(() => {
+                            if (typeof fallbackCopy === 'function') fallbackCopy(textContent);
+                            handleCopyFeedback();
+                        });
+                    } else {
+                        if (typeof fallbackCopy === 'function') fallbackCopy(textContent);
+                        handleCopyFeedback();
+                    }
+                });
+            });
 
             // Wire Quick Download Buttons on bottom cards
             document.querySelectorAll('.quick-download-btn').forEach(btn => {
