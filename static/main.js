@@ -90,6 +90,22 @@ function closeTerminalModal() {
     }
 }
 
+/**
+ * Artifact File Download Helper
+ */
+function downloadArtifact(textContent, filename = 'pipeline_artifact.txt') {
+    if (typeof document === 'undefined' || typeof Blob === 'undefined') return;
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || 'pipeline_artifact.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 // Export for module systems (Node / Bundlers) and browser window
 if (typeof window !== 'undefined') {
     window.sanitizeBranch = sanitizeBranch;
@@ -97,6 +113,7 @@ if (typeof window !== 'undefined') {
     window.buildGitHubCompareUrl = buildGitHubCompareUrl;
     window.openTerminalModal = openTerminalModal;
     window.closeTerminalModal = closeTerminalModal;
+    window.downloadArtifact = downloadArtifact;
 }
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -105,6 +122,7 @@ if (typeof module !== 'undefined' && module.exports) {
         sanitizeRepo,
         buildGitHubCompareUrl,
         openTerminalModal,
-        closeTerminalModal
+        closeTerminalModal,
+        downloadArtifact
     };
 }
