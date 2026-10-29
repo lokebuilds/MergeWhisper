@@ -1033,65 +1033,59 @@
             <!-- STAGE 03: VERIFY (QA VERIFICATION MATRIX & TEST STEPS)       -->
             <!-- ------------------------------------------------------------ -->
             <div id="stage-panel-03" class="stage-panel hidden flex flex-col gap-6">
-                <!-- Bento Box Architecture matching Stage 01 Design System -->
-                <div class="w-full bg-white dark:bg-[#15171e] border border-gray-200 dark:border-[#2a2d36] rounded-2xl overflow-hidden shadow-sm flex flex-col">
-                    <!-- Edge-to-Edge Bento Header Block -->
-                    <div class="bg-gray-50 dark:bg-[#1c1e26] border-b border-gray-200 dark:border-[#2a2d36] px-6 py-4 rounded-t-2xl flex justify-between items-center">
-                        <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-widest">
-                            QA VERIFICATION MATRIX &amp; TEST STEPS
-                        </span>
-                        <span class="text-[10px] font-mono text-gray-400 dark:text-gray-500 uppercase tracking-wider">STAGE 03 // VERIFY</span>
+                <!-- Warm Editorial Card / Dark Slate Bento Structure matching Stage 02 -->
+                <div id="stage-03-card" class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all">
+                    <!-- Title Section with Status Badge (1:1 Match with Stage 02) -->
+                    <div class="flex items-center justify-between border-b hairline-border pb-4">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">QA Verification Matrix &amp; Test Steps</span>
+                            <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">Primary Verification Objective &amp; Test Steps</h3>
+                        </div>
+                        <div id="qa-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
+                            STANDBY
+                        </div>
                     </div>
 
-                    <!-- Pure White Body Section -->
-                    <div class="p-6 bg-white dark:bg-[#15171e] flex flex-col gap-6">
-                        <!-- Title Section -->
-                        <div class="border-b border-gray-100 dark:border-zinc-800/80 pb-4">
-                            <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400 block mb-1">Pre-Flight Test Suite</span>
-                            <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 tracking-tight">Primary Verification Objective &amp; Test Steps</h3>
+                    <!-- Primary Objective Box (editorial-inner Tinted Box matching Stage 02 Subsystem Boundaries) -->
+                    <div>
+                        <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider block mb-1">Primary Objective</span>
+                        <div id="qa-objective-box" class="p-3.5 rounded-xl editorial-inner text-xs font-mono leading-relaxed text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500">
+                            Awaiting synthesis...
                         </div>
+                    </div>
 
-                        <!-- Primary Objective Box (Standalone Full-Width Box with Rounded-XL) -->
+                    <!-- Two-Column Split (gap-4 matching Stage 02 layout) -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- Left Column: Ordered Verification Checklist -->
                         <div class="flex flex-col gap-1.5">
-                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">PRIMARY OBJECTIVE</span>
-                            <div id="qa-objective-box" class="w-full p-4 rounded-xl bg-gray-50 dark:bg-[#1c1e26] border border-gray-100 dark:border-[#2a2d36] text-xs font-mono text-stone-400 dark:text-zinc-500 leading-relaxed">
-                                Awaiting synthesis...
-                            </div>
-                        </div>
-
-                        <!-- Soft Two-Column Split (gap-6) -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <!-- Left Column: Ordered Verification Checklist -->
-                            <div class="flex flex-col gap-3">
-                                <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold">ORDERED VERIFICATION CHECKLIST</span>
-                                <div id="qa-steps-list" class="flex flex-col gap-3">
-                                    <div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">
-                                        Awaiting verification checklist generation...
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right Column: Boundary Regression & Edge Cases -->
-                            <div class="flex flex-col gap-3">
-                                <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400 font-semibold">BOUNDARY REGRESSION &amp; EDGE CASES</span>
-                                <div id="qa-edges-list" class="flex flex-col gap-3">
-                                    <div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">
-                                        Awaiting edge case regression analysis...
-                                    </div>
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Ordered Verification Checklist</span>
+                            <div id="qa-steps-list" class="flex flex-col gap-2.5">
+                                <div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">
+                                    Awaiting verification checklist generation...
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Navigation Footer -->
-                        <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-zinc-800/80">
-                            <button type="button" onclick="navigateToStage('stage-02')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer flex items-center gap-1.5">
-                                &larr; Back to Audit
-                            </button>
-                            <button type="button" onclick="proceedToStage('stage-04')" class="px-5 py-2.5 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1.5 shadow-xs">
-                                <span>Proceed to Changelog</span>
-                                &rarr;
-                            </button>
+                        <!-- Right Column: Boundary Regression & Edge Cases -->
+                        <div class="flex flex-col gap-1.5">
+                            <span class="text-xs font-mono font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Boundary Regression &amp; Edge Cases</span>
+                            <div id="qa-edges-list" class="flex flex-col gap-2.5">
+                                <div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">
+                                    Awaiting edge case regression analysis...
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex items-center justify-between pt-3 border-t hairline-border">
+                        <button type="button" onclick="navigateToStage('stage-02')" class="px-4 py-2 rounded-lg text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-zinc-100 transition cursor-pointer flex items-center gap-1.5">
+                            &larr; Back to Audit
+                        </button>
+                        <button type="button" onclick="proceedToStage('stage-04')" class="px-5 py-2.5 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1.5 shadow-xs">
+                            <span>Proceed to Changelog</span>
+                            &rarr;
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2012,18 +2006,23 @@
                 if (rollbackCode) rollbackCode.textContent = '# Automated command will appear here...';
 
                 // Reset Stage 03 Verify placeholders
+                const qaBadge = document.getElementById('qa-status-badge');
+                if (qaBadge) {
+                    qaBadge.textContent = 'STANDBY';
+                    qaBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20";
+                }
                 const qaObj = document.getElementById('qa-objective-box');
                 if (qaObj) {
                     qaObj.textContent = 'Awaiting synthesis...';
-                    qaObj.className = "w-full p-4 rounded-xl bg-gray-50 dark:bg-[#1c1e26] border border-gray-100 dark:border-[#2a2d36] text-xs font-mono text-stone-400 dark:text-zinc-500 leading-relaxed";
+                    qaObj.className = "p-3.5 rounded-xl editorial-inner text-xs font-mono leading-relaxed text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500";
                 }
                 const qaSteps = document.getElementById('qa-steps-list');
                 if (qaSteps) {
-                    qaSteps.innerHTML = '<div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">Awaiting verification checklist generation...</div>';
+                    qaSteps.innerHTML = '<div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">Awaiting verification checklist generation...</div>';
                 }
                 const qaEdges = document.getElementById('qa-edges-list');
                 if (qaEdges) {
-                    qaEdges.innerHTML = '<div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">Awaiting edge case regression analysis...</div>';
+                    qaEdges.innerHTML = '<div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">Awaiting edge case regression analysis...</div>';
                 }
 
                 // Reset Stage 04 Changelog placeholders
@@ -3034,28 +3033,38 @@
 
         // Stage 03 Dynamic Verification Matrix Renderer
         function renderStage03Verify(qa) {
+            const qaBadge = document.getElementById('qa-status-badge');
             const qaObj = document.getElementById('qa-objective-box');
             const stepsList = document.getElementById('qa-steps-list');
             const edgesList = document.getElementById('qa-edges-list');
 
             if (!qa || (typeof qa === 'object' && Object.keys(qa).length === 0)) {
+                if (qaBadge) {
+                    qaBadge.textContent = "STANDBY";
+                    qaBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20";
+                }
                 if (qaObj) {
                     qaObj.textContent = "Awaiting synthesis...";
-                    qaObj.className = "w-full p-4 rounded-xl bg-gray-50 dark:bg-[#1c1e26] border border-gray-100 dark:border-[#2a2d36] text-xs font-mono text-stone-400 dark:text-zinc-500 leading-relaxed";
+                    qaObj.className = "p-3.5 rounded-xl editorial-inner text-xs font-mono leading-relaxed text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500";
                 }
                 if (stepsList) {
-                    stepsList.innerHTML = '<div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">Awaiting verification checklist generation...</div>';
+                    stepsList.innerHTML = '<div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">Awaiting verification checklist generation...</div>';
                 }
                 if (edgesList) {
-                    edgesList.innerHTML = '<div class="p-6 rounded-xl border border-dashed border-gray-200 dark:border-zinc-800 text-center text-xs font-mono text-stone-400 dark:text-zinc-500">Awaiting edge case regression analysis...</div>';
+                    edgesList.innerHTML = '<div class="p-4 rounded-xl editorial-inner border-dashed text-center text-xs font-mono text-stone-500 dark:text-zinc-400">Awaiting edge case regression analysis...</div>';
                 }
                 return;
+            }
+
+            if (qaBadge) {
+                qaBadge.textContent = "VERIFIED";
+                qaBadge.className = "px-3 py-1 rounded-full text-xs font-mono font-medium bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400 border border-emerald-500/30";
             }
 
             const primaryObj = qa.primary_objective || qa.objective;
             if (qaObj && primaryObj) {
                 qaObj.textContent = primaryObj;
-                qaObj.className = "w-full p-4 rounded-xl bg-gray-50 dark:bg-[#1c1e26] border border-gray-100 dark:border-[#2a2d36] text-xs font-mono text-gray-800 dark:text-zinc-200 leading-relaxed";
+                qaObj.className = "p-3.5 rounded-xl editorial-inner text-xs font-mono leading-relaxed text-gray-900 dark:text-gray-100";
             }
 
             if (stepsList) {
@@ -3064,10 +3073,10 @@
                     stepsList.innerHTML = '';
                     steps.forEach((step) => {
                         const label = document.createElement('label');
-                        label.className = "flex items-center gap-3.5 border border-gray-200 dark:border-[#2a2d36] bg-white dark:bg-[#1f2129] p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 dark:hover:border-zinc-700 cursor-pointer group select-none";
+                        label.className = "flex items-center gap-3.5 p-3.5 rounded-xl editorial-inner hover:border-stone-400 dark:hover:border-zinc-600 transition-all cursor-pointer group select-none shadow-2xs";
                         label.innerHTML = `
-                            <input type="checkbox" class="w-4 h-4 rounded bg-white dark:bg-zinc-800 border-gray-300 dark:border-zinc-700 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                            <span class="text-xs font-mono text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors tracking-tight select-all">${step}</span>
+                            <input type="checkbox" class="w-4 h-4 rounded bg-white dark:bg-zinc-800 border-stone-300 dark:border-zinc-700 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                            <span class="text-xs font-mono text-stone-700 dark:text-zinc-300 group-hover:text-stone-900 dark:group-hover:text-white transition-colors tracking-tight select-all">${step}</span>
                         `;
                         stepsList.appendChild(label);
                     });
@@ -3085,7 +3094,7 @@
                         const isRed = severity === 'red';
                         const box = document.createElement('div');
                         if (isRed) {
-                            box.className = "p-4 rounded-xl bg-red-50/50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-800 dark:text-red-300 shadow-sm flex items-start gap-3";
+                            box.className = "p-3.5 rounded-xl bg-red-500/10 border border-red-500/25 text-red-900 dark:text-red-300 shadow-2xs flex items-start gap-3";
                             box.innerHTML = `
                                 <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                 <div class="flex flex-col gap-1">
@@ -3094,12 +3103,12 @@
                                 </div>
                             `;
                         } else {
-                            box.className = "p-4 rounded-xl bg-orange-50/50 dark:bg-amber-950/20 border border-orange-200 dark:border-amber-900/40 text-orange-800 dark:text-amber-300 shadow-sm flex items-start gap-3";
+                            box.className = "p-3.5 rounded-xl bg-[#f58e0a]/10 border border-[#f58e0a]/25 text-stone-900 dark:text-zinc-100 shadow-2xs flex items-start gap-3";
                             box.innerHTML = `
-                                <svg class="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <svg class="w-4 h-4 text-[#f58e0a] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <div class="flex flex-col gap-1">
-                                    <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-orange-900 dark:text-amber-200">BOUNDARY REGRESSION #${idx + 1}</span>
-                                    <p class="text-xs font-mono tracking-tight text-orange-800 dark:text-amber-300 leading-relaxed">${desc}</p>
+                                    <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-[#f58e0a] dark:text-[#f58e0a]">BOUNDARY REGRESSION #${idx + 1}</span>
+                                    <p class="text-xs font-mono tracking-tight text-stone-800 dark:text-zinc-200 leading-relaxed">${desc}</p>
                                 </div>
                             `;
                         }
