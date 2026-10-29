@@ -1061,7 +1061,7 @@ class MergeWhisperOrchestrator:
         logs.append(f"[DevSecOps Gate] Target repository resolved to {base_url}")
 
         # 3. Resolve GitHub authorization token and remote URLs
-        github_token = self.get_github_token()
+        github_token = (getattr(req, "github_token", None) or "").strip() or self.get_github_token()
         if github_token:
             auth_remote_url = f"https://{github_token}@github.com/{clean_repo}.git"
             masked_remote_url = f"https://***@github.com/{clean_repo}.git"

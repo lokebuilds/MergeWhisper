@@ -1291,7 +1291,7 @@
                                     <i data-lucide="lock" class="w-4 h-4 text-stone-400 dark:text-zinc-600"></i>
                                     <span id="pr-github-btn-label">Open on GitHub (Awaiting Approval)</span>
                                 </a>
-                                <div id="github-branch-sync-note" class="hidden text-[11px] font-mono p-2.5 rounded-lg bg-stone-100 dark:bg-zinc-800/60 border hairline-border text-stone-600 dark:text-zinc-400 flex flex-col gap-1.5 mt-1">
+                                <div id="github-branch-sync-note" class="hidden text-[11px] font-mono p-2.5 rounded-lg bg-stone-100 dark:bg-zinc-800/60 border hairline-border text-stone-600 dark:text-zinc-400 flex flex-col gap-2 mt-1">
                                     <div class="flex items-center justify-between">
                                         <span class="font-medium text-stone-900 dark:text-zinc-200">Terminal Push Helper:</span>
                                         <button type="button" onclick="copyBranchPushCommand()" class="text-[#f58e0a] hover:underline cursor-pointer flex items-center gap-1">
@@ -1299,6 +1299,25 @@
                                         </button>
                                     </div>
                                     <code id="github-push-cli-code" class="text-[10px] text-emerald-600 dark:text-emerald-400 break-all select-all font-mono">git push origin feat/patch</code>
+                                    <p class="text-[10px] text-stone-500 dark:text-zinc-500 leading-tight">Run in your repo terminal to push local changes before creating PR.</p>
+
+                                    <!-- Optional GitHub PAT for direct cloud push -->
+                                    <div class="pt-2 border-t hairline-border flex flex-col gap-1">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[10px] text-stone-700 dark:text-zinc-300 flex items-center gap-1 font-sans">
+                                                <i data-lucide="key" class="w-3 h-3 text-[#f58e0a]"></i> Or GitHub Token (Cloud Push):
+                                            </span>
+                                            <button type="button" onclick="clearUserGhToken()" class="text-[9px] text-stone-400 hover:text-red-500 cursor-pointer">Clear</button>
+                                        </div>
+                                        <input 
+                                            id="user-github-pat" 
+                                            type="password" 
+                                            placeholder="ghp_xxxxxxxx (optional)" 
+                                            onchange="saveUserGhToken(this.value)"
+                                            class="w-full bg-white dark:bg-zinc-900 border hairline-border rounded px-2 py-1 text-[10px] font-mono text-stone-800 dark:text-zinc-200 focus:outline-none focus:border-[#f58e0a]"
+                                        />
+                                        <span class="text-[9px] text-stone-400 dark:text-zinc-500">Stored in browser localStorage for your custom repos.</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3839,6 +3858,7 @@
             try {
                 const markdownBody = (bodyInput ? (bodyInput.value || bodyInput.textContent || '') : '').trim();
                 const baseBranch = (document.getElementById('base-branch')?.value || 'main').trim();
+                const userGhToken = (document.getElementById('user-github-pat')?.value || localStorage.getItem('mw_user_github_pat') || '').trim();
                 if (targetRepo && title) {
                     const res = await fetch(`${API_BASE}/api/publish-pr`, {
                         method: 'POST',
@@ -3851,7 +3871,8 @@
                             base_branch: baseBranch,
                             head_branch: headBranch,
                             title: title,
-                            markdown_body: markdownBody
+                            markdown_body: markdownBody,
+                            github_token: userGhToken || undefined
                         })
                     });
                     if (res.ok) {
@@ -3888,6 +3909,24 @@
             }
         }
         window.copyBranchPushCommand = copyBranchPushCommand;
+
+        function saveUserGhToken(val) {
+            if (val && val.trim()) {
+                localStorage.setItem('mw_user_github_pat', val.trim());
+                showToast("GitHub Personal Access Token saved locally", "success");
+            } else {
+                localStorage.removeItem('mw_user_github_pat');
+            }
+        }
+        window.saveUserGhToken = saveUserGhToken;
+
+        function clearUserGhToken() {
+            localStorage.removeItem('mw_user_github_pat');
+            const patInput = document.getElementById('user-github-pat');
+            if (patInput) patInput.value = '';
+            showToast("GitHub token cleared", "info");
+        }
+        window.clearUserGhToken = clearUserGhToken;
 
         // Keyboard Shortcut Handler (Ctrl + Enter to synthesize)
         window.addEventListener('keydown', (e) => {
@@ -3986,6 +4025,13 @@
                 compareBtn.addEventListener('click', updateGitHubCompareLink);
             }
             updateGitHubCompareLink();
+
+            // Populate saved GitHub Token if present in localStorage
+            try {
+                const savedPat = localStorage.getItem('mw_user_github_pat') || '';
+                const patInput = document.getElementById('user-github-pat');
+                if (patInput && savedPat) patInput.value = savedPat;
+            } catch (e) {}
 
             // Optional Demo / Test Query Parameter Handler (e.g. ?test=critical&stage=stage-02)
             const urlParams = new URLSearchParams(window.location.search);

@@ -554,6 +554,10 @@ class PublishPRRequest(BaseSchema):
         default=None,
         description="Optional author email for the Git commit.",
     )
+    github_token: Optional[str] = Field(
+        default=None,
+        description="Optional user-provided GitHub Personal Access Token for remote repository branch creation.",
+    )
 
     @field_validator("head_branch")
     @classmethod
