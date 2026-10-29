@@ -1286,13 +1286,13 @@
                         <div class="editorial-card radius-outer bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-4 flex flex-col justify-between shadow-xs">
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">⚙️ CI/CD Workflow</span>
-                                <button type="button" onclick="copyCiWorkflow()" class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Copy CI/CD Workflow">
+                                <button type="button" class="expand-terminal-btn text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Expand Terminal" data-title="CI/CD WORKFLOW" data-target="ci-terminal-content">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
                                     </svg>
                                 </button>
                             </div>
-                            <div class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-gray-300 overflow-y-auto border border-[#1f2129] shadow-inner">
+                            <div id="ci-terminal-content" class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-gray-300 overflow-y-auto border border-[#1f2129] shadow-inner">
                                 <pre id="ci-workflow-box" class="whitespace-pre leading-relaxed font-mono">name: Enterprise PR Verification
 on:
   pull_request:
@@ -1317,13 +1317,13 @@ jobs:
                         <div class="editorial-card radius-outer bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-4 flex flex-col justify-between shadow-xs">
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">💬 Slack Block Kit</span>
-                                <button type="button" onclick="copyToClipboard('slack-json-box', 'Slack JSON Payload')" class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Copy Slack JSON">
+                                <button type="button" class="expand-terminal-btn text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Expand Terminal" data-title="SLACK BLOCK KIT" data-target="slack-terminal-content">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
                                     </svg>
                                 </button>
                             </div>
-                            <div class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-orange-300 overflow-y-auto border border-[#1f2129] shadow-inner">
+                            <div id="slack-terminal-content" class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-orange-300 overflow-y-auto border border-[#1f2129] shadow-inner">
                                 <pre id="slack-json-box" class="whitespace-pre-wrap leading-relaxed font-mono">{
   "channel": "#production-releases",
   "text": "MergeWhisper Automated Ship Release",
@@ -1345,13 +1345,13 @@ jobs:
                         <div class="editorial-card radius-outer bg-[#ffffff] border border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-xl p-4 flex flex-col justify-between shadow-xs">
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-xs font-bold text-gray-900 dark:text-gray-100 uppercase">&gt;_ JIRA / Linear Sync</span>
-                                <button type="button" id="copy-issue-curl-btn" onclick="copyIssueCurl()" class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Copy cURL">
+                                <button type="button" class="expand-terminal-btn text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors cursor-pointer" title="Expand Terminal" data-title="JIRA / LINEAR SYNC" data-target="jira-terminal-content">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
                                     </svg>
                                 </button>
                             </div>
-                            <div class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-blue-300 overflow-y-auto border border-[#1f2129] shadow-inner">
+                            <div id="jira-terminal-content" class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-blue-300 overflow-y-auto border border-[#1f2129] shadow-inner">
                                 <pre class="overflow-x-auto leading-relaxed"><code id="issue-curl-code" class="whitespace-pre-wrap break-all leading-relaxed font-mono">curl -X POST https://api.linear.app/graphql \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer lin_live_token" \
@@ -3630,6 +3630,9 @@ jobs:
             // Initialize SRE ROI Telemetry Widget
             initRoiTelemetry();
 
+            // Initialize Global Terminal Modal Dispatcher
+            initGlobalTerminalModal();
+
             // Wire up dynamic live GitHub Compare URL synchronization with universal sanitization
             ['target-repo', 'base-branch', 'head-branch'].forEach(id => {
                 const el = document.getElementById(id);
@@ -4073,6 +4076,81 @@ jobs:
         function updateRoiCalculations() {
             // Sliders removed in favor of static telemetry badge
         }
+
+        // ==============================================================================
+        // Global Terminal Modal Overlay & Dispatcher
+        // ==============================================================================
+        function openTerminalModal(title, contentHtml) {
+            const modal = document.getElementById('global-terminal-modal');
+            const modalTitle = document.getElementById('modal-terminal-title');
+            const modalBody = document.getElementById('modal-terminal-body');
+            if (modalTitle) modalTitle.textContent = title || 'TERMINAL';
+            if (modalBody) modalBody.innerHTML = contentHtml || '';
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeTerminalModal() {
+            const modal = document.getElementById('global-terminal-modal');
+            const modalBody = document.getElementById('modal-terminal-body');
+            if (modal) modal.classList.add('hidden');
+            if (modalBody) modalBody.innerHTML = '';
+        }
+
+        function initGlobalTerminalModal() {
+            const modal = document.getElementById('global-terminal-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+
+            document.querySelectorAll('.expand-terminal-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const title = btn.getAttribute('data-title') || 'TERMINAL';
+                    const targetId = btn.getAttribute('data-target');
+                    const targetEl = targetId ? document.getElementById(targetId) : null;
+                    openTerminalModal(title, targetEl ? targetEl.innerHTML : '');
+                });
+            });
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    closeTerminalModal();
+                });
+            }
+
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeTerminalModal();
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+                    closeTerminalModal();
+                }
+            });
+        }
+
+        window.openTerminalModal = openTerminalModal;
+        window.closeTerminalModal = closeTerminalModal;
+        window.initGlobalTerminalModal = initGlobalTerminalModal;
     </script>
+
+    <!-- ==================================================================== -->
+    <!-- GLOBAL TERMINAL MODAL OVERLAY                                        -->
+    <!-- ==================================================================== -->
+    <div id="global-terminal-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 backdrop-blur-sm p-4 lg:p-12">
+        <div class="bg-[#0c0d12] border border-[#2a2d36] rounded-xl w-full max-w-5xl h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center px-4 py-3 border-b border-[#2a2d36] bg-[#12141a]">
+                <span id="modal-terminal-title" class="text-xs font-mono font-bold text-gray-300 tracking-wider">TERMINAL</span>
+                <button id="close-modal-btn" type="button" class="text-gray-500 hover:text-white transition-colors cursor-pointer" title="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modal-terminal-body" class="p-6 overflow-y-auto font-mono text-sm text-gray-300 h-full whitespace-pre-wrap"></div>
+        </div>
+    </div>
 </body>
 </html>
