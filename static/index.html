@@ -855,11 +855,11 @@
                             </div>
                             <div>
                                 <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Base Branch</span>
-                                <input id="base-branch" type="text" value="main" placeholder="main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                                <input id="base-branch" type="text" value="" placeholder="main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                             </div>
                             <div>
                                 <span class="text-[11px] text-gray-500 dark:text-gray-400 block mb-1">Head Branch</span>
-                                <input id="head-branch" type="text" value="" placeholder="Dynamic (e.g. fix/session-cookie)" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                                <input id="head-branch" type="text" value="" placeholder="feat/live-demo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
                             </div>
                         </div>
 
@@ -1923,8 +1923,8 @@ jobs:
                 const rawDiff = document.getElementById('raw-diff');
 
                 if (targetRepo) targetRepo.value = '';
-                if (baseBranch) baseBranch.value = 'main';
-                if (headBranch) headBranch.value = 'feat/live-demo';
+                if (baseBranch) baseBranch.value = '';
+                if (headBranch) headBranch.value = '';
                 if (intent) intent.value = '';
                 if (rawDiff) rawDiff.value = '';
             } catch (e) {
