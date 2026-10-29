@@ -5,6 +5,7 @@ registering strict Pydantic v2 API routes, mounting static console assets,
 and exposing health and preset telemetry.
 """
 
+import json
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -17,7 +18,7 @@ load_dotenv()
 
 from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
@@ -46,7 +47,7 @@ BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
 
 # Model definition
-GEMINI_MODEL = "gemini-3.1-flash-lite"
+GEMINI_MODEL = "gemini-2.5-flash"
 
 # Centralized orchestrator instance
 orchestrator = MergeWhisperOrchestrator()
@@ -224,6 +225,31 @@ async def synthesize_verification_matrix(payload: IngestData) -> VerificationMat
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Stage 03 generation failed: {str(exc)}",
         )
+
+
+@app.post(
+    "/api/synthesize-stream",
+    tags=["Orchestration"],
+)
+async def synthesize_stream_sse(payload: IngestData):
+    """Stream release pipeline synthesis status and manifest in real-time over Server-Sent Events (SSE)."""
+    async def sse_event_stream():
+        try:
+            async for status_update in orchestrator.synthesize_stream(payload):
+                yield f"data: {json.dumps(status_update)}\n\n"
+        except Exception as exc:
+            logger.error("SSE stream error: %s", exc, exc_info=True)
+            yield f"data: {json.dumps({'event': 'error', 'message': str(exc)})}\n\n"
+
+    return StreamingResponse(
+        sse_event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @app.websocket("/ws/synthesize")

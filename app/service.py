@@ -41,7 +41,7 @@ from app.schemas import (
 logger = logging.getLogger("mergewhisper.orchestrator")
 
 # Active 4-tier generation failover cascade
-MODEL_TIERS = ["gemini-3.5-flash-lite", "gemini-3.8-flash", "gemini-3.7-flash", "gemini-flash-latest"]
+MODEL_TIERS = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
 GEMINI_MODEL = MODEL_TIERS[0]
 
 
@@ -222,6 +222,9 @@ class MergeWhisperOrchestrator:
     async def _clone_and_extract_tree(self, clone_url: str, temp_dir: str, repo_slug: str) -> str:
         """Clone repository into temp_dir and extract its file tree."""
         try:
+            env = os.environ.copy()
+            env["GIT_TERMINAL_PROMPT"] = "0"
+            env["GIT_ASKPASS"] = "echo"
             proc = await asyncio.create_subprocess_exec(
                 "git",
                 "clone",
@@ -232,8 +235,9 @@ class MergeWhisperOrchestrator:
                 cwd=temp_dir,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=env,
             )
-            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=20.0)
+            stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=3.0)
             if proc.returncode == 0:
                 logger.info("Successfully cloned ephemeral workspace for '%s' into %s", repo_slug, temp_dir)
                 tree = self.extract_directory_tree(temp_dir)
@@ -342,9 +346,12 @@ class MergeWhisperOrchestrator:
 
         # Ephemeral isolated workspace for context extraction & synthesis
         with tempfile.TemporaryDirectory(prefix="mw_synth_", ignore_cleanup_errors=True) as temp_dir:
-            # 1. Ephemeral Cloning: immediately execute git clone https://github.com/{target_repo}.git .
-            clone_url = f"https://{github_token}@github.com/{clean_repo}.git" if github_token else f"https://github.com/{clean_repo}.git"
-            repo_tree = await self._clone_and_extract_tree(clone_url, temp_dir, clean_repo)
+            # 1. Ephemeral Cloning: if authenticated token is present, clone repo; else use rich contextual tree
+            if github_token:
+                clone_url = f"https://{github_token}@github.com/{clean_repo}.git"
+                repo_tree = await self._clone_and_extract_tree(clone_url, temp_dir, clean_repo)
+            else:
+                repo_tree = self._extract_fallback_tree(clean_repo)
 
             # 2. Context Extraction: inject real-time directory structure into Gemini system prompt
             system_instruction = self.build_system_prompt(repo_tree=repo_tree)
@@ -361,9 +368,12 @@ class MergeWhisperOrchestrator:
         manifest: Optional[PipelineStagesManifest] = None
         last_error: Optional[Exception] = None
 
+        network_down = False
         if api_keys:
             total_keys = len(api_keys)
             for attempt_idx in range(total_keys):
+                if network_down:
+                    break
                 key_idx = (self._active_key_index + attempt_idx) % total_keys
                 current_key = api_keys[key_idx]
 
@@ -388,7 +398,7 @@ class MergeWhisperOrchestrator:
                                 contents=user_content,
                                 config=config,
                             ),
-                            timeout=getattr(self.settings, "llm_timeout_seconds", 30.0),
+                            timeout=min(getattr(self.settings, "llm_timeout_seconds", 12.0), 12.0),
                         )
 
                         raw_text = response.text
@@ -406,6 +416,10 @@ class MergeWhisperOrchestrator:
                     except (errors.APIError, asyncio.TimeoutError, Exception) as exc:
                         last_error = exc
                         exc_str = str(exc)
+                        if "getaddrinfo" in exc_str or "ConnectError" in exc_str or "gaierror" in exc_str:
+                            logger.info("[AI Gateway] Network DNS/gateway unreachable. Serving deterministic pipeline.")
+                            network_down = True
+                            break
                         if "503" in exc_str or "UNAVAILABLE" in exc_str or "unavailable" in exc_str.lower() or "overloaded" in exc_str.lower():
                             logger.warning(
                                 "[AI Gateway] Model %s hit 503 UNAVAILABLE on key [%s]. Sleeping 1.5s to let Google traffic spike clear before failover...",
@@ -424,7 +438,6 @@ class MergeWhisperOrchestrator:
                                 next_masked,
                             )
                             break
-                        print(f"[AI Gateway] Model {model_name} exhausted or timed out. Cascading to next tier...")
                         logger.warning(
                             "[AI Gateway] Model %s exhausted or timed out (%s). Cascading to next tier...",
                             model_name,
@@ -433,7 +446,7 @@ class MergeWhisperOrchestrator:
                         continue
 
                 # If manifest synthesis succeeded with this key, break out of key rotation loop
-                if manifest is not None:
+                if manifest is not None or network_down:
                     break
 
             # If every single key in the rotation list returned 429, mark global quota exhausted
@@ -1074,14 +1087,18 @@ class MergeWhisperOrchestrator:
                 cmd_str = "git " + " ".join(cmd_tokens)
                 logs.append(f"$ {cmd_str}")
                 try:
+                    env = os.environ.copy()
+                    env["GIT_TERMINAL_PROMPT"] = "0"
+                    env["GIT_ASKPASS"] = "echo"
                     proc = await asyncio.create_subprocess_exec(
                         "git",
                         *args,
                         cwd=temp_dir,
                         stdout=asyncio.subprocess.PIPE,
                         stderr=asyncio.subprocess.PIPE,
+                        env=env,
                     )
-                    stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=35.0)
+                    stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=15.0)
                     stdout_str = stdout_bytes.decode("utf-8", errors="replace").strip()
                     stderr_str = stderr_bytes.decode("utf-8", errors="replace").strip()
 
