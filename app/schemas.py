@@ -62,6 +62,18 @@ class IngestData(BaseSchema):
         ge=0,
         description="Total word count of developer voice intent and dictation directives.",
     )
+    payload: Optional[str] = Field(
+        default=None,
+        description="Optional raw text payload alias for intent.",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def populate_intent_from_payload(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "payload" in data and not data.get("intent"):
+                data["intent"] = str(data["payload"])
+        return data
 
     @field_validator("intent")
     @classmethod
