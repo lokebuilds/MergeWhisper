@@ -830,9 +830,9 @@
                 </div>
 
                 <!-- Dedicated Bento Container for Developer Intent Ingest -->
-                <div class="w-full bg-[#ffffff] rounded-xl border border-[#e3e6e3] overflow-hidden shadow-xs flex flex-col">
+                <div class="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col">
                     <!-- Edge-to-Edge Bento Header Block -->
-                    <div class="bg-[#f9faf9] border-b border-[#e3e6e3] px-5 py-4 flex items-center justify-between">
+                    <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
                         <label for="intent" class="text-xs font-mono font-medium text-gray-500 uppercase tracking-widest cursor-pointer">
                             DEVELOPER INTENT INGEST
                         </label>
@@ -840,7 +840,7 @@
                     </div>
 
                     <!-- Pure White Body Section -->
-                    <div class="p-6 sm:p-7 bg-[#ffffff] flex flex-col gap-4">
+                    <div class="p-6 bg-white flex flex-col gap-4">
                         <textarea 
                             id="intent" 
                             rows="4" 
@@ -1056,11 +1056,11 @@
                             <span class="text-xs font-mono uppercase tracking-wider text-gray-500 font-semibold">ORDERED VERIFICATION CHECKLIST</span>
                             <div id="qa-steps-list" class="flex flex-col gap-3">
                                 <label class="flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                    <input type="checkbox" class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
                                     <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">pytest tests/test_migrations.py -v --tb=short</span>
                                 </label>
                                 <label class="flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                    <input type="checkbox" class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
                                     <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">psql -d production_replica -c "SELECT COUNT(*) FROM migration_locks WHERE active = true;"</span>
                                 </label>
                                 <label class="flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none">
@@ -3045,7 +3045,7 @@ jobs:
                         const label = document.createElement('label');
                         label.className = "flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none";
                         label.innerHTML = `
-                            <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                            <input type="checkbox" class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
                             <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">${step}</span>
                         `;
                         stepsList.appendChild(label);
