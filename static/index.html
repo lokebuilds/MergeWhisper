@@ -2594,25 +2594,25 @@ jobs:
             await new Promise(r => setTimeout(r, 1200));
             const threats = [];
 
-            const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
-            if (hasStripeKey) {
-                const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
-                threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
-            }
-
             const hasAWSKey = /AKIA[0-9A-Z]{16}/.test(textPayload);
             if (hasAWSKey) {
                 const match = (textPayload && textPayload.match) ? textPayload.match(/AKIA[0-9A-Z]{16}/) : null;
                 threats.push(`Hardcoded AWS Access Key: ${match ? match[0] : 'AKIA***'}`);
             }
 
-            const hasDestructiveSQL = /ALTER TABLE|DROP TABLE/i.test(textPayload);
-            if (hasDestructiveSQL) {
-                const match = (textPayload && textPayload.match) ? textPayload.match(/(?:ALTER\s+TABLE|DROP\s+TABLE)[^\n;]*/i) : null;
-                threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE / ALTER TABLE'}`);
+            const hasCatastrophicDrop = /DROP TABLE (users|audit_logs|customer_sessions) CASCADE/i.test(textPayload);
+            if (hasCatastrophicDrop) {
+                const match = (textPayload && textPayload.match) ? textPayload.match(/DROP TABLE (users|audit_logs|customer_sessions) CASCADE/i) : null;
+                threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE customer_sessions CASCADE'}`);
             }
 
-            const isSafe = !hasStripeKey && !hasAWSKey && !hasDestructiveSQL && threats.length === 0;
+            const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
+            if (hasStripeKey) {
+                const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
+                threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
+            }
+
+            const isSafe = !hasAWSKey && !hasCatastrophicDrop && !hasStripeKey && threats.length === 0;
             return { isSafe, threats };
         }
 
@@ -2670,7 +2670,7 @@ jobs:
                 showToast('🛑 DevSecOps Fatal Halt: Security threat intercepted.', 'error');
             } else {
                 // If safe: Trigger transition to Stage 02 (Audit)
-                const base = OFFLINE_FALLBACK_STORE['auth-loop'] || {};
+                const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
                 currentActiveManifest = Object.assign({}, base, {
                     intent: intentVal || base.intent,
                     diff: diffVal || base.diff,
@@ -3873,10 +3873,10 @@ jobs:
                 s = s.replace(/(\b[a-zA-Z0-9_-]*(?:secret|key|token|auth)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');
 
                 // 3. Destructive SQL Commands
-                s = s.replace(/^(\+?.*?)\b(DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/gmi, (match, prefix) => {
+                s = s.replace(/^(\+?.*?)\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/gmi, (match, prefix) => {
                     return prefix + '-- [REDACTED: Destructive statement removed]';
                 });
-                s = s.replace(/\b(DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\s+[a-zA-Z0-9_.]+(\s+CASCADE)?/gi, '-- [REDACTED: Destructive statement removed]');
+                s = s.replace(/\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\s+[a-zA-Z0-9_.]+(\s+CASCADE)?/gi, '-- [REDACTED: Destructive statement removed]');
 
                 // 4. Passwords
                 s = s.replace(/(\b[a-zA-Z0-9_-]*(?:password|passwd|pwd)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');

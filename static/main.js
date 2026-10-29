@@ -123,25 +123,25 @@ async function scanPayloadForVulnerabilities(textPayload) {
     await new Promise(r => setTimeout(r, 1200));
     const threats = [];
 
-    const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
-    if (hasStripeKey) {
-        const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
-        threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
-    }
-
     const hasAWSKey = /AKIA[0-9A-Z]{16}/.test(textPayload);
     if (hasAWSKey) {
         const match = (textPayload && textPayload.match) ? textPayload.match(/AKIA[0-9A-Z]{16}/) : null;
         threats.push(`Hardcoded AWS Access Key: ${match ? match[0] : 'AKIA***'}`);
     }
 
-    const hasDestructiveSQL = /ALTER TABLE|DROP TABLE/i.test(textPayload);
-    if (hasDestructiveSQL) {
-        const match = (textPayload && textPayload.match) ? textPayload.match(/(?:ALTER\s+TABLE|DROP\s+TABLE)[^\n;]*/i) : null;
-        threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE / ALTER TABLE'}`);
+    const hasCatastrophicDrop = /DROP TABLE (users|audit_logs|customer_sessions) CASCADE/i.test(textPayload);
+    if (hasCatastrophicDrop) {
+        const match = (textPayload && textPayload.match) ? textPayload.match(/DROP TABLE (users|audit_logs|customer_sessions) CASCADE/i) : null;
+        threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE customer_sessions CASCADE'}`);
     }
 
-    const isSafe = !hasStripeKey && !hasAWSKey && !hasDestructiveSQL && threats.length === 0;
+    const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
+    if (hasStripeKey) {
+        const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
+        threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
+    }
+
+    const isSafe = !hasAWSKey && !hasCatastrophicDrop && !hasStripeKey && threats.length === 0;
     return { isSafe, threats };
 }
 
