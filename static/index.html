@@ -4093,14 +4093,20 @@ jobs:
             const modalBody = document.getElementById('modal-terminal-body');
             if (modalTitle) modalTitle.textContent = title || 'TERMINAL';
             if (modalBody) modalBody.innerHTML = contentHtml || '';
-            if (modal) modal.classList.remove('hidden');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            }
         }
 
         function closeTerminalModal() {
             const modal = document.getElementById('global-terminal-modal');
             const modalBody = document.getElementById('modal-terminal-body');
             const copyBtn = document.getElementById('modal-copy-btn');
-            if (modal) modal.classList.add('hidden');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
             if (modalBody) modalBody.innerHTML = '';
             if (copyBtn && copyBtn.dataset.originalHtml) {
                 copyBtn.innerHTML = copyBtn.dataset.originalHtml;
@@ -4239,7 +4245,7 @@ jobs:
     <!-- GLOBAL TERMINAL MODAL OVERLAY (macOS IDE Style)                      -->
     <!-- ==================================================================== -->
     <div id="global-terminal-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md transition-opacity p-4 lg:p-12">
-        <div class="bg-[#0c0d12] border border-[#2a2d36] rounded-xl w-full max-w-4xl h-[75vh] flex flex-col shadow-2xl relative overflow-hidden">
+        <div class="bg-[#0c0d12] border border-[#2a2d36] rounded-xl w-full max-w-4xl h-[75vh] flex flex-col shadow-[0_0_60px_-15px_rgba(56,189,248,0.15)] relative overflow-hidden">
             <!-- Glowing Electric Sky Accent Line -->
             <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent opacity-80 pointer-events-none"></div>
 
@@ -4274,7 +4280,7 @@ jobs:
             </div>
 
             <!-- Terminal Body -->
-            <div id="modal-terminal-body" class="p-6 overflow-y-auto font-mono text-sm text-gray-300 h-full whitespace-pre-wrap leading-relaxed selection:bg-[#38BDF8]/30"></div>
+            <div id="modal-terminal-body" class="p-6 overflow-y-auto font-mono text-sm text-[#e2e8f0] antialiased tracking-tight h-full whitespace-pre-wrap leading-relaxed selection:bg-[#38BDF8]/30 bg-[#0c0d12] bg-[radial-gradient(#2a2d36_1px,transparent_1px)] [background-size:16px_16px] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#2a2d36] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#38BDF8]/50"></div>
         </div>
     </div>
 </body>

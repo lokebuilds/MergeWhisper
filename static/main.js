@@ -72,7 +72,10 @@ function openTerminalModal(title, contentHtml) {
     const modalBody = document.getElementById('modal-terminal-body');
     if (modalTitle) modalTitle.textContent = title || 'TERMINAL';
     if (modalBody) modalBody.innerHTML = contentHtml || '';
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+        if (document.body) document.body.classList.add('overflow-hidden');
+    }
 }
 
 function closeTerminalModal() {
@@ -80,7 +83,10 @@ function closeTerminalModal() {
     const modal = document.getElementById('global-terminal-modal');
     const modalBody = document.getElementById('modal-terminal-body');
     const copyBtn = document.getElementById('modal-copy-btn');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        if (document.body) document.body.classList.remove('overflow-hidden');
+    }
     if (modalBody) modalBody.innerHTML = '';
     if (copyBtn && copyBtn.dataset && copyBtn.dataset.originalHtml) {
         copyBtn.innerHTML = copyBtn.dataset.originalHtml;
