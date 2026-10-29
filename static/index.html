@@ -2587,223 +2587,110 @@ jobs:
             caret.style.transform = drawer.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
 
-        // Trigger Dual-Context Synthesis with Live Agent Modal and Fallback Resilience
+        // ==============================================================================
+        // DevSecOps Asynchronous Payload Security Scanner
+        // ==============================================================================
+        async function scanPayloadForVulnerabilities(textPayload) {
+            await new Promise(r => setTimeout(r, 1200));
+            const threats = [];
+
+            const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
+            if (hasStripeKey) {
+                const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
+                threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
+            }
+
+            const hasAWSKey = /AKIA[0-9A-Z]{16}/.test(textPayload);
+            if (hasAWSKey) {
+                const match = (textPayload && textPayload.match) ? textPayload.match(/AKIA[0-9A-Z]{16}/) : null;
+                threats.push(`Hardcoded AWS Access Key: ${match ? match[0] : 'AKIA***'}`);
+            }
+
+            const hasDestructiveSQL = /ALTER TABLE|DROP TABLE/i.test(textPayload);
+            if (hasDestructiveSQL) {
+                const match = (textPayload && textPayload.match) ? textPayload.match(/(?:ALTER\s+TABLE|DROP\s+TABLE)[^\n;]*/i) : null;
+                threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE / ALTER TABLE'}`);
+            }
+
+            const isSafe = !hasStripeKey && !hasAWSKey && !hasDestructiveSQL && threats.length === 0;
+            return { isSafe, threats };
+        }
+
+        // Trigger Synthesis with Asynchronous DevSecOps Security Scanner
         async function triggerSynthesis() {
-            const intentVal = document.getElementById('intent').value.trim();
-            if (!intentVal) {
+            const intentEl = document.getElementById('intent');
+            const diffEl = document.getElementById('raw-diff');
+            const intentVal = intentEl ? intentEl.value.trim() : '';
+            const diffVal = diffEl ? diffEl.value.trim() : '';
+
+            if (!intentVal && !diffVal) {
                 showToast("Please enter or paste developer intent", "error");
                 return;
             }
 
-            // Ensure git diff is sanitized if Ghost Mode is active
-            let diffVal = document.getElementById('raw-diff').value.trim() || null;
-            if (isGhostModeActive && diffVal) {
-                const res = sanitizeDiffText(diffVal);
-                diffVal = res.sanitized;
-                document.getElementById('raw-diff').value = diffVal;
+            const synthBtn = document.getElementById('synthesize-btn');
+
+            // 1. Immediately change button state to simulate API call
+            if (synthBtn) {
+                synthBtn.disabled = true;
+                synthBtn.classList.remove('bg-[#f58e0a]', 'hover:bg-[#e07d08]');
+                synthBtn.classList.add('bg-gray-400');
+                synthBtn.innerHTML = `
+                    <svg class="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                    </svg>
+                    <span>[ ↻ ] SCANNING PAYLOAD...</span>
+                `;
             }
 
-            const rawTargetRepo = (document.getElementById('target-repo').value || '').trim();
-            const payload = {
-                intent: intentVal,
-                diff: diffVal,
-                target_repo: sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service'),
-                target_repository: rawTargetRepo,
-                is_preset: !!activePresetKey,
-                preset_id: activePresetKey,
-                base_branch: sanitizeBranch(document.getElementById('base-branch').value, 'main'),
-                head_branch: sanitizeBranch(document.getElementById('head-branch').value.trim(), ''),
-                tech_stack: 'Python FastAPI'
-            };
+            // Combine text to scan intent (and diff if present)
+            const combinedPayload = intentVal + (diffVal ? '\n' + diffVal : '');
 
+            // 2. Perform async DevSecOps scan with simulated network latency
+            const scanResult = await scanPayloadForVulnerabilities(combinedPayload);
 
-            // Display Live Execution Modal & Launch Visual Sequencer
-            const modal = document.getElementById('execution-modal');
-            modal.classList.remove('hidden');
-
-            const startClock = performance.now();
-            startModalSequencer(startClock);
-
-            try {
-                // Dynamically resolve WebSocket connection protocol and host between localhost and production
-                const isSecure = window.location.protocol === 'https:';
-                const wsProtocol = isSecure ? 'wss:' : 'ws:';
-                const wsHost = window.location.host || 'localhost:8000';
-                const wsUrl = `${wsProtocol}//${wsHost}/ws/synthesize`;
-
-                // Resilient HTTP synthesis fallback (for serverless environments like Vercel where WebSockets are not persisted)
-                let fallbackTriggered = false;
-                const executeHttpFallback = async (reason) => {
-                    if (fallbackTriggered) return;
-                    fallbackTriggered = true;
-                    try {
-                        console.warn(`[Synthesis Transport] WebSocket unreachable (${reason}). Executing HTTP synthesis fallback via ${API_BASE}/api/synthesize...`);
-                        const res = await fetch(`${API_BASE}/api/synthesize`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!res.ok) {
-                            const errData = await res.json().catch(() => ({}));
-                            throw new Error(errData.detail || `Synthesis failed (HTTP ${res.status})`);
-                        }
-
-                        const data = await res.json();
-                        currentActiveManifest = data;
-                        fastForwardModalSequencer();
-
-                        const actualElapsed = Math.round(performance.now() - startClock);
-                        const cappedDisplay = (actualElapsed > 14250 || actualElapsed === 0) ? '14,250' : actualElapsed.toLocaleString();
-                        const tickerEl = document.getElementById('exec-latency-ticker');
-                        if (tickerEl) tickerEl.textContent = `${cappedDisplay} ms`;
-
-                        try {
-                            renderAllStages(data);
-                        } catch (renderErr) {
-                            console.error("Non-fatal error in renderAllStages (HTTP):", renderErr);
-                        }
-
-                        setTimeout(() => {
-                            if (modal) modal.classList.add('hidden');
-                            const audit = (currentActiveManifest && (currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit)) || {};
-                            const isCritical = ((audit && audit.risk_level) ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
-                            if (isCritical) {
-                                showFatalHaltModal(audit.intercepted_threats);
-                                showToast('🛑 DevSecOps Fatal Halt: Deployment locked due to security breach.', 'error');
-                            } else {
-                                showToast(`Release pipeline synthesized in ${cappedDisplay} ms`, 'success');
-                            }
-                            // Accumulate SRE Telemetry with strict null-safety
-                            try {
-                                const wordsSpoken = (currentActiveManifest && (currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count))) || (payload.intent ? payload.intent.split(/\s+/).filter(Boolean).length : 14);
-                                const minutesSaved = (currentActiveManifest && currentActiveManifest.dev_time_saved_minutes) || Math.round(wordsSpoken * 0.25 * 10) / 10;
-                                accumulateRoiTelemetry(minutesSaved);
-                            } catch (roiErr) {
-                                console.warn("ROI telemetry accumulation warning:", roiErr);
-                            }
-
-                            // Reveal SRE ROI dock in collapsed pill state after generation completes (Stage 05)
-                            try {
-                                const roiDock = document.getElementById('sre-roi-dock');
-                                if (roiDock) {
-                                    if (typeof toggleRoiDock === 'function') toggleRoiDock(false);
-                                    roiDock.classList.remove('hidden');
-                                }
-                            } catch (dockErr) {
-                                console.warn("SRE ROI dock reveal warning:", dockErr);
-                            }
-
-                            // Reveal Stage 01 footer with Proceed to Audit button for manual progression
-                            const s1Footer = document.getElementById('stage-01-footer');
-                            if (s1Footer) s1Footer.classList.remove('hidden');
-                            const synthBtn = document.getElementById('synthesize-btn');
-                            if (synthBtn) {
-                                synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-zinc-950"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
-                            }
-                            refreshIcons();
-                        }, 500);
-                    } catch (httpErr) {
-                        console.error("HTTP synthesis request failed:", httpErr);
-                        if (modal) modal.classList.add('hidden');
-                        showToast(`Synthesis failed: ${httpErr.message || 'Server error'}`, 'error');
-                    }
-                };
-
-                const socket = new WebSocket(wsUrl);
-
-                socket.onopen = () => {
-                    socket.send(JSON.stringify(payload));
-                };
-
-                socket.onmessage = (event) => {
-                    try {
-                        const data = JSON.parse(event.data);
-                        if (data.event === 'step_complete') {
-                            markModalStepComplete(data.step);
-                        } else if (data.event === 'synthesis_complete') {
-                            currentActiveManifest = data.data;
-                            fastForwardModalSequencer();
-
-                            const actualElapsed = Math.round(performance.now() - startClock);
-                            const cappedDisplay = (actualElapsed > 14250 || actualElapsed === 0) ? '14,250' : actualElapsed.toLocaleString();
-                            const tickerEl = document.getElementById('exec-latency-ticker');
-                            if (tickerEl) tickerEl.textContent = `${cappedDisplay} ms`;
-
-                            try {
-                                renderAllStages(data.data);
-                            } catch (renderErr) {
-                                console.error("Non-fatal error in renderAllStages (WS):", renderErr);
-                            }
-
-                            try {
-                                socket.close();
-                            } catch (_) {}
-
-                            // Gracefully close modal & trigger Fatal Halt if CRITICAL
-                            setTimeout(() => {
-                                if (modal) modal.classList.add('hidden');
-                                const audit = (currentActiveManifest && (currentActiveManifest.audit || currentActiveManifest.stage_02 || currentActiveManifest.devops_audit)) || {};
-                                const isCritical = ((audit && audit.risk_level) ? audit.risk_level : '').toUpperCase() === 'CRITICAL';
-                                if (isCritical) {
-                                    showFatalHaltModal(audit.intercepted_threats);
-                                    showToast('🛑 DevSecOps Fatal Halt: Deployment locked due to security breach.', 'error');
-                                } else {
-                                    showToast(`Release pipeline synthesized in ${cappedDisplay} ms`, 'success');
-                                }
-                                // Accumulate SRE Telemetry with strict null-safety
-                                try {
-                                    const wordsSpoken = (currentActiveManifest && (currentActiveManifest.spoken_word_count || (currentActiveManifest.ingest && currentActiveManifest.ingest.word_count))) || (payload.intent ? payload.intent.split(/\s+/).filter(Boolean).length : 14);
-                                    const minutesSaved = (currentActiveManifest && currentActiveManifest.dev_time_saved_minutes) || Math.round(wordsSpoken * 0.25 * 10) / 10;
-                                    accumulateRoiTelemetry(minutesSaved);
-                                } catch (roiErr) {
-                                    console.warn("ROI telemetry accumulation warning:", roiErr);
-                                }
-
-                                // Reveal SRE ROI dock in collapsed pill state after generation completes (Stage 05)
-                                try {
-                                    const roiDock = document.getElementById('sre-roi-dock');
-                                    if (roiDock) {
-                                        if (typeof toggleRoiDock === 'function') toggleRoiDock(false);
-                                        roiDock.classList.remove('hidden');
-                                    }
-                                } catch (dockErr) {
-                                    console.warn("SRE ROI dock reveal warning:", dockErr);
-                                }
-
-                                // Reveal Stage 01 footer with Proceed to Audit button for manual progression
-                                const s1Footer = document.getElementById('stage-01-footer');
-                                if (s1Footer) s1Footer.classList.remove('hidden');
-                                const synthBtn = document.getElementById('synthesize-btn');
-                                if (synthBtn) {
-                                    synthBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 text-zinc-950"></i><span>Specifications Ready &bull; Proceed to Audit</span>';
-                                }
-                                refreshIcons();
-                            }, 500);
-                        } else if (data.event === 'error') {
-                            console.error("WebSocket streaming error from server:", data.message);
-                            try { socket.close(); } catch (_) {}
-                            if (modal) modal.classList.add('hidden');
-                            showToast(`Synthesis failed: ${data.message || 'Server error'}`, 'error');
-                            return;
-                        }
-                    } catch (err) {
-                        console.error("Error processing WebSocket payload:", err);
-                        executeHttpFallback("WebSocket frame parsing error");
-                    }
-                };
-
-                socket.onerror = (err) => {
-                    console.error("WebSocket connection error:", err);
-                    executeHttpFallback("WebSocket transport refused/unsupported");
-                };
-
-            } catch (err) {
-                console.error("Synthesis initiation failed:", err);
-                modal.classList.add('hidden');
-                showToast(`Synthesis initiation failed: ${err.message || 'Error'}`, 'error');
-            } finally {
+            // 3. Re-enable button & restore default appearance
+            if (synthBtn) {
+                synthBtn.disabled = false;
+                synthBtn.classList.remove('bg-gray-400');
+                synthBtn.classList.add('bg-[#f58e0a]', 'hover:bg-[#e07d08]');
+                synthBtn.innerHTML = `
+                    <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
+                    <span id="synthesize-btn-label">Synthesize Release Specifications</span>
+                    <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
+                `;
                 refreshIcons();
+            }
+
+            // 4. Dynamic routing based on scan results
+            if (!scanResult.isSafe) {
+                // If unsafe: Un-hide DEVSECOPS FATAL HALT modal and inject found threats
+                showFatalHaltModal(scanResult.threats);
+                showToast('🛑 DevSecOps Fatal Halt: Security threat intercepted.', 'error');
+            } else {
+                // If safe: Trigger transition to Stage 02 (Audit)
+                const base = OFFLINE_FALLBACK_STORE['auth-loop'] || {};
+                currentActiveManifest = Object.assign({}, base, {
+                    intent: intentVal || base.intent,
+                    diff: diffVal || base.diff,
+                    summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
+                    title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
+                });
+
+                try {
+                    renderAllStages(currentActiveManifest);
+                } catch (renderErr) {
+                    console.warn("Non-fatal error rendering stages:", renderErr);
+                }
+
+                // Reveal Stage 01 footer with Proceed to Audit button
+                const s1Footer = document.getElementById('stage-01-footer');
+                if (s1Footer) s1Footer.classList.remove('hidden');
+
+                // Advance to Stage 02
+                proceedToStage('stage-02');
+                showToast('Payload verified. Transitioned to Stage 02 (Audit).', 'success');
             }
         }
 
@@ -3857,13 +3744,18 @@ jobs:
                     let matchedLine = null;
                     let matchedIdx = -1;
                     for (let i = 0; i < lines.length; i++) {
-                        if (lines[i].startsWith('+') && !recordedLines.has(i + 1)) {
+                        if (!recordedLines.has(i + 1)) {
+                            if (threat.includes('Stripe') && lines[i].includes('sk_live_')) {
+                                matchedLine = lines[i];
+                                matchedIdx = i + 1;
+                                break;
+                            }
                             if (threat.includes('AWS') && (lines[i].includes('AWS') || lines[i].includes('AKIA'))) {
                                 matchedLine = lines[i];
                                 matchedIdx = i + 1;
                                 break;
                             }
-                            if (threat.includes('SQL') && (lines[i].toUpperCase().includes('DROP') || lines[i].toUpperCase().includes('TABLE'))) {
+                            if (threat.includes('SQL') && (lines[i].toUpperCase().includes('DROP') || lines[i].toUpperCase().includes('TABLE') || lines[i].toUpperCase().includes('ALTER'))) {
                                 matchedLine = lines[i];
                                 matchedIdx = i + 1;
                                 break;
@@ -3877,7 +3769,8 @@ jobs:
                             threatType: threat.split(':')[0] || "Security Violation",
                             offendingCode: matchedLine,
                             safeCode: matchedLine.replace(/(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}|AKIAIOSFODNN7EXAMPLE/g, '[REDACTED]')
-                                                 .replace(/\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/i, '-- [REDACTED: Destructive statement removed]')
+                                                 .replace(/\b(sk_live_[a-zA-Z0-9]+)\b/g, '[REDACTED]')
+                                                 .replace(/\b(DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/i, '-- [REDACTED: Destructive statement removed]')
                         });
                     } else {
                         results.push({
@@ -3898,6 +3791,10 @@ jobs:
             let diffText = rawDiffEl ? rawDiffEl.value : '';
             if (!diffText && currentActiveManifest && currentActiveManifest.ingest) {
                 diffText = currentActiveManifest.ingest.diff || '';
+            }
+            if (!diffText) {
+                const intentEl = document.getElementById('intent');
+                diffText = intentEl ? intentEl.value : '';
             }
 
             const items = parseVulnerabilitiesFromDiff(diffText, threats);
@@ -3956,38 +3853,48 @@ jobs:
                 currentDiff = currentActiveManifest.ingest.diff || '';
             }
 
-            if (!currentDiff) {
-                showToast("No git diff found to remediate", "error");
+            const intentEl = document.getElementById('intent');
+            let currentIntent = intentEl ? intentEl.value : '';
+
+            if (!currentDiff && !currentIntent) {
+                showToast("No content found to remediate", "error");
                 return;
             }
 
-            // Apply inline redactions to memory and payload
-            let sanitizedDiff = currentDiff;
+            function sanitizeContent(text) {
+                if (!text) return '';
+                let s = text;
+                // 1. AWS Access Keys
+                s = s.replace(/\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b/g, '[REDACTED]');
+                s = s.replace(/AKIAIOSFODNN7EXAMPLE/g, '[REDACTED]');
 
-            // 1. AWS Access Keys
-            sanitizedDiff = sanitizedDiff.replace(/\b(AKIA|ABIA|ACCA|ASIA)[0-9A-Z]{16}\b/g, '[REDACTED]');
-            sanitizedDiff = sanitizedDiff.replace(/AKIAIOSFODNN7EXAMPLE/g, '[REDACTED]');
+                // 2. AWS Secret Access Keys & Generic Secrets
+                s = s.replace(/wJalrXUtnFEMI\/K7MDENG\/bPxRfiCYEXAMPLEKEY/g, '[REDACTED]');
+                s = s.replace(/(\b[a-zA-Z0-9_-]*(?:secret|key|token|auth)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');
 
-            // 2. AWS Secret Access Keys & Generic Secrets
-            sanitizedDiff = sanitizedDiff.replace(/wJalrXUtnFEMI\/K7MDENG\/bPxRfiCYEXAMPLEKEY/g, '[REDACTED]');
-            sanitizedDiff = sanitizedDiff.replace(/(\b[a-zA-Z0-9_-]*(?:secret|key|token|auth)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');
+                // 3. Destructive SQL Commands
+                s = s.replace(/^(\+?.*?)\b(DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/gmi, (match, prefix) => {
+                    return prefix + '-- [REDACTED: Destructive statement removed]';
+                });
+                s = s.replace(/\b(DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\s+[a-zA-Z0-9_.]+(\s+CASCADE)?/gi, '-- [REDACTED: Destructive statement removed]');
 
-            // 3. Destructive SQL Commands
-            sanitizedDiff = sanitizedDiff.replace(/^(\+?.*?)\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\b.*$/gmi, (match, prefix) => {
-                return prefix + '-- [REDACTED: Destructive statement removed]';
-            });
-            sanitizedDiff = sanitizedDiff.replace(/\b(DROP\s+TABLE|TRUNCATE\s+TABLE|DROP\s+DATABASE)\s+[a-zA-Z0-9_.]+(\s+CASCADE)?/gi, '-- [REDACTED: Destructive statement removed]');
+                // 4. Passwords
+                s = s.replace(/(\b[a-zA-Z0-9_-]*(?:password|passwd|pwd)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');
 
-            // 4. Passwords
-            sanitizedDiff = sanitizedDiff.replace(/(\b[a-zA-Z0-9_-]*(?:password|passwd|pwd)[a-zA-Z0-9_-]*\s*=\s*)(['"])[^'"]+?\2/gi, '$1$2[REDACTED]$2');
+                // 5. Generic API Keys & Stripe Keys
+                s = s.replace(/\b(sk_live_[a-zA-Z0-9]+|sk_test_[a-zA-Z0-9]+|ghp_[a-zA-Z0-9]+|gho_[a-zA-Z0-9]+|glpat-[a-zA-Z0-9\-_]+)\b/g, '[REDACTED]');
+                return s;
+            }
 
-            // 5. Generic API Keys
-            sanitizedDiff = sanitizedDiff.replace(/\b(sk_live_[a-zA-Z0-9]+|sk_test_[a-zA-Z0-9]+|ghp_[a-zA-Z0-9]+|gho_[a-zA-Z0-9]+|glpat-[a-zA-Z0-9\-_]+)\b/g, '[REDACTED]');
+            const sanitizedDiff = sanitizeContent(currentDiff);
+            const sanitizedIntent = sanitizeContent(currentIntent);
 
             // Update DOM and in-memory manifest
             if (rawDiffEl) rawDiffEl.value = sanitizedDiff;
+            if (intentEl) intentEl.value = sanitizedIntent;
             if (currentActiveManifest && currentActiveManifest.ingest) {
                 currentActiveManifest.ingest.diff = sanitizedDiff;
+                currentActiveManifest.ingest.intent = sanitizedIntent;
             }
 
             // Sync Ghost Mode status
@@ -4003,7 +3910,7 @@ jobs:
             const modal = document.getElementById('fatal-halt-modal');
             if (modal) modal.classList.add('hidden');
 
-            showToast("Diff redacted. Re-triggering synthesis to resume pipeline...", "info");
+            showToast("Payload sanitized. Re-triggering synthesis to resume pipeline...", "info");
 
             // Re-trigger POST /api/synthesize seamlessly
             triggerSynthesis();
@@ -4046,6 +3953,8 @@ jobs:
         window.remediateAndResume = remediateAndResume;
         window.showFatalHaltModal = showFatalHaltModal;
         window.closeFatalHaltModal = closeFatalHaltModal;
+        window.scanPayloadForVulnerabilities = scanPayloadForVulnerabilities;
+        window.triggerSynthesis = triggerSynthesis;
 
         function initRoiTelemetry() {
             try {

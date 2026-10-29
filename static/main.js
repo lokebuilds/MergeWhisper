@@ -112,6 +112,39 @@ function downloadArtifact(textContent, filename = 'pipeline_artifact.txt') {
     URL.revokeObjectURL(url);
 }
 
+/**
+ * Asynchronous DevSecOps Payload Security Scanner
+ * Simulates real backend vulnerability and credential analysis with network latency.
+ *
+ * @param {string} textPayload - Text payload (intent, diff, or combined) to scan
+ * @returns {Promise<{isSafe: boolean, threats: string[]}>}
+ */
+async function scanPayloadForVulnerabilities(textPayload) {
+    await new Promise(r => setTimeout(r, 1200));
+    const threats = [];
+
+    const hasStripeKey = /sk_live_[a-zA-Z0-9]+/.test(textPayload);
+    if (hasStripeKey) {
+        const match = (textPayload && textPayload.match) ? textPayload.match(/sk_live_[a-zA-Z0-9]+/) : null;
+        threats.push(`Exposed Stripe API Key Detected: ${match ? match[0] : 'sk_live_***'}`);
+    }
+
+    const hasAWSKey = /AKIA[0-9A-Z]{16}/.test(textPayload);
+    if (hasAWSKey) {
+        const match = (textPayload && textPayload.match) ? textPayload.match(/AKIA[0-9A-Z]{16}/) : null;
+        threats.push(`Hardcoded AWS Access Key: ${match ? match[0] : 'AKIA***'}`);
+    }
+
+    const hasDestructiveSQL = /ALTER TABLE|DROP TABLE/i.test(textPayload);
+    if (hasDestructiveSQL) {
+        const match = (textPayload && textPayload.match) ? textPayload.match(/(?:ALTER\s+TABLE|DROP\s+TABLE)[^\n;]*/i) : null;
+        threats.push(`Destructive SQL Command: ${match ? match[0].trim() : 'DROP TABLE / ALTER TABLE'}`);
+    }
+
+    const isSafe = !hasStripeKey && !hasAWSKey && !hasDestructiveSQL && threats.length === 0;
+    return { isSafe, threats };
+}
+
 // Export for module systems (Node / Bundlers) and browser window
 if (typeof window !== 'undefined') {
     window.sanitizeBranch = sanitizeBranch;
@@ -120,6 +153,7 @@ if (typeof window !== 'undefined') {
     window.openTerminalModal = openTerminalModal;
     window.closeTerminalModal = closeTerminalModal;
     window.downloadArtifact = downloadArtifact;
+    window.scanPayloadForVulnerabilities = scanPayloadForVulnerabilities;
 }
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -129,6 +163,7 @@ if (typeof module !== 'undefined' && module.exports) {
         buildGitHubCompareUrl,
         openTerminalModal,
         closeTerminalModal,
-        downloadArtifact
+        downloadArtifact,
+        scanPayloadForVulnerabilities
     };
 }
