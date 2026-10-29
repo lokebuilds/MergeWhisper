@@ -62,17 +62,49 @@ function buildGitHubCompareUrl(repo, base, head) {
     return `https://github.com/${cleanRepo}/compare/${cleanBase}...${cleanHead}`;
 }
 
+/**
+ * Terminal Modal Helpers (macOS IDE Style)
+ */
+function openTerminalModal(title, contentHtml) {
+    if (typeof document === 'undefined') return;
+    const modal = document.getElementById('global-terminal-modal');
+    const modalTitle = document.getElementById('modal-terminal-title');
+    const modalBody = document.getElementById('modal-terminal-body');
+    if (modalTitle) modalTitle.textContent = title || 'TERMINAL';
+    if (modalBody) modalBody.innerHTML = contentHtml || '';
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closeTerminalModal() {
+    if (typeof document === 'undefined') return;
+    const modal = document.getElementById('global-terminal-modal');
+    const modalBody = document.getElementById('modal-terminal-body');
+    const copyBtn = document.getElementById('modal-copy-btn');
+    if (modal) modal.classList.add('hidden');
+    if (modalBody) modalBody.innerHTML = '';
+    if (copyBtn && copyBtn.dataset && copyBtn.dataset.originalHtml) {
+        copyBtn.innerHTML = copyBtn.dataset.originalHtml;
+        copyBtn.classList.remove('text-[#10b981]');
+        copyBtn.classList.add('text-gray-500', 'hover:text-[#38BDF8]');
+        copyBtn.style.color = '';
+    }
+}
+
 // Export for module systems (Node / Bundlers) and browser window
 if (typeof window !== 'undefined') {
     window.sanitizeBranch = sanitizeBranch;
     window.sanitizeRepo = sanitizeRepo;
     window.buildGitHubCompareUrl = buildGitHubCompareUrl;
+    window.openTerminalModal = openTerminalModal;
+    window.closeTerminalModal = closeTerminalModal;
 }
 
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         sanitizeBranch,
         sanitizeRepo,
-        buildGitHubCompareUrl
+        buildGitHubCompareUrl,
+        openTerminalModal,
+        closeTerminalModal
     };
 }
