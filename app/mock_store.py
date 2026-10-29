@@ -14,11 +14,13 @@ from typing import Any, Dict, List, Literal, Optional, Tuple
 from app.schemas import (
     ChangelogCard,
     DevOpsAudit,
+    EdgeCase,
     IngestionPayload,
     PRCard,
     QACard,
     SlackCard,
     SynthesisResponse,
+    VerificationMatrix,
     VoicePatchRequest,
 )
 
@@ -542,7 +544,7 @@ def _build_precompiled_manifest(preset: Dict[str, Any], payload: IngestionPayloa
         diff=diff_content,
         target_repo=target_repo,
         base_branch=base_branch,
-        head_branch=LIVE_DEMO_BRANCH,
+        head_branch=head_branch,
         tech_stack=tech_stack,
         word_count=word_count,
     )
@@ -670,7 +672,7 @@ def synthesize_release_manifest(payload: IngestionPayload) -> SynthesisResponse:
     github_url = generate_github_url(
         target_repo=payload.target_repo,
         base_branch=payload.base_branch,
-        head_branch=LIVE_DEMO_BRANCH,
+        head_branch=head_branch,
         title=title,
         markdown_body=pr_markdown,
     )
@@ -876,11 +878,11 @@ def apply_voice_patch(patch_req: VoicePatchRequest) -> SynthesisResponse:
         new_step_text = test_match.group(1).strip()
         step_number = len(manifest.qa_card.verification_steps) + 1
         manifest.qa_card.verification_steps.append(f"{step_number}. [Voice Patch] {new_step_text}")
-        manifest.qa_card.edge_cases.append(f"Voice Patch Hazard Vector: {new_step_text}")
+        manifest.qa_card.edge_cases.append(EdgeCase(severity="orange", description=f"Voice Patch Hazard Vector: {new_step_text}"))
     elif any(w in instruction_lower for w in ["test", "qa", "failover", "chaos", "redis"]):
         step_number = len(manifest.qa_card.verification_steps) + 1
         manifest.qa_card.verification_steps.append(f"{step_number}. [Voice Patch] Verify {instruction}")
-        manifest.qa_card.edge_cases.append(f"Voice Patch Hazard Vector: {instruction}")
+        manifest.qa_card.edge_cases.append(EdgeCase(severity="orange", description=f"Voice Patch Hazard Vector: {instruction}"))
 
     # 4. Synchronize PR and Slack Deliverables with Voice Patch Mutation
     manifest.pr_card.summary += f" (Patched: {instruction})"

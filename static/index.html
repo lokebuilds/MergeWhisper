@@ -1373,11 +1373,23 @@ jobs:
                             <div id="slack-terminal-content" class="h-[160px] w-full rounded-lg bg-[#0c0d12] p-3 font-mono text-[10px] text-orange-300 overflow-y-auto border border-[#1f2129] shadow-inner">
                                 <pre id="slack-json-box" class="whitespace-pre-wrap leading-relaxed font-mono">{
   "channel": "#production-releases",
+  "username": "MergeWhisper_Bot",
+  "actor": "{{actor.username}}",
+  "deployer": "system_auto_deploy",
   "text": "MergeWhisper Automated Ship Release",
   "blocks": [
     {
       "type": "header",
-      "text": { "type": "plain_text", "text": "🚀 Production Deployment Live" }
+      "text": { "type": "plain_text", "text": "🚀 Production Deployment Live", "emoji": true }
+    },
+    {
+      "type": "section",
+      "fields": [
+        { "type": "mrkdwn", "text": "*Triggered By:*\n`system_auto_deploy`" },
+        { "type": "mrkdwn", "text": "*Actor:*\n`{{actor.username}}`" },
+        { "type": "mrkdwn", "text": "*Bot:*\n`MergeWhisper_Bot`" },
+        { "type": "mrkdwn", "text": "*Status:*\n*Shipped & Verified*" }
+      ]
     }
   ]
 }</pre>
@@ -2673,55 +2685,66 @@ jobs:
                 return;
             }
 
-            // 4. Safe Payload: Prepare manifest & stages
-            const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
-            currentActiveManifest = Object.assign({}, base, {
-                intent: intentVal || base.intent,
-                diff: diffVal || base.diff,
-                summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
-                title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
+            // 4. Capture Stage 01 text payload and trigger Live API Hook
+            const rawTargetRepo = (document.getElementById('target-repo')?.value || '').trim();
+            const baseBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('base-branch')?.value, 'main') : (document.getElementById('base-branch')?.value || 'main'));
+            const headBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('head-branch')?.value.trim(), '') : (document.getElementById('head-branch')?.value.trim() || ''));
+            const targetRepo = (typeof sanitizeRepo === 'function' ? sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service') : (rawTargetRepo || 'lokebuilds/core-auth-service'));
+
+            const synthRequestPayload = {
+                intent: intentVal || combinedPayload,
+                diff: diffVal || null,
+                target_repo: targetRepo,
+                target_repository: rawTargetRepo,
+                is_preset: !!activePresetKey,
+                preset_id: activePresetKey,
+                base_branch: baseBranch,
+                head_branch: headBranch,
+                tech_stack: 'Python FastAPI',
+                payload: combinedPayload,
+                textPayload: combinedPayload
+            };
+
+            // Concurrently dispatch live API synthesis POST request and run the orchestration sequence animation
+            const liveApiPromise = fetch(`${API_BASE}/api/synthesize`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(synthRequestPayload)
+            }).then(async res => {
+                if (res.ok) {
+                    return await res.json();
+                }
+                return null;
+            }).catch(err => {
+                console.warn("Live API synthesis fetch error:", err);
+                return null;
             });
 
-            try {
+            // 5. Trigger Sequential Modal Orchestration concurrently with backend synthesis
+            const [liveApiResult] = await Promise.all([
+                liveApiPromise,
+                runOrchestrationSequence()
+            ]);
+
+            // 6. Dynamic Stage Rendering: populate Stage 03 directly from live API response
+            if (liveApiResult) {
+                currentActiveManifest = liveApiResult;
+                const verifyData = liveApiResult.verify || liveApiResult.qa_card || (liveApiResult.primary_objective ? liveApiResult : null);
+                if (verifyData) {
+                    renderStage03Verify(verifyData);
+                }
                 renderAllStages(currentActiveManifest);
-            } catch (renderErr) {
-                console.warn("Non-fatal error rendering stages:", renderErr);
+            } else {
+                // Resilient local baseline fallback if network disconnects
+                const base = (activePresetKey && OFFLINE_FALLBACK_STORE[activePresetKey]) || OFFLINE_FALLBACK_STORE['auth-loop'] || {};
+                currentActiveManifest = Object.assign({}, base, {
+                    intent: intentVal || base.intent,
+                    diff: diffVal || base.diff,
+                    summary: intentVal ? `Autonomous release verification: ${intentVal.slice(0, 120)}` : base.summary,
+                    title: intentVal ? `feat(core): ${intentVal.slice(0, 60)}` : base.title
+                });
+                renderAllStages(currentActiveManifest);
             }
-
-            // Optional background synthesis update if API backend is alive
-            try {
-                const rawTargetRepo = (document.getElementById('target-repo').value || '').trim();
-                const baseBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('base-branch').value, 'main') : (document.getElementById('base-branch').value || 'main'));
-                const headBranch = (typeof sanitizeBranch === 'function' ? sanitizeBranch(document.getElementById('head-branch').value.trim(), '') : (document.getElementById('head-branch').value.trim() || ''));
-
-                fetch(`${API_BASE}/api/synthesize`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        intent: intentVal,
-                        diff: diffVal || null,
-                        target_repo: (typeof sanitizeRepo === 'function' ? sanitizeRepo(rawTargetRepo, 'lokebuilds/core-auth-service') : (rawTargetRepo || 'lokebuilds/core-auth-service')),
-                        target_repository: rawTargetRepo,
-                        is_preset: !!activePresetKey,
-                        preset_id: activePresetKey,
-                        base_branch: baseBranch,
-                        head_branch: headBranch,
-                        tech_stack: 'Python FastAPI',
-                        payload: combinedPayload
-                    })
-                }).then(async res => {
-                    if (res.ok) {
-                        const data = await res.json().catch(() => null);
-                        if (data && (data.audit || data.title || data.ship)) {
-                            currentActiveManifest = data;
-                            try { renderAllStages(currentActiveManifest); } catch (_) {}
-                        }
-                    }
-                }).catch(() => {});
-            } catch (_) {}
-
-            // 5. Trigger Sequential Modal Orchestration
-            await runOrchestrationSequence();
         }
 
         function resetOrchestrationModal() {
@@ -3006,6 +3029,66 @@ jobs:
         window.getDynamicGitHubCompareUrl = getDynamicGitHubCompareUrl;
         window.updateGitHubCompareLink = updateGitHubCompareLink;
 
+        // Stage 03 Dynamic Verification Matrix Renderer
+        function renderStage03Verify(qa) {
+            if (!qa) return;
+            const qaObj = document.getElementById('qa-objective-box');
+            const primaryObj = qa.primary_objective || qa.objective;
+            if (qaObj && primaryObj) qaObj.textContent = primaryObj;
+
+            const stepsList = document.getElementById('qa-steps-list');
+            if (stepsList) {
+                const steps = Array.isArray(qa.ordered_steps) ? qa.ordered_steps : (Array.isArray(qa.verification_steps) ? qa.verification_steps : []);
+                if (steps.length > 0) {
+                    stepsList.innerHTML = '';
+                    steps.forEach((step) => {
+                        const label = document.createElement('label');
+                        label.className = "flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none";
+                        label.innerHTML = `
+                            <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                            <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">${step}</span>
+                        `;
+                        stepsList.appendChild(label);
+                    });
+                }
+            }
+
+            const edgesList = document.getElementById('qa-edges-list');
+            if (edgesList) {
+                const edges = Array.isArray(qa.edge_cases) ? qa.edge_cases : [];
+                if (edges.length > 0) {
+                    edgesList.innerHTML = '';
+                    edges.forEach((edge, idx) => {
+                        const isObj = typeof edge === 'object' && edge !== null;
+                        const severity = (isObj ? (edge.severity || 'orange') : (idx % 2 === 0 ? 'red' : 'orange')).toLowerCase();
+                        const desc = isObj ? (edge.description || '') : edge;
+                        const isRed = severity === 'red';
+                        const box = document.createElement('div');
+                        if (isRed) {
+                            box.className = "p-4 rounded-xl bg-red-50/50 border border-red-200 text-red-800 shadow-sm flex items-start gap-3";
+                            box.innerHTML = `
+                                <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-900">CRITICAL HAZARD REGRESSION #${idx + 1}</span>
+                                    <p class="text-xs font-mono tracking-tight text-red-800 leading-relaxed">${desc}</p>
+                                </div>
+                            `;
+                        } else {
+                            box.className = "p-4 rounded-xl bg-orange-50/50 border border-orange-200 text-orange-800 shadow-sm flex items-start gap-3";
+                            box.innerHTML = `
+                                <svg class="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-orange-900">BOUNDARY REGRESSION #${idx + 1}</span>
+                                    <p class="text-xs font-mono tracking-tight text-orange-800 leading-relaxed">${desc}</p>
+                                </div>
+                            `;
+                        }
+                        edgesList.appendChild(box);
+                    });
+                }
+            }
+        }
+
         // Render Manifest Deliverables across all 5 Stages (Ingest, Audit, Verify, Changelog, Ship)
         function renderAllStages(manifest) {
             if (!manifest) return;
@@ -3147,58 +3230,8 @@ jobs:
                 if (rollbackCode) rollbackCode.textContent = audit.rollback_plan || 'git revert HEAD --no-edit';
 
                 // Stage 03: Verify (QA Verification Matrix & Test Steps)
-                const qa = manifest.verify || manifest.qa_card || {};
-                const qaObj = document.getElementById('qa-objective-box');
-                if (qaObj && qa.objective) qaObj.textContent = qa.objective;
-
-                const stepsList = document.getElementById('qa-steps-list');
-                if (stepsList) {
-                    const steps = Array.isArray(qa.verification_steps) ? qa.verification_steps : [];
-                    if (steps.length > 0) {
-                        stepsList.innerHTML = '';
-                        steps.forEach((step) => {
-                            const label = document.createElement('label');
-                            label.className = "flex items-center gap-3.5 border border-gray-200 bg-white p-4 shadow-sm rounded-xl transition-all hover:border-gray-300 cursor-pointer group select-none";
-                            label.innerHTML = `
-                                <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                                <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">${step}</span>
-                            `;
-                            stepsList.appendChild(label);
-                        });
-                    }
-                }
-
-                const edgesList = document.getElementById('qa-edges-list');
-                if (edgesList) {
-                    const edges = Array.isArray(qa.edge_cases) ? qa.edge_cases : [];
-                    if (edges.length > 0) {
-                        edgesList.innerHTML = '';
-                        edges.forEach((edge, idx) => {
-                            const isRed = idx % 2 === 0;
-                            const box = document.createElement('div');
-                            if (isRed) {
-                                box.className = "p-4 rounded-xl bg-red-50/50 border border-red-200 text-red-800 shadow-sm flex items-start gap-3";
-                                box.innerHTML = `
-                                    <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-900">EDGE CASE REGRESSION #${idx + 1}</span>
-                                        <p class="text-xs font-mono tracking-tight text-red-800 leading-relaxed">${edge}</p>
-                                    </div>
-                                `;
-                            } else {
-                                box.className = "p-4 rounded-xl bg-orange-50/50 border border-orange-200 text-orange-800 shadow-sm flex items-start gap-3";
-                                box.innerHTML = `
-                                    <svg class="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-orange-900">EDGE CASE REGRESSION #${idx + 1}</span>
-                                        <p class="text-xs font-mono tracking-tight text-orange-800 leading-relaxed">${edge}</p>
-                                    </div>
-                                `;
-                            }
-                            edgesList.appendChild(box);
-                        });
-                    }
-                }
+                const qa = manifest.verify || manifest.qa_card || (manifest.primary_objective ? manifest : {});
+                renderStage03Verify(qa);
 
                 // Stage 04: Changelog (SemVer Evaluation & Keep-a-Changelog)
                 const cl = manifest.changelog || manifest.changelog_card || {};
@@ -3515,6 +3548,9 @@ jobs:
                 pipeline_id: "mw-ship-live-" + Math.floor(100000 + Math.random() * 900000),
                 status: "DEPLOYMENT_LIVE",
                 timestamp: new Date().toISOString(),
+                actor: "{{actor.username}}",
+                bot: "MergeWhisper_Bot",
+                deployer: "system_auto_deploy",
                 repository: targetRepo,
                 branch: headBranch,
                 deliverable: {
@@ -3526,13 +3562,22 @@ jobs:
                 slack_blocks: [
                     {
                         type: "header",
-                        text: { type: "plain_text", text: "🚀 Production Deployment Live" }
+                        text: { type: "plain_text", text: "🚀 Production Deployment Live", emoji: true }
+                    },
+                    {
+                        type: "section",
+                        fields: [
+                            { type: "mrkdwn", text: "*Triggered By:*\n`system_auto_deploy`" },
+                            { type: "mrkdwn", text: "*Actor:*\n`{{actor.username}}`" },
+                            { type: "mrkdwn", text: "*Bot:*\n`MergeWhisper_Bot`" },
+                            { type: "mrkdwn", text: `*Repository:*\n\`${targetRepo}\`` }
+                        ]
                     },
                     {
                         type: "section",
                         text: {
                             type: "mrkdwn",
-                            text: `*Repository:* \`${targetRepo}\`\n*Target Branch:* \`${headBranch}\`\n*PR:* *${title}*\n*State:* :white_check_mark: *Shipped & Verified*`
+                            text: `*Target Branch:* \`${headBranch}\`\n*PR:* *${title}*\n*State:* :white_check_mark: *Shipped & Verified*`
                         }
                     }
                 ]

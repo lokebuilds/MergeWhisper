@@ -71,6 +71,8 @@ class IngestData(BaseSchema):
     @classmethod
     def populate_intent_from_payload(cls, data: Any) -> Any:
         if isinstance(data, dict):
+            if "textPayload" in data and not data.get("intent"):
+                data["intent"] = str(data["textPayload"])
             if "payload" in data and not data.get("intent"):
                 data["intent"] = str(data["payload"])
         return data
@@ -137,28 +139,96 @@ DevOpsAudit = AuditData
 
 
 # ==============================================================================
-# Stage 03: Verify Data Contract
+# Stage 03: Verify Data Contract (VerificationMatrix & EdgeCase)
 # ==============================================================================
 
-class VerifyData(BaseSchema):
+class EdgeCase(BaseModel):
+    """Critical boundary regression or edge case condition with severity."""
+
+    severity: str = Field(
+        ...,
+        description="Risk or severity classification ('red' or 'orange').",
+    )
+    description: str = Field(
+        ...,
+        description="Detailed failure condition or edge case scenario.",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def parse_raw_edge_case(cls, data: Any) -> Any:
+        if isinstance(data, str):
+            lower = data.lower()
+            sev = "red" if any(k in lower for k in ["critical", "catastrophic", "breach", "fail", "drop", "deadlock", "loss", "timeout", "lock"]) else "orange"
+            return {"severity": sev, "description": data}
+        return data
+
+
+class VerificationMatrix(BaseModel):
     """Stage 03: Targeted QA verification matrix and test execution strategy."""
 
-    objective: str = Field(
+    primary_objective: str = Field(
         ...,
         description="Primary verification objective describing what must be proven safe prior to merge.",
     )
-    verification_steps: List[str] = Field(
+    ordered_steps: List[str] = Field(
         default_factory=list,
-        description="Ordered, reproducible test steps or automated execution commands.",
+        description="Ordered, reproducible test steps or automated execution commands (e.g. pytest, psql, curl).",
     )
-    edge_cases: List[str] = Field(
+    edge_cases: List[EdgeCase] = Field(
         default_factory=list,
-        description="Critical boundary conditions, race hazards, and regression vectors.",
+        description="Critical boundary conditions, race hazards, and regression vectors with severity ('red' or 'orange').",
     )
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_verification_matrix(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            # Support objective <-> primary_objective
+            if "objective" in data and not data.get("primary_objective"):
+                data["primary_objective"] = data["objective"]
+            elif "primary_objective" in data and not data.get("objective"):
+                data["objective"] = data["primary_objective"]
 
-# Backward compatibility alias
-QACard = VerifyData
+            # Support verification_steps <-> ordered_steps
+            if "verification_steps" in data and not data.get("ordered_steps"):
+                data["ordered_steps"] = data["verification_steps"]
+            elif "ordered_steps" in data and not data.get("verification_steps"):
+                data["verification_steps"] = data["ordered_steps"]
+
+            # Support edge_cases where items might be strings or EdgeCase dicts
+            if "edge_cases" in data and isinstance(data["edge_cases"], list):
+                parsed = []
+                for ec in data["edge_cases"]:
+                    if isinstance(ec, str):
+                        lower = ec.lower()
+                        sev = "red" if any(k in lower for k in ["critical", "catastrophic", "breach", "fail", "drop", "deadlock", "loss", "timeout", "lock"]) else "orange"
+                        parsed.append({"severity": sev, "description": ec})
+                    else:
+                        parsed.append(ec)
+                data["edge_cases"] = parsed
+        return data
+
+    @property
+    def objective(self) -> str:
+        return self.primary_objective
+
+    @objective.setter
+    def objective(self, val: str) -> None:
+        self.primary_objective = val
+
+    @property
+    def verification_steps(self) -> List[str]:
+        return self.ordered_steps
+
+    @verification_steps.setter
+    def verification_steps(self, val: List[str]) -> None:
+        self.ordered_steps = val
+
+
+# Backward compatibility aliases
+VerifyData = VerificationMatrix
+QACard = VerificationMatrix
 
 
 # ==============================================================================

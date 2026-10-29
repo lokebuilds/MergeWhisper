@@ -9,13 +9,13 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from dotenv import load_dotenv
 # Load environment variables from .env file at startup
 load_dotenv()
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, status
+from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -29,6 +29,7 @@ from app.schemas import (
     PublishPRResponse,
     SynthesisResponse,
     SystemHealthResponse,
+    VerificationMatrix,
     VoicePatchRequest,
 )
 from app.service import MergeWhisperOrchestrator
@@ -153,7 +154,7 @@ async def list_fallback_presets() -> List[Dict[str, Any]]:
 
 @app.post(
     "/api/synthesize",
-    response_model=SynthesisResponse,
+    response_model=Union[SynthesisResponse, VerificationMatrix],
     status_code=status.HTTP_200_OK,
     tags=["Orchestration"],
 )
@@ -171,9 +172,14 @@ async def list_fallback_presets() -> List[Dict[str, Any]]:
     tags=["Orchestration"],
     include_in_schema=False,
 )
-async def synthesize_release_manifest(payload: IngestData) -> SynthesisResponse:
+async def synthesize_release_manifest(
+    payload: IngestData,
+    stage: Optional[str] = Query(default=None, description="Optional target stage ('verify' or '03')"),
+) -> Union[SynthesisResponse, VerificationMatrix]:
     """Synthesize complete release manifest with the four deliverables and DevOps risk audit."""
     try:
+        if stage in ("verify", "03", "stage_03", "stage-03"):
+            return await orchestrator.synthesize_stage_03(payload)
         return await orchestrator.synthesize(payload)
     except ValueError as exc:
         logger.warning("Configuration or validation error during synthesis: %s", exc)
@@ -186,6 +192,37 @@ async def synthesize_release_manifest(payload: IngestData) -> SynthesisResponse:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Live Gemini generation failed: {str(exc)}",
+        )
+
+
+@app.post(
+    "/api/verify",
+    response_model=VerificationMatrix,
+    status_code=status.HTTP_200_OK,
+    tags=["Orchestration"],
+)
+@app.post(
+    "/api/synthesize/verify",
+    response_model=VerificationMatrix,
+    status_code=status.HTTP_200_OK,
+    tags=["Orchestration"],
+)
+@app.post(
+    "/api/stage/03",
+    response_model=VerificationMatrix,
+    status_code=status.HTTP_200_OK,
+    tags=["Orchestration"],
+    include_in_schema=False,
+)
+async def synthesize_verification_matrix(payload: IngestData) -> VerificationMatrix:
+    """Force Gemini to synthesize strict Stage 03 VerificationMatrix tailored to developer intent."""
+    try:
+        return await orchestrator.synthesize_stage_03(payload)
+    except Exception as exc:
+        logger.error("Verification matrix generation failure: %s", exc, exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Stage 03 generation failed: {str(exc)}",
         )
 
 
