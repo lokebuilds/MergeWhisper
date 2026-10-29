@@ -1029,57 +1029,57 @@
             <!-- STAGE 03: VERIFY (QA VERIFICATION MATRIX & TEST STEPS)       -->
             <!-- ------------------------------------------------------------ -->
             <div id="stage-panel-03" class="stage-panel hidden flex flex-col gap-6">
-                <!-- Anti-Cardocalypse Asymmetric Bento Box Shell -->
-                <div class="w-full bg-[#0c0d12] rounded-xl border border-[#1f2129] overflow-hidden shadow-2xl">
+                <!-- Anti-Cardocalypse Asymmetric Bento Box Shell (Light Mode) -->
+                <div class="w-full bg-[#ffffff] rounded-xl border border-[#e3e6e3] overflow-hidden shadow-sm">
                     <!-- Header Section -->
-                    <div class="bg-[#0e1015] border-b border-[#1f2129] px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div class="bg-[#f9faf9] border-b border-[#e3e6e3] px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div>
-                            <h3 class="text-xs font-mono font-bold uppercase tracking-widest text-gray-300">QA VERIFICATION MATRIX &amp; TEST STEPS</h3>
+                            <h3 class="text-xs font-mono font-bold uppercase tracking-widest text-gray-800">QA VERIFICATION MATRIX &amp; TEST STEPS</h3>
                             <p id="qa-objective-box" class="text-[11px] font-mono text-[#f58e0a] mt-0.5 tracking-tight"></p>
                         </div>
                         <span class="text-[10px] font-mono text-gray-500 uppercase tracking-wider shrink-0">STAGE 03 // VERIFY</span>
                     </div>
 
                     <!-- 60/40 Hairline Grid -->
-                    <div class="grid grid-cols-[60%_40%] bg-[#1f2129] gap-px">
+                    <div class="grid grid-cols-1 lg:grid-cols-[60%_40%] bg-[#e3e6e3] gap-px">
                         <!-- Left Column: Ordered Verification Checklist (60%) -->
-                        <div class="bg-[#0c0d12] p-5 flex flex-col gap-4">
+                        <div class="bg-[#ffffff] p-5 flex flex-col gap-4">
                             <span class="text-xs font-mono uppercase tracking-wider text-gray-500 font-semibold">ORDERED VERIFICATION CHECKLIST</span>
                             <div id="qa-steps-list" class="flex flex-col gap-2.5">
-                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0e1015] hover:bg-[#13161c] border border-[#1f2129] hover:border-[#2e323b] transition-all cursor-pointer group select-none">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-[#0c0d12] border-[#2e323b] text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                                    <span class="text-xs font-mono text-gray-300 group-hover:text-white transition-colors tracking-tight select-all">pytest tests/test_migrations.py -v --tb=short</span>
+                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#f9faf9] hover:bg-gray-100 border border-[#e3e6e3] transition-all cursor-pointer group select-none">
+                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                    <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">pytest tests/test_migrations.py -v --tb=short</span>
                                 </label>
-                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0e1015] hover:bg-[#13161c] border border-[#1f2129] hover:border-[#2e323b] transition-all cursor-pointer group select-none">
-                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-[#0c0d12] border-[#2e323b] text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                                    <span class="text-xs font-mono text-gray-300 group-hover:text-white transition-colors tracking-tight select-all">psql -d production_replica -c "SELECT COUNT(*) FROM migration_locks WHERE active = true;"</span>
+                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#f9faf9] hover:bg-gray-100 border border-[#e3e6e3] transition-all cursor-pointer group select-none">
+                                    <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                    <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">psql -d production_replica -c "SELECT COUNT(*) FROM migration_locks WHERE active = true;"</span>
                                 </label>
-                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#0e1015] hover:bg-[#13161c] border border-[#1f2129] hover:border-[#2e323b] transition-all cursor-pointer group select-none">
-                                    <input type="checkbox" class="w-4 h-4 rounded bg-[#0c0d12] border-[#2e323b] text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                                    <span class="text-xs font-mono text-gray-300 group-hover:text-white transition-colors tracking-tight select-all">curl -sI https://api.internal/v1/health/ready | grep "200 OK"</span>
+                                <label class="flex items-center gap-3 p-3 rounded-lg bg-[#f9faf9] hover:bg-gray-100 border border-[#e3e6e3] transition-all cursor-pointer group select-none">
+                                    <input type="checkbox" class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                    <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">curl -sI https://api.internal/v1/health/ready | grep "200 OK"</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Right Column: Boundary Regression (40%) -->
-                        <div class="bg-[#0c0d12] p-5 flex flex-col gap-4">
+                        <div class="bg-[#ffffff] p-5 flex flex-col gap-4">
                             <span class="text-xs font-mono uppercase tracking-wider text-gray-500 font-semibold">BOUNDARY REGRESSION</span>
                             <div id="qa-edges-list" class="flex flex-col gap-3">
-                                <!-- Edge Case Warning Box 1: Dark Red Border / Tint / Text -->
-                                <div class="p-3.5 rounded-lg bg-red-950/20 border border-red-900/40 text-red-400 flex items-start gap-2.5">
-                                    <svg class="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                <!-- Edge Case Warning Box 1: Red Box (Light Mode) -->
+                                <div class="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-800 flex items-start gap-2.5">
+                                    <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                     <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-300">LOCK TIMEOUT EXCEEDED</span>
-                                        <p class="text-xs font-mono tracking-tight text-red-400 leading-relaxed">Concurrent transactions holding ACCESS EXCLUSIVE lock on partition tables will fail silently if timeout exceeds 5000ms.</p>
+                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-900">LOCK TIMEOUT EXCEEDED</span>
+                                        <p class="text-xs font-mono tracking-tight text-red-800 leading-relaxed">Concurrent transactions holding ACCESS EXCLUSIVE lock on partition tables will fail silently if timeout exceeds 5000ms.</p>
                                     </div>
                                 </div>
 
-                                <!-- Edge Case Warning Box 2: Dark Orange Border / Tint / Text -->
-                                <div class="p-3.5 rounded-lg bg-[#f58e0a]/10 border border-[#f58e0a]/30 text-[#f58e0a] flex items-start gap-2.5">
-                                    <svg class="w-4 h-4 text-[#f58e0a] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <!-- Edge Case Warning Box 2: Orange Box (Light Mode) -->
+                                <div class="p-3.5 rounded-lg bg-orange-50 border border-orange-200 text-orange-800 flex items-start gap-2.5">
+                                    <svg class="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-amber-300">CONNECTION POOL EXHAUSTION</span>
-                                        <p class="text-xs font-mono tracking-tight text-[#f58e0a] leading-relaxed">PgBouncer max_client_conn threshold reached during rolling migration restart; fallback backoff retry configured.</p>
+                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-orange-900">CONNECTION POOL EXHAUSTION</span>
+                                        <p class="text-xs font-mono tracking-tight text-orange-800 leading-relaxed">PgBouncer max_client_conn threshold reached during rolling migration restart; fallback backoff retry configured.</p>
                                     </div>
                                 </div>
                             </div>
@@ -2727,9 +2727,9 @@ jobs:
                 const statusEl = document.getElementById(`orch-status-${i}`);
                 if (stepRow) {
                     if (i === 1) {
-                        stepRow.className = "flex items-center justify-between text-gray-400 transition-colors duration-200";
+                        stepRow.className = "flex items-center justify-between text-gray-500 transition-colors duration-200";
                     } else {
-                        stepRow.className = "flex items-center justify-between opacity-40 text-gray-400 transition-colors duration-200";
+                        stepRow.className = "flex items-center justify-between opacity-40 text-gray-500 transition-colors duration-200";
                     }
                 }
                 if (statusEl) {
@@ -2768,7 +2768,7 @@ jobs:
                     stepRow.classList.remove('opacity-40');
                     stepRow.classList.remove('text-gray-400');
                     stepRow.classList.remove('text-gray-500');
-                    stepRow.classList.add('text-gray-200');
+                    stepRow.classList.add('text-gray-900');
                 }
                 if (statusEl) {
                     statusEl.innerHTML = checkmarkIcon;
@@ -3149,10 +3149,10 @@ jobs:
                         stepsList.innerHTML = '';
                         steps.forEach((step) => {
                             const label = document.createElement('label');
-                            label.className = "flex items-center gap-3 p-3 rounded-lg bg-[#0e1015] hover:bg-[#13161c] border border-[#1f2129] hover:border-[#2e323b] transition-all cursor-pointer group select-none";
+                            label.className = "flex items-center gap-3 p-3 rounded-lg bg-[#f9faf9] hover:bg-gray-100 border border-[#e3e6e3] transition-all cursor-pointer group select-none";
                             label.innerHTML = `
-                                <input type="checkbox" checked class="w-4 h-4 rounded bg-[#0c0d12] border-[#2e323b] text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
-                                <span class="text-xs font-mono text-gray-300 group-hover:text-white transition-colors tracking-tight select-all">${step}</span>
+                                <input type="checkbox" checked class="w-4 h-4 rounded bg-white border-gray-300 text-[#f58e0a] accent-[#f58e0a] focus:ring-0 focus:ring-offset-0 cursor-pointer shrink-0">
+                                <span class="text-xs font-mono text-gray-700 group-hover:text-gray-900 transition-colors tracking-tight select-all">${step}</span>
                             `;
                             stepsList.appendChild(label);
                         });
@@ -3168,21 +3168,21 @@ jobs:
                             const isRed = idx % 2 === 0;
                             const box = document.createElement('div');
                             if (isRed) {
-                                box.className = "p-3.5 rounded-lg bg-red-950/20 border border-red-900/40 text-red-400 flex items-start gap-2.5";
+                                box.className = "p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-800 flex items-start gap-2.5";
                                 box.innerHTML = `
-                                    <svg class="w-4 h-4 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    <svg class="w-4 h-4 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                                     <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-300">EDGE CASE REGRESSION #${idx + 1}</span>
-                                        <p class="text-xs font-mono tracking-tight text-red-400 leading-relaxed">${edge}</p>
+                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-red-900">EDGE CASE REGRESSION #${idx + 1}</span>
+                                        <p class="text-xs font-mono tracking-tight text-red-800 leading-relaxed">${edge}</p>
                                     </div>
                                 `;
                             } else {
-                                box.className = "p-3.5 rounded-lg bg-[#f58e0a]/10 border border-[#f58e0a]/30 text-[#f58e0a] flex items-start gap-2.5";
+                                box.className = "p-3.5 rounded-lg bg-orange-50 border border-orange-200 text-orange-800 flex items-start gap-2.5";
                                 box.innerHTML = `
-                                    <svg class="w-4 h-4 text-[#f58e0a] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    <svg class="w-4 h-4 text-orange-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     <div class="flex flex-col gap-1">
-                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-amber-300">EDGE CASE REGRESSION #${idx + 1}</span>
-                                        <p class="text-xs font-mono tracking-tight text-[#f58e0a] leading-relaxed">${edge}</p>
+                                        <span class="text-[11px] font-mono font-bold tracking-tight uppercase text-orange-900">EDGE CASE REGRESSION #${idx + 1}</span>
+                                        <p class="text-xs font-mono tracking-tight text-orange-800 leading-relaxed">${edge}</p>
                                     </div>
                                 `;
                             }
@@ -4374,47 +4374,47 @@ jobs:
     <!-- ==================================================================== -->
     <!-- AUTONOMOUS ORCHESTRATION PIPELINE MODAL OVERLAY                     -->
     <!-- ==================================================================== -->
-    <div id="orchestration-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-[#0c0d12] rounded-2xl w-full max-w-md border border-[#1f2129] p-6 shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col gap-4 text-left">
+    <div id="orchestration-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+        <div class="bg-[#ffffff] rounded-2xl w-full max-w-md border border-[#e3e6e3] p-6 shadow-2xl flex flex-col gap-4 text-left">
             <!-- Modal Header -->
-            <div class="flex items-center justify-between border-b border-[#1f2129] pb-3">
+            <div class="flex items-center justify-between border-b border-[#e3e6e3] pb-3">
                 <div class="flex items-center gap-2.5">
-                    <svg class="w-4 h-4 text-[#f58e0a] animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-700 animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
                     </svg>
-                    <span class="text-xs font-mono font-bold text-gray-200 tracking-tight">Autonomous Orchestration Pipeline</span>
+                    <span class="text-xs font-mono font-bold text-gray-900 tracking-tight">Autonomous Orchestration Pipeline</span>
                 </div>
-                <span id="orchestration-latency-counter" class="text-xs font-mono text-gray-400 tabular-nums">0.0 ms</span>
+                <span id="orchestration-latency-counter" class="text-xs font-mono text-gray-500 tabular-nums">0.0 ms</span>
             </div>
 
             <!-- 5-Step Checklist -->
-            <div class="flex flex-col gap-3 py-1 text-xs font-mono text-gray-400">
-                <div id="orch-step-1" class="flex items-center justify-between transition-colors duration-200 text-gray-400">
+            <div class="flex flex-col gap-3 py-1 text-xs font-mono text-gray-500">
+                <div id="orch-step-1" class="flex items-center justify-between transition-colors duration-200 text-gray-500">
                     <span class="orch-step-text">1. Ingesting developer intent &amp; git context</span>
                     <span id="orch-status-1" class="font-mono tabular-nums">...</span>
                 </div>
-                <div id="orch-step-2" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-400">
+                <div id="orch-step-2" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
                     <span class="orch-step-text">2. Evaluating DevOps blast radius &amp; risk</span>
                     <span id="orch-status-2" class="font-mono tabular-nums">...</span>
                 </div>
-                <div id="orch-step-3" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-400">
+                <div id="orch-step-3" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
                     <span class="orch-step-text">3. Synthesizing conventional commit PR</span>
                     <span id="orch-status-3" class="font-mono tabular-nums">...</span>
                 </div>
-                <div id="orch-step-4" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-400">
+                <div id="orch-step-4" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
                     <span class="orch-step-text">4. Computing SemVer bump &amp; changelog</span>
                     <span id="orch-status-4" class="font-mono tabular-nums">...</span>
                 </div>
-                <div id="orch-step-5" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-400">
+                <div id="orch-step-5" class="flex items-center justify-between opacity-40 transition-colors duration-200 text-gray-500">
                     <span class="orch-step-text">5. Formatting Slack Block Kit payload</span>
                     <span id="orch-status-5" class="font-mono tabular-nums">...</span>
                 </div>
             </div>
 
-            <!-- Glowing Orange Progress Bar Track -->
-            <div class="w-full h-1 bg-[#1f2129] rounded-full overflow-hidden mt-1">
-                <div id="orchestration-progress-bar" class="h-full w-0 bg-[#f58e0a] shadow-[0_0_12px_rgba(245,142,10,0.5)] drop-shadow-[0_0_8px_rgba(245,142,10,0.5)] transition-all duration-500 ease-out rounded-full"></div>
+            <!-- Progress Bar Track (Light Mode) -->
+            <div class="w-full h-1 bg-gray-100 rounded-full overflow-hidden mt-1">
+                <div id="orchestration-progress-bar" class="h-full w-0 bg-[#f58e0a] shadow-sm transition-all duration-500 ease-out rounded-full"></div>
             </div>
         </div>
     </div>
