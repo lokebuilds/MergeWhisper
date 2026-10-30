@@ -219,17 +219,17 @@
             <span class="text-xs text-stone-400 dark:text-zinc-500 font-mono select-none group-hover:rotate-45 transition-transform duration-300">✳</span>
         </button>
 
-        <!-- Center: Absolute Centered Utility Navigation Block -->
-        <nav class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
+        <!-- Center: Absolute Centered Utility Navigation Block (Visible on landing; hidden inside workspace) -->
+        <nav id="landing-nav-links" class="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-8">
             <button 
                 type="button" 
-                onclick="if (currentView !== 'landing') switchView('landing'); (document.getElementById('features-section') || document.getElementById('landing-view')).scrollIntoView({ behavior: 'smooth' });" 
+                onclick="if (currentView !== 'landing') switchView('landing'); const f = document.getElementById('features-section'); if (f) f.scrollIntoView({ behavior: 'smooth' });" 
                 class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 FEATURES
             </button>
             <button 
                 type="button" 
-                onclick="launchReviewerDemo()" 
+                onclick="navigateToPresets()" 
                 class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 PRESETS
             </button>
@@ -241,7 +241,7 @@
             </button>
             <button 
                 type="button" 
-                onclick="if (currentView !== 'landing') switchView('landing'); const faq = document.getElementById('faq-section') || document.getElementById('faq'); if (faq) faq.scrollIntoView({ behavior: 'smooth' });" 
+                onclick="navigateToFAQ()" 
                 class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 FAQ
             </button>
@@ -1837,12 +1837,14 @@
             const workspaceView = document.getElementById('workspace-view');
             const navBtn = document.getElementById('workspace-nav-btn');
             const copyDevProfileBtn = document.getElementById('copy-dev-profile-btn');
+            const landingNav = document.getElementById('landing-nav-links');
 
             if (viewName === 'landing') {
                 if (landingView) landingView.classList.remove('hidden');
                 if (workspaceView) workspaceView.classList.add('hidden');
                 if (navBtn) navBtn.classList.remove('hidden');
                 if (copyDevProfileBtn) copyDevProfileBtn.classList.remove('hidden');
+                if (landingNav) landingNav.style.display = '';
             } else {
                 if (!preserveState) {
                     try {
@@ -1862,10 +1864,11 @@
                         if (s1) s1.classList.remove('hidden');
                     }
                 }
-                // CRITICAL: When inside the active workspace, completely hide/remove the 'Overview' button from the header.
+                // CRITICAL: When inside the active workspace, completely hide the landing navigation bar & 'Overview' button from the header.
                 // Navigating back home is handled solely by clicking the brand mark.
                 if (navBtn) navBtn.classList.add('hidden');
                 if (copyDevProfileBtn) copyDevProfileBtn.classList.remove('hidden');
+                if (landingNav) landingNav.style.display = 'none';
             }
             try {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2106,6 +2109,8 @@
         window.switchView = switchView;
         window.resetWorkspaceState = resetWorkspaceState;
         window.openWorkspace = openWorkspace;
+        window.navigateToPresets = navigateToPresets;
+        window.navigateToFAQ = navigateToFAQ;
 
         // Single Sleek Workspace Toggle Button Handler
         function toggleWorkspaceView() {
@@ -2116,17 +2121,16 @@
             }
         }
 
-        // Smooth Scroll or Navigate to Presets
+        // Smooth Scroll or Navigate to Presets on Landing Page
         function navigateToPresets() {
-            if (currentView === 'landing') {
-                const presetSec = document.getElementById('landing-presets-section');
-                if (presetSec) {
+            if (currentView !== 'landing') {
+                switchView('landing');
+            }
+            const presetSec = document.getElementById('landing-presets-section');
+            if (presetSec) {
+                setTimeout(() => {
                     presetSec.scrollIntoView({ behavior: 'smooth' });
-                }
-            } else {
-                navigateToStage('stage-01');
-                const p1 = document.getElementById('pill-auth-loop');
-                if (p1) p1.scrollIntoView({ behavior: 'smooth' });
+                }, 50);
             }
         }
 
