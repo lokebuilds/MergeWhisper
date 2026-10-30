@@ -229,7 +229,7 @@
             </button>
             <button 
                 type="button" 
-                onclick="openWorkspace()" 
+                onclick="launchReviewerDemo()" 
                 class="text-[11px] font-mono font-medium uppercase tracking-wider text-gray-500 hover:text-[#f58e0a] transition-colors cursor-pointer">
                 PRESETS
             </button>
@@ -782,10 +782,16 @@
             <!-- STAGE 01: INGEST (SPOKEN INTENT & GIT DIFF CONTEXT)          -->
             <!-- ------------------------------------------------------------ -->
             <div id="stage-panel-01" class="stage-panel flex flex-col gap-6">
-                <!-- Preset Pills -->
-                <div class="flex flex-col gap-2">
+                <!-- Preset Pills (Strictly Hidden by default; Only visible when 'Run Live Demo' is clicked) -->
+                <div id="enterprise-presets-container" class="hidden flex flex-col gap-2">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider">Enterprise Presets</span>
+                        <span class="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-[#f58e0a]"></span>
+                            <span>Enterprise Presets (Reviewer Demo Mode)</span>
+                        </span>
+                        <button type="button" onclick="document.getElementById('enterprise-presets-container').classList.add('hidden')" class="text-[10px] font-mono text-stone-400 hover:text-stone-700 dark:hover:text-zinc-300 cursor-pointer">
+                            Hide Presets ✕
+                        </button>
                     </div>
                     <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                         <button type="button" onclick="selectPreset('auth-loop')" id="pill-auth-loop" class="preset-pill p-3 rounded-xl editorial-card hover:border-stone-400 dark:hover:border-zinc-700 text-left transition cursor-pointer shadow-2xs">
@@ -830,97 +836,101 @@
                     </div>
                 </div>
 
-                <!-- Dedicated Bento Container for Developer Intent Ingest -->
-                <div class="w-full bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm flex flex-col">
-                    <!-- Edge-to-Edge Bento Header Block -->
-                    <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 rounded-t-2xl flex justify-between items-center">
-                        <label for="intent" class="text-xs font-mono font-medium text-gray-500 uppercase tracking-widest cursor-pointer">
-                            DEVELOPER INTENT INGEST
-                        </label>
-                        <span class="text-[10px] font-mono text-gray-400 uppercase tracking-wider">STAGE 01 // INGEST</span>
+                <!-- Stage 01 Unified Card (editorial-card radius-outer matching Stage 02/03/04/05) -->
+                <div id="stage-01-card" class="editorial-card radius-outer p-6 sm:p-7 shadow-xs flex flex-col gap-5 transition-all">
+                    <!-- Stage 01 Header Block (Exact match with Stage 02 header format) -->
+                    <div class="flex items-center justify-between border-b hairline-border pb-4">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                                Stage 01 // Ingestion &amp; Context Telemetry
+                            </span>
+                            <h3 class="text-sm font-semibold text-stone-900 dark:text-zinc-100 mt-0.5">
+                                Developer Intent &amp; Unified Diff Synthesis
+                            </h3>
+                        </div>
+                        <div id="stage-01-status-badge" class="px-3 py-1 rounded-full text-xs font-mono font-medium bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
+                            READY
+                        </div>
                     </div>
 
-                    <!-- Pure White Body Section (Variation 3A: Scope First -> Intent -> Diff -> Synthesize) -->
-                    <div class="p-6 bg-white flex flex-col gap-5">
-                        <!-- 1. Scope First: Compact Repository Metadata -->
-                        <div>
-                            <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400 block mb-1.5 uppercase tracking-wider">
-                                📦 Target Repository Topology
+                    <!-- 1. Scope First: Compact Repository Metadata -->
+                    <div>
+                        <span class="text-[11px] font-mono text-gray-500 dark:text-gray-400 block mb-1.5 uppercase tracking-wider">
+                            📦 Target Repository Topology
+                        </span>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
+                            <div>
+                                <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Target Repository</span>
+                                <input id="target-repo" type="text" value="" placeholder="e.g. owner/repo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Base Branch</span>
+                                <input id="base-branch" type="text" value="" placeholder="e.g. main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Head Branch</span>
+                                <input id="head-branch" type="text" value="" placeholder="e.g. feat/live-demo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Developer Spoken Intent -->
+                    <div class="flex flex-col gap-1.5">
+                        <div class="flex items-center justify-between">
+                            <label for="intent" class="text-[11px] font-mono text-gray-500 dark:text-gray-400 flex items-center gap-1.5 uppercase tracking-wider">
+                                <i data-lucide="mic" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
+                                <span>Developer Spoken Intent (Wispr Flow)</span>
+                            </label>
+                            <span class="text-[10px] font-mono text-gray-400 dark:text-gray-500"><span id="intent-word-count">0</span> words</span>
+                        </div>
+                        <textarea 
+                            id="intent" 
+                            rows="3" 
+                            placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
+                            class="w-full p-3.5 text-xs font-mono leading-relaxed bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
+                    </div>
+
+                    <!-- 3. Git Staged Diff & Patch Logs -->
+                    <div class="border hairline-border rounded-xl overflow-hidden bg-stone-50/50 dark:bg-black/20 flex flex-col">
+                        <div class="w-full px-4 py-2 flex items-center justify-between text-xs font-mono text-stone-700 dark:text-zinc-300 bg-stone-100/70 dark:bg-zinc-800/40 border-b hairline-border">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="file-diff" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
+                                <span class="font-medium text-stone-800 dark:text-zinc-200 uppercase tracking-wider text-[11px]">Git Staged Diff &amp; Patch Logs</span>
+                                <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.5 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Context Attached</span>
+                            </div>
+                            <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
+                                Ghost Shield Active
                             </span>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                                <div>
-                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Target Repository</span>
-                                    <input id="target-repo" type="text" value="" placeholder="e.g. owner/repo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
-                                </div>
-                                <div>
-                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Base Branch</span>
-                                    <input id="base-branch" type="text" value="" placeholder="e.g. main" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
-                                </div>
-                                <div>
-                                    <span class="text-[10px] text-gray-400 dark:text-gray-500 block mb-1">Head Branch</span>
-                                    <input id="head-branch" type="text" value="" placeholder="e.g. feat/live-demo" class="w-full bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner px-3 py-2 text-xs font-mono focus:outline-none focus:border-[#f58e0a]">
-                                </div>
-                            </div>
                         </div>
+                        <div id="diff-drawer-content" class="p-3 bg-[#f9faf9] dark:bg-[#0c0d12]">
+                            <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (e.g. from 'git diff' or 'git diff --staged')..." class="w-full bg-[#ffffff] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
+                        </div>
+                    </div>
 
-                        <!-- 2. Developer Spoken Intent (Wispr Flow Voice Dictation or Text) -->
-                        <div class="flex flex-col gap-1.5">
-                            <div class="flex items-center justify-between">
-                                <label for="intent" class="text-[11px] font-mono text-gray-500 dark:text-gray-400 flex items-center gap-1.5 uppercase tracking-wider">
-                                    <i data-lucide="mic" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
-                                    <span>Developer Spoken Intent (Wispr Flow)</span>
-                                </label>
-                                <span class="text-[10px] font-mono text-gray-400 dark:text-gray-500"><span id="intent-word-count">0</span> words</span>
-                            </div>
-                            <textarea 
-                                id="intent" 
-                                rows="3" 
-                                placeholder="Type or paste developer intent (e.g. captured via Wispr Flow)..." 
-                                class="w-full p-3.5 text-xs font-mono leading-relaxed bg-[#f9faf9] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] rounded-lg text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 focus:border-[#f58e0a] focus:ring-1 focus:ring-[#f58e0a]/40 outline-none transition-colors resize-none"></textarea>
-                        </div>
+                    <!-- Primary Synthesis Action -->
+                    <div class="w-full mt-1">
+                        <button 
+                            type="button"
+                            id="synthesize-btn" 
+                            onclick="triggerSynthesis()" 
+                            class="w-full py-3.5 bg-[#f58e0a] hover:bg-[#e07d08] text-white text-sm font-bold tracking-widest uppercase rounded-lg transition-colors flex justify-center items-center gap-2 shadow-sm"
+                            style="cursor: pointer;">
+                            <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
+                            <span id="synthesize-btn-label">Synthesize Release Specifications</span>
+                            <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
+                        </button>
+                    </div>
 
-                        <!-- 3. Git Staged Diff & Patch Logs (Always Open & Accessible) -->
-                        <div class="border hairline-border rounded-xl overflow-hidden bg-stone-50/50 dark:bg-black/20 flex flex-col">
-                            <div class="w-full px-4 py-2 flex items-center justify-between text-xs font-mono text-stone-700 dark:text-zinc-300 bg-stone-100/70 dark:bg-zinc-800/40 border-b hairline-border">
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="file-diff" class="w-3.5 h-3.5 text-[#f58e0a]"></i>
-                                    <span class="font-medium text-stone-800 dark:text-zinc-200 uppercase tracking-wider text-[11px]">Git Staged Diff &amp; Patch Logs</span>
-                                    <span id="diff-status-chip" class="text-[10px] font-mono tabular-nums px-1.5 py-0.5 rounded bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400">Context Attached</span>
-                                </div>
-                                <span id="ghost-redacted-badge" class="hidden text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#f58e0a]/10 text-[#f58e0a] border border-[#f58e0a]/20">
-                                    Ghost Shield Active
-                                </span>
-                            </div>
-                            <div id="diff-drawer-content" class="p-3 bg-[#f9faf9] dark:bg-[#0c0d12]">
-                                <textarea id="raw-diff" rows="5" placeholder="Paste unified git diff context here (e.g. from 'git diff' or 'git diff --staged')..." class="w-full bg-[#ffffff] border-[#e3e6e3] dark:bg-[#1f2129] dark:border-[#2a2d36] text-gray-900 placeholder-gray-400 dark:text-gray-200 dark:placeholder-gray-500 radius-inner p-3 font-mono text-xs focus:outline-none focus:border-[#f58e0a] leading-relaxed"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Primary Synthesis Action -->
-                        <div class="w-full mt-4">
-                            <button 
-                                type="button"
-                                id="synthesize-btn" 
-                                onclick="triggerSynthesis()" 
-                                class="w-full py-3.5 bg-[#f58e0a] hover:bg-[#e07d08] text-white text-sm font-bold tracking-widest uppercase rounded-lg transition-colors flex justify-center items-center gap-2 shadow-sm"
-                                style="cursor: pointer;">
-                                <i data-lucide="zap" class="w-3.5 h-3.5 text-white"></i>
-                                <span id="synthesize-btn-label">Synthesize Release Specifications</span>
-                                <span class="text-[10px] font-normal opacity-70 ml-1 text-white">Ctrl + Enter</span>
-                            </button>
-                        </div>
-
-                        <!-- Navigation Footer for Stage 01 -->
-                        <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
-                            <button 
-                                type="button" 
-                                id="proceed-to-audit-btn" 
-                                onclick="proceedToStage('stage-02')" 
-                                class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
-                                <span>Proceed to Audit</span>
-                                &rarr;
-                            </button>
-                        </div>
+                    <!-- Navigation Footer for Stage 01 -->
+                    <div id="stage-01-footer" class="hidden flex items-center justify-end pt-3 border-t hairline-border">
+                        <button 
+                            type="button" 
+                            id="proceed-to-audit-btn" 
+                            onclick="proceedToStage('stage-02')" 
+                            class="px-4 py-2 rounded-lg bg-[#1f2129] hover:bg-[#252832] text-gray-200 border border-[#2a2d36] hover:border-[#f58e0a]/40 font-medium text-xs font-mono transition-opacity duration-200 hover:opacity-90 cursor-pointer flex items-center gap-1 shadow-xs">
+                            <span>Proceed to Audit</span>
+                            &rarr;
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1896,8 +1906,12 @@
                 console.warn("updateGitHubCompareLink error:", e);
             }
 
-            // Reset active preset key
+            // Reset active preset key & strictly hide presets container in clean workspace
             activePresetKey = null;
+            try {
+                const presetsContainer = document.getElementById('enterprise-presets-container');
+                if (presetsContainer) presetsContainer.classList.add('hidden');
+            } catch (e) {}
 
             // Reset all preset pills to unselected state
             try {
@@ -2084,6 +2098,8 @@
         function openWorkspace() {
             try {
                 resetWorkspaceState();
+                const presetsContainer = document.getElementById('enterprise-presets-container');
+                if (presetsContainer) presetsContainer.classList.add('hidden');
             } catch (err) {
                 console.warn("Non-fatal error in resetWorkspaceState:", err);
             }
@@ -2167,16 +2183,20 @@
 
         // Launch Reviewer Mode Demo (Path B: Preloaded high-impact payload in Stage 01 ready for inspection/run)
         async function launchReviewerDemo(presetKey = 'auth-loop') {
-            // 1. Transition UI from landing page into active workspace
+            // 1. Reveal Presets Bar exclusively for Demo Mode
+            const presetsContainer = document.getElementById('enterprise-presets-container');
+            if (presetsContainer) presetsContainer.classList.remove('hidden');
+
+            // 2. Transition UI from landing page into active workspace
             switchView('workspace', true);
             navigateToStage('stage-01');
 
-            // 2. Clear any lingering active key to ensure fresh selection
+            // 3. Clear any lingering active key to ensure fresh selection
             if (activePresetKey === presetKey) {
                 activePresetKey = null;
             }
 
-            // 3. Programmatically populate Stage 01 with preset payload
+            // 4. Programmatically populate Stage 01 with preset payload
             await selectPreset(presetKey, false);
 
             // 4. Programmatically open the Git Diff drawer and ensure state is visible
