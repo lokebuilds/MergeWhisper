@@ -2188,19 +2188,35 @@
             const presetsContainer = document.getElementById('enterprise-presets-container');
             if (presetsContainer) presetsContainer.classList.remove('hidden');
 
-            // 2. Transition UI from landing page into active workspace
+            // 2. Transition UI from landing page into active workspace Stage 01
             switchView('workspace', true);
             navigateToStage('stage-01');
 
-            // 3. Clear any lingering active key to ensure fresh selection
-            if (activePresetKey === presetKey) {
-                activePresetKey = null;
-            }
+            // 3. Pre-fill ONLY Repository Topology
+            const repoInput = document.getElementById('target-repo');
+            const baseInput = document.getElementById('base-branch');
+            const headInput = document.getElementById('head-branch');
+            if (repoInput) repoInput.value = 'lokebuilds/core-auth-service';
+            if (baseInput) baseInput.value = 'main';
+            if (headInput) headInput.value = 'feat/auth-loop-fix';
 
-            // 4. Programmatically populate Stage 01 with preset payload
-            await selectPreset(presetKey, false);
+            // 4. Ensure Intent & Git Diff remain clean for live paste/dictation
+            const intentInput = document.getElementById('intent');
+            const diffInput = document.getElementById('raw-diff');
+            if (intentInput) intentInput.value = '';
+            if (diffInput) diffInput.value = '';
 
-            // 4. Programmatically open the Git Diff drawer and ensure state is visible
+            // Reset intent word count
+            const intentWordCount = document.getElementById('intent-word-count');
+            if (intentWordCount) intentWordCount.textContent = '0';
+
+            // 5. Clear active preset selection highlight until a pill is clicked
+            activePresetKey = null;
+            document.querySelectorAll('.preset-pill').forEach(el => {
+                el.classList.remove('border-[#f58e0a]', 'ring-1', 'ring-[#f58e0a]');
+            });
+
+            // 6. Ensure Git Diff drawer is open and ready for paste
             const drawer = document.getElementById('diff-drawer-content');
             const caret = document.getElementById('diff-drawer-caret');
             const statusChip = document.getElementById('diff-status-chip');
@@ -2211,10 +2227,10 @@
                 caret.style.transform = 'rotate(180deg)';
             }
             if (statusChip) {
-                statusChip.textContent = 'Context Attached';
+                statusChip.textContent = 'Context';
             }
 
-            showToast("Reviewer Demo Loaded: Scenario prefilled in Stage 01", "info");
+            showToast("Live Demo Mode: Target repo loaded. Paste diff or trigger Wispr.", "info");
             refreshIcons();
         }
 
